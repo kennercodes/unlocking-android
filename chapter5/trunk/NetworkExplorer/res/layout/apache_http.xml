@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<TextView android:id="@+id/apache_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="10px"	
+		android:text="Fill in credentials and select GO to make del.icio.us request" />
+		
+	<TextView android:id="@+id/apache_user_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10px"  
+        android:text="User:" />
+	
+	<EditText android:id="@+id/apache_user"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="10px"  />
+        
+    <TextView android:id="@+id/apache_pass_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10px"  
+        android:text="Password:" />
+    
+    <EditText android:id="@+id/apache_pass"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="10px"
+        android:password="true" />
+
+	<Button android:id="@+id/apachego_button" 
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="GO" />
+		
+	<TextView android:id="@+id/apache_output_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="10px"	
+		android:text="Output:" />
+		
+	<EditText android:id="@+id/apache_output"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:layout_marginBottom="10px"	
+		android:textSize="10sp" />
+		
+
+</LinearLayout>
