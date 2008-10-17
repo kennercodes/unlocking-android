@@ -101,7 +101,7 @@ public class ApacheHTTPViaHelper extends Activity {
             @Override
             public void run() {
                 HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
-                helper.performPost(ApacheHTTPViaHelper.URL_GET_POSTS_RECENT, user, pass, null, null, null);
+                helper.performPost(ApacheHTTPViaHelper.URL_GET_POSTS_RECENT, user, pass, null, null);
             }
         }.start();        
     }

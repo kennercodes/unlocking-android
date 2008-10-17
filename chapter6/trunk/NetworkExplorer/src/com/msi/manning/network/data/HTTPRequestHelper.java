@@ -60,9 +60,9 @@ public class HTTPRequestHelper {
      * Perform an HTTP POST operation.
      * 
      */
-    public void performPost(String url, final String user, final String pass, final String data,
-            final Map<String, String> additionalHeaders, final Map<String, String> nameValueParams) {
-        this.performRequest(url, user, pass, additionalHeaders, nameValueParams, POST_TYPE);
+    public void performPost(String url, final String user, final String pass, 
+            final Map<String, String> additionalHeaders, final Map<String, String> params) {
+        this.performRequest(url, user, pass, additionalHeaders, params, POST_TYPE);
     }
 
     /**
@@ -70,8 +70,9 @@ public class HTTPRequestHelper {
      * 
      */
     public void performGet(final String url, final String user, final String pass, 
-            final Map<String, String> additionalHeaders) {
-        this.performRequest(url, user, pass, additionalHeaders, null, GET_TYPE);
+            final Map<String, String> additionalHeaders, final Map<String, String> params) {
+       // TODO get handle separate params (for now just append to URL passed in)
+        this.performRequest(url, user, pass, additionalHeaders, params, GET_TYPE);
     }
 
     /**
