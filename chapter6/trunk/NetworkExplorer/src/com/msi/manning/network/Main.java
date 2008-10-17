@@ -17,6 +17,7 @@ public class Main extends Activity {
     private Button getButton;
     private Button apacheButton;
     private Button apacheViaHelperButton;
+    private Button helperButton;
 
     private TextView status;
 
@@ -51,7 +52,14 @@ public class Main extends Activity {
             public void onClick(final View v) {
                 Main.this.startActivity(new Intent(Main.this, ApacheHTTPViaHelper.class));
             }
-        });     
+        }); 
+        
+        this.helperButton = (Button) this.findViewById(R.id.main_helper_button);
+        this.helperButton.setOnClickListener(new OnClickListener() {
+            public void onClick(final View v) {
+                Main.this.startActivity(new Intent(Main.this, HTTPHelperForm.class));
+            }
+        });   
 
         this.status = (TextView) this.findViewById(R.id.main_status);
     }

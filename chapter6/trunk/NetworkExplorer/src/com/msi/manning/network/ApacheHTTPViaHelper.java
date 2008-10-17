@@ -21,7 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.msi.manning.network.data.HttpRequestHelper;
+import com.msi.manning.network.data.HTTPRequestHelper;
 import com.msi.manning.network.data.xml.DeliciousHandler;
 import com.msi.manning.network.data.xml.DeliciousPost;
 
@@ -92,7 +92,7 @@ public class ApacheHTTPViaHelper extends Activity {
      */
     private void performRequest(final String user, final String pass) {
 
-        final ResponseHandler<String> responseHandler = HttpRequestHelper.getResponseHandlerInstance(this.handler);
+        final ResponseHandler<String> responseHandler = HTTPRequestHelper.getResponseHandlerInstance(this.handler);
         
         this.progressDialog = ProgressDialog.show(this, "working . . .", "performing HTTP post to del.icio.us");
 
@@ -100,7 +100,7 @@ public class ApacheHTTPViaHelper extends Activity {
         new Thread() {
             @Override
             public void run() {
-                HttpRequestHelper helper = new HttpRequestHelper(responseHandler);
+                HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
                 helper.performPost(ApacheHTTPViaHelper.URL_GET_POSTS_RECENT, user, pass, null, null, null);
             }
         }.start();        

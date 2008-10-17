@@ -41,9 +41,9 @@ import com.msi.manning.network.util.StringUtils;
  * @author charliecollins
  * 
  */
-public class HttpRequestHelper {
+public class HTTPRequestHelper {
 
-    private static final String CLASSTAG = HttpRequestHelper.class.getSimpleName();
+    private static final String CLASSTAG = HTTPRequestHelper.class.getSimpleName();
 
     private static final int POST_TYPE = 1;
     private static final int GET_TYPE = 2;
@@ -52,7 +52,7 @@ public class HttpRequestHelper {
 
     private ResponseHandler<String> responseHandler;
 
-    public HttpRequestHelper(ResponseHandler<String> responseHandler) {
+    public HTTPRequestHelper(ResponseHandler<String> responseHandler) {
         this.responseHandler = responseHandler;
     }
 
@@ -141,7 +141,7 @@ public class HttpRequestHelper {
                 try {
                 method.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
                 } catch (UnsupportedEncodingException e) {
-                    Log.e(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG, e);
+                    Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
                 }
             }
             
@@ -149,9 +149,9 @@ public class HttpRequestHelper {
                 client.execute(method, this.responseHandler);
                 Log.d(Constants.LOGTAG, " " + CLASSTAG + " request completed");            
             } catch (ClientProtocolException e) {
-                Log.e(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG, e);
+                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
             } catch (IOException e) {
-                Log.e(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG, e);
+                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
             }
         } else if (requestType == GET_TYPE) {
             Log.d(Constants.LOGTAG, " " + CLASSTAG + " performRequest GET");
@@ -161,9 +161,9 @@ public class HttpRequestHelper {
                 client.execute(method, this.responseHandler);
                 Log.d(Constants.LOGTAG, " " + CLASSTAG + " request completed");            
             } catch (ClientProtocolException e) {
-                Log.e(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG, e);
+                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
             } catch (IOException e) {
-                Log.e(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG, e);
+                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
             }
         }
     }
@@ -180,8 +180,8 @@ public class HttpRequestHelper {
         final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             public String handleResponse(HttpResponse response) {
                 StatusLine status = response.getStatusLine();
-                Log.d(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG + " statusCode - " + status.getStatusCode());
-                Log.d(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG + " statusReasonPhrase - "
+                Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " statusCode - " + status.getStatusCode());
+                Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " statusReasonPhrase - "
                         + status.getReasonPhrase());
                 HttpEntity entity = response.getEntity();
                 String result = null;
@@ -193,7 +193,7 @@ public class HttpRequestHelper {
                     message.setData(bundle);
                     handler.sendMessage(message);
                 } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + HttpRequestHelper.CLASSTAG, e);
+                    Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
                 }
                 return result;
             }
