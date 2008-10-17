@@ -38,6 +38,9 @@ import com.msi.manning.network.util.StringUtils;
  * Wrapper to help make HTTP requests easier - after all, we want to make it
  * nice for the people.
  * 
+ * TODO cookies
+ * TODO multi-part form data
+ * 
  * @author charliecollins
  * 
  */
@@ -70,26 +73,24 @@ public class HTTPRequestHelper {
      * 
      */
     public void performGet(final String url, final String user, final String pass, 
-            final Map<String, String> additionalHeaders, final Map<String, String> params) {
-       // TODO get handle separate params (for now just append to URL passed in)
-        this.performRequest(url, user, pass, additionalHeaders, params, GET_TYPE);
+            final Map<String, String> additionalHeaders) {
+        this.performRequest(url, user, pass, additionalHeaders, null, GET_TYPE);
     }
 
     /**
      * Private heavy lifting method that performs GET or POST with supplied url, user, 
      * pass, data, and headers.
      * 
-     * TODO binary multi-part form data
      * 
      * @param url
      * @param user
      * @param pass
      * @param additionalHeaders
-     * @param nameValueParams
+     * @param params
      * @param requestType
      */
     private void performRequest(final String url, final String user, final String pass, 
-            final Map<String, String> additionalHeaders, final Map<String, String> nameValueParams, int requestType) {
+            final Map<String, String> additionalHeaders, final Map<String, String> params, int requestType) {
 
         // establish HttpClient
         DefaultHttpClient client = new DefaultHttpClient();
@@ -131,10 +132,10 @@ public class HTTPRequestHelper {
             // data - name/value params 
             // (mutli part form data not supported with helper, yet, but HttpClient can handle it fine)
             List <NameValuePair> nvps =  null;
-            if (nameValueParams != null && nameValueParams.size() > 0) {
+            if (params != null && params.size() > 0) {
                 nvps = new ArrayList <NameValuePair>();
-                for (String key : nameValueParams.keySet()) {
-                    nvps.add(new BasicNameValuePair(key, nameValueParams.get(key)));
+                for (String key : params.keySet()) {
+                    nvps.add(new BasicNameValuePair(key, params.get(key)));
                 }            
             }           
             

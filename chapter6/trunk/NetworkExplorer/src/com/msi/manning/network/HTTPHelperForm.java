@@ -23,6 +23,7 @@ import com.msi.manning.network.data.HTTPRequestHelper;
  * Simple form to exercise the HttpRequestHelper class (which wraps HttpClient).
  * 
  * GET: http://www.yahoo.com
+ * GET: http://www.google.com/search?&q=android
  * POST: http://www.snee.com/xml/crud/posttest.cgi (fname and lname params)
  * 
  * 
