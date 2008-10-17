@@ -145,7 +145,7 @@ public class HTTPHelperForm extends Activity {
          public void run() {
             HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
             if (method.equals("GET")) {
-               helper.performGet(url, user, pass, null, params);
+               helper.performGet(url, user, pass, null);
             }
             else if (method.equals("POST")) {
                helper.performPost(url, user, pass, null, params);
