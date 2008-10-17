@@ -88,7 +88,7 @@ public class ApacheHTTPWithAuth extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if (this.progressDialog.isShowing()) {
+        if (this.progressDialog != null && this.progressDialog.isShowing()) {
             this.progressDialog.dismiss();
         }
     }
