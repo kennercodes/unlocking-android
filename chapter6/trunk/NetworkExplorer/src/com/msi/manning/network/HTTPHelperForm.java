@@ -26,6 +26,8 @@ import com.msi.manning.network.data.HTTPRequestHelper;
  * GET: http://www.google.com/search?&q=android
  * POST: http://www.snee.com/xml/crud/posttest.cgi (fname and lname params)
  * 
+ * Or, host "echo.jsp" from the root of this project locally and use it for testing. 
+ * 
  * 
  * @author charliecollins
  * 
