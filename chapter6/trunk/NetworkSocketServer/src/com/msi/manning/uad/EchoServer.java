@@ -1,4 +1,4 @@
-package com.manning.uad;
+package com.msi.manning.uad;
 
 import java.net.ServerSocket;
 import java.net.Socket;
