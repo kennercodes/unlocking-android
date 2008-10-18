@@ -1,22 +1,12 @@
 package com.msi.manning.network;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -32,9 +22,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.msi.manning.network.data.HTTPRequestHelper;
 import com.msi.manning.network.data.xml.DeliciousHandler;
 import com.msi.manning.network.data.xml.DeliciousPost;
-import com.msi.manning.network.util.StringUtils;
 
 /**
  * Android HTTP example demonstrating basic auth over Apache HttpClient 4 (using
@@ -62,7 +52,7 @@ public class DeliciousRecentPosts extends Activity {
         public void handleMessage(final Message msg) {
             progressDialog.dismiss();
             String bundleResult = msg.getData().getString("RESPONSE");
-            DeliciousRecentPosts.this.output.setText(bundleResult);
+            DeliciousRecentPosts.this.output.setText(DeliciousRecentPosts.this.parseXMLResult(bundleResult));
         }
     };
 
@@ -102,52 +92,19 @@ public class DeliciousRecentPosts extends Activity {
      */
     private void performRequest(final String user, final String pass) {
 
-        // TODO update to using helper
-        
-        // use a response handler so we aren't blocking on the HTTP request
-        final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-            public String handleResponse(HttpResponse response) {
-                // when the response happens close the notification and update UI
-                StatusLine status = response.getStatusLine();
-                Log.d(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG + " statusCode - " + status.getStatusCode());
-                Log.d(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG + " statusReasonPhrase - "
-                        + status.getReasonPhrase());
-                HttpEntity entity = response.getEntity();
-                String result = null;
-                try {
-                    result = DeliciousRecentPosts.this.parseXMLResult(
-                            StringUtils.inputStreamToString(entity.getContent()));
-                    Message message = new Message();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("RESPONSE", result);
-                    message.setData(bundle);
-                    handler.sendMessage(message);                    
-                } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG, e);
-                }
-                return result;
-            }
-        };
-        
         this.progressDialog = ProgressDialog.show(this, "working . . .", "performing HTTP post to del.icio.us");
-
+        
+        final ResponseHandler<String> responseHandler = HTTPRequestHelper.getResponseHandlerInstance(this.handler);
+        
         // do the HTTP dance in a separate thread (the responseHandler will fire when complete)    
         new Thread() {
             @Override
             public void run() {
-                try {
-                    DefaultHttpClient client = new DefaultHttpClient();
-                    Credentials credentials = new UsernamePasswordCredentials(user, pass);
-                    client.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
-                    HttpPost httpMethod = new HttpPost(DeliciousRecentPosts.URL_GET_POSTS_RECENT);
-                    client.execute(httpMethod, responseHandler);
-                } catch (ClientProtocolException e) {
-                    Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG, e);
-                } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG, e);
-                }
+                HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
+                helper.performPost(URL_GET_POSTS_RECENT, user, pass, null, null);
             }
-        }.start();        
+        }.start();     
+        
     }
 
     /**
