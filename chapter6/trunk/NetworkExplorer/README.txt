@@ -2,8 +2,6 @@ Unlocking Android - NetworkExplorer
 ------------------------------------
 Android code example that makes use of network ConnectionManager,
 and also makes network Socket and HTTP calls - in various forms. 
- 
-THIS PROJECT IS NOT FINAL YET (still tweaking this chapter)
 
 --------------------------------------
 
