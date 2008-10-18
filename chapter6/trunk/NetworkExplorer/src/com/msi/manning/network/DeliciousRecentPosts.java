@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.msi.manning.network.data.xml.DeliciousHandler;
 import com.msi.manning.network.data.xml.DeliciousPost;
@@ -37,20 +38,20 @@ import com.msi.manning.network.util.StringUtils;
 
 /**
  * Android HTTP example demonstrating basic auth over Apache HttpClient 4 (using
- * del.icio.us API).
+ * del.icio.us API), and XML parsing (HTTP and Plain XML - POX).
  * 
  * 
  * @author charliecollins
  * 
  */
-public class ApacheHTTPWithAuth extends Activity {
+public class DeliciousRecentPosts extends Activity {
 
-    private static final String CLASSTAG = ApacheHTTPWithAuth.class.getSimpleName();
+    private static final String CLASSTAG = DeliciousRecentPosts.class.getSimpleName();
     private static final String URL_GET_POSTS_RECENT = "https://api.del.icio.us/v1/posts/recent?";
 
     private EditText user;
     private EditText pass;
-    private EditText output;
+    private TextView output;
     private Button button;
     
     private ProgressDialog progressDialog;
@@ -61,26 +62,26 @@ public class ApacheHTTPWithAuth extends Activity {
         public void handleMessage(final Message msg) {
             progressDialog.dismiss();
             String bundleResult = msg.getData().getString("RESPONSE");
-            ApacheHTTPWithAuth.this.output.setText(bundleResult);
+            DeliciousRecentPosts.this.output.setText(bundleResult);
         }
     };
 
     @Override
     public void onCreate(final Bundle icicle) {
         super.onCreate(icicle);
-        this.setContentView(R.layout.apache_http);
+        this.setContentView(R.layout.delicious_posts);
 
-        this.user = (EditText) this.findViewById(R.id.apache_user);
-        this.pass = (EditText) this.findViewById(R.id.apache_pass);
-        this.button = (Button) this.findViewById(R.id.apachego_button);
-        this.output = (EditText) this.findViewById(R.id.apache_output);
+        this.user = (EditText) this.findViewById(R.id.del_user);
+        this.pass = (EditText) this.findViewById(R.id.del_pass);
+        this.button = (Button) this.findViewById(R.id.delgo_button);
+        this.output = (TextView) this.findViewById(R.id.del_output);
 
         this.button.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
-                ApacheHTTPWithAuth.this.output.setText("");
+                DeliciousRecentPosts.this.output.setText("");
 
-                ApacheHTTPWithAuth.this.performRequest(ApacheHTTPWithAuth.this.user.getText()
-                        .toString(), ApacheHTTPWithAuth.this.pass.getText().toString());                
+                DeliciousRecentPosts.this.performRequest(DeliciousRecentPosts.this.user.getText()
+                        .toString(), DeliciousRecentPosts.this.pass.getText().toString());                
             }
         });
     };
@@ -101,18 +102,20 @@ public class ApacheHTTPWithAuth extends Activity {
      */
     private void performRequest(final String user, final String pass) {
 
+        // TODO update to using helper
+        
         // use a response handler so we aren't blocking on the HTTP request
         final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             public String handleResponse(HttpResponse response) {
                 // when the response happens close the notification and update UI
                 StatusLine status = response.getStatusLine();
-                Log.d(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG + " statusCode - " + status.getStatusCode());
-                Log.d(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG + " statusReasonPhrase - "
+                Log.d(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG + " statusCode - " + status.getStatusCode());
+                Log.d(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG + " statusReasonPhrase - "
                         + status.getReasonPhrase());
                 HttpEntity entity = response.getEntity();
                 String result = null;
                 try {
-                    result = ApacheHTTPWithAuth.this.parseXMLResult(
+                    result = DeliciousRecentPosts.this.parseXMLResult(
                             StringUtils.inputStreamToString(entity.getContent()));
                     Message message = new Message();
                     Bundle bundle = new Bundle();
@@ -120,7 +123,7 @@ public class ApacheHTTPWithAuth extends Activity {
                     message.setData(bundle);
                     handler.sendMessage(message);                    
                 } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG, e);
+                    Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG, e);
                 }
                 return result;
             }
@@ -136,12 +139,12 @@ public class ApacheHTTPWithAuth extends Activity {
                     DefaultHttpClient client = new DefaultHttpClient();
                     Credentials credentials = new UsernamePasswordCredentials(user, pass);
                     client.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
-                    HttpPost httpMethod = new HttpPost(ApacheHTTPWithAuth.URL_GET_POSTS_RECENT);
+                    HttpPost httpMethod = new HttpPost(DeliciousRecentPosts.URL_GET_POSTS_RECENT);
                     client.execute(httpMethod, responseHandler);
                 } catch (ClientProtocolException e) {
-                    Log.e(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG, e);
+                    Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG, e);
                 } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG, e);
+                    Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG, e);
                 }
             }
         }.start();        
@@ -166,11 +169,11 @@ public class ApacheHTTPWithAuth extends Activity {
 
             List<DeliciousPost> posts = handler.getPosts();
             for (DeliciousPost p : posts) {
-                Log.d(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG + " DeliciousPost - " + p.getHref());
+                Log.d(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG + " DeliciousPost - " + p.getHref());
                 result.append("\n" + p.getHref());
             }
         } catch (Exception e) {
-            Log.e(Constants.LOGTAG, " " + ApacheHTTPWithAuth.CLASSTAG + " ERROR - " + e);
+            Log.e(Constants.LOGTAG, " " + DeliciousRecentPosts.CLASSTAG + " ERROR - " + e);
         }
         return result.toString();
     }

@@ -10,9 +10,11 @@
         
         <activity android:name=".SimpleSocket" android:label="@string/app_name" />
         <activity android:name=".SimpleGet" android:label="@string/app_name" />
-        <activity android:name=".ApacheHTTPWithAuth" android:label="@string/app_name" />        
+        <activity android:name=".ApacheHTTPSimple" android:label="@string/app_name" />        
         <activity android:name=".ApacheHTTPViaHelper" android:label="@string/app_name" /> 
         <activity android:name=".HTTPHelperForm" android:label="@string/app_name" />         
+        <activity android:name=".DeliciousRecentPosts" android:label="@string/app_name" />         
+        <activity android:name=".GoogleClientLogin" android:label="@string/app_name" />         
         
     </application>
     

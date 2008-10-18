@@ -17,7 +17,9 @@ public class Main extends Activity {
     private Button getButton;
     private Button apacheButton;
     private Button apacheViaHelperButton;
-    private Button helperButton;
+    private Button helperFormButton;
+    private Button deliciousButton;
+    private Button gClientLoginButton;
 
     private TextView status;
 
@@ -43,7 +45,7 @@ public class Main extends Activity {
         this.apacheButton = (Button) this.findViewById(R.id.main_apache_button);
         this.apacheButton.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, ApacheHTTPWithAuth.class));
+                Main.this.startActivity(new Intent(Main.this, ApacheHTTPSimple.class));
             }
         });
 
@@ -54,12 +56,26 @@ public class Main extends Activity {
             }
         }); 
         
-        this.helperButton = (Button) this.findViewById(R.id.main_helper_button);
-        this.helperButton.setOnClickListener(new OnClickListener() {
+        this.helperFormButton = (Button) this.findViewById(R.id.main_helper_button);
+        this.helperFormButton.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
                 Main.this.startActivity(new Intent(Main.this, HTTPHelperForm.class));
             }
-        });   
+        }); 
+        
+        this.deliciousButton = (Button) this.findViewById(R.id.main_delicious_button);
+        this.deliciousButton.setOnClickListener(new OnClickListener() {
+            public void onClick(final View v) {
+                Main.this.startActivity(new Intent(Main.this, DeliciousRecentPosts.class));
+            }
+        });  
+        
+        this.gClientLoginButton = (Button) this.findViewById(R.id.main_gclientlogin_button);
+        this.gClientLoginButton.setOnClickListener(new OnClickListener() {
+            public void onClick(final View v) {
+                Main.this.startActivity(new Intent(Main.this, GoogleClientLogin.class));
+            }
+        });  
 
         this.status = (TextView) this.findViewById(R.id.main_status);
     }

@@ -14,13 +14,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class SimpleGet extends Activity {
 
 	private static final String CLASSTAG = SimpleGet.class.getSimpleName();
 
 	private EditText getInput;
-	private EditText getOutput;
+	private TextView getOutput;
 	private Button getButton;
 
 	@Override
@@ -29,7 +30,7 @@ public class SimpleGet extends Activity {
 		setContentView(R.layout.simple_get);
 
 		getInput = (EditText) this.findViewById(R.id.get_input);
-		getOutput = (EditText) this.findViewById(R.id.get_output);
+		getOutput = (TextView) this.findViewById(R.id.get_output);
 		getButton = (Button) this.findViewById(R.id.get_button);
 
 		getButton.setOnClickListener(new OnClickListener() {

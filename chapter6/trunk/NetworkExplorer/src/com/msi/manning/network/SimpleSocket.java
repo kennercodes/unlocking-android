@@ -14,9 +14,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Android direct to Socket example.
+ * 
+ * For this to work you need a server listening on the IP address and port listed below in code. 
+ * See NetworkSocketServer project for an example.
  * 
  * 
  * @author charliecollins
@@ -27,7 +31,7 @@ public class SimpleSocket extends Activity {
 	private static final String CLASSTAG = SimpleSocket.class.getSimpleName();
 
 	private EditText socketInput;
-	private EditText socketOutput;
+	private TextView socketOutput;
 	private Button socketButton;
 
 	@Override
@@ -36,7 +40,7 @@ public class SimpleSocket extends Activity {
 		setContentView(R.layout.simple_socket);
 
 		socketInput = (EditText) this.findViewById(R.id.socket_input);
-		socketOutput = (EditText) this.findViewById(R.id.socket_output);
+		socketOutput = (TextView) this.findViewById(R.id.socket_output);
 		socketButton = (Button) this.findViewById(R.id.socket_button);
 
 		socketButton.setOnClickListener(new OnClickListener() {
@@ -77,7 +81,7 @@ public class SimpleSocket extends Activity {
 			writer.write("EXIT\n", 0, 5);
 			writer.flush();
 
-		} catch (IOException e) {
+		} catch (IOException e) {		    
 			Log.e(Constants.LOGTAG, " " + CLASSTAG
 					+ " IOException calling socket", e);
 		} finally {

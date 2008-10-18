@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.msi.manning.network.data.HTTPRequestHelper;
 
@@ -47,7 +48,7 @@ public class HTTPHelperForm extends Activity {
    private EditText user;
    private EditText pass;
    private Button go;
-   private EditText output;
+   private TextView output;
 
    private ProgressDialog progressDialog;
 
@@ -78,7 +79,7 @@ public class HTTPHelperForm extends Activity {
       this.user = (EditText) this.findViewById(R.id.htth_user);
       this.pass = (EditText) this.findViewById(R.id.htth_pass);
       this.go = (Button) this.findViewById(R.id.htth_go_button);
-      this.output = (EditText) this.findViewById(R.id.htth_output);
+      this.output = (TextView) this.findViewById(R.id.htth_output);
 
       ArrayAdapter<String> methods = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[] {
                "GET", "POST" });

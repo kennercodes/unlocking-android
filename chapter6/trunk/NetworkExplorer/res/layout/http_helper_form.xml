@@ -82,7 +82,7 @@
 		<TextView android:id="@+id/htth_output_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:text="Output:" />
-		<EditText android:id="@+id/htth_output" android:layout_width="fill_parent"
+		<TextView android:id="@+id/htth_output" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginBottom="10px"
 			android:textSize="10sp" />
 

@@ -7,7 +7,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="10px"	
-		android:text="Enter some data and press SOCKET to submit to socket" />
+		android:text="Enter some data and press SOCKET to submit to socket (must have socket server listening at IP and port from code for this to work)" />
 		
 	<TextView android:id="@+id/socket_input_label"
         android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
 		android:layout_marginBottom="10px"	
 		android:text="Output:" />
 		
-	<EditText android:id="@+id/socket_output"
+	<TextView android:id="@+id/socket_output"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
 		android:layout_marginBottom="10px"	

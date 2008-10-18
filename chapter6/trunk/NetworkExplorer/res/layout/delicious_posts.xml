@@ -7,34 +7,34 @@
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 
-		<TextView android:id="@+id/apache_label"
+		<TextView android:id="@+id/del_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px"
-			android:text="Fill in credentials and select GO to make del.icio.us request" />
+			android:text="Fill in credentials and select GO to make del.icio.us request for recent posts" />
 
-		<TextView android:id="@+id/apache_user_label"
+		<TextView android:id="@+id/del_user_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:text="User:" />
 
-		<EditText android:id="@+id/apache_user" android:layout_width="fill_parent"
+		<EditText android:id="@+id/del_user" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginBottom="10px" />
 
-		<TextView android:id="@+id/apache_pass_label"
+		<TextView android:id="@+id/del_pass_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:text="Password:" />
 
-		<EditText android:id="@+id/apache_pass" android:layout_width="fill_parent"
+		<EditText android:id="@+id/del_pass" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginBottom="10px"
 			android:password="true" />
 
-		<Button android:id="@+id/apachego_button" android:layout_width="wrap_content"
+		<Button android:id="@+id/delgo_button" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="GO" />
 
-		<TextView android:id="@+id/apache_output_label"
+		<TextView android:id="@+id/del_output_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:text="Output:" />
 
-		<EditText android:id="@+id/apache_output"
+		<TextView android:id="@+id/del_output"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:textSize="10sp" />
 
