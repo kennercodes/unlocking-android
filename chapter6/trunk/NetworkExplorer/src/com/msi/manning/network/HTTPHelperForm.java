@@ -127,6 +127,19 @@ public class HTTPHelperForm extends Activity {
             final String param1Value, final String param2Name, final String param2Value, final String param3Name,
             final String param3Value, final String user, final String pass) {
 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " request url - " + url); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " request method - " + method); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " param1Name - " + param1Name); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " param1Value - " + param1Value); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " param2Name - " + param2Name); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " param2Value - " + param2Value); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " param3Name - " + param3Name); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " param3Value - " + param3Value); 
+       Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " user - " + user); 
+       if (pass != null) {
+           Log.d(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " pass length - " + pass.length());
+       }
+       
       final HashMap<String, String> params = new HashMap<String, String>();
       if ((param1Name != null) && (param1Value != null)) {
          params.put(param1Name, param1Value);

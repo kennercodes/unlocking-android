@@ -52,7 +52,7 @@ public class HTTPRequestHelper {
     private static final int GET_TYPE = 2;
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String FORM_ENCODED = "application/x-www-form-urlencoded";
-
+   
     private final ResponseHandler<String> responseHandler;
 
     public HTTPRequestHelper(final ResponseHandler<String> responseHandler) {
@@ -92,6 +92,8 @@ public class HTTPRequestHelper {
     private void performRequest(final String url, final String user, final String pass,
             final Map<String, String> additionalHeaders, final Map<String, String> params, final int requestType) {
 
+        Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " making HTTP request to url - " + url);
+
         // establish HttpClient
         DefaultHttpClient client = new DefaultHttpClient();
 
@@ -108,6 +110,9 @@ public class HTTPRequestHelper {
         // process additional headers using request interceptor
         final Map<String, String> headers = new HashMap<String, String>();
         if ((additionalHeaders != null) && (additionalHeaders.size() > 0)) {
+            Log
+                    .d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG
+                            + " additional headers present, adding to request");
             headers.putAll(additionalHeaders);
         }
         if (requestType == HTTPRequestHelper.POST_TYPE) {
@@ -136,6 +141,7 @@ public class HTTPRequestHelper {
             // (mutli part form data not supported with helper, yet, but HttpClient can handle it fine)
             List<NameValuePair> nvps = null;
             if ((params != null) && (params.size() > 0)) {
+                Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " params present, adding to request");
                 nvps = new ArrayList<NameValuePair>();
                 for (String key : params.keySet()) {
                     nvps.add(new BasicNameValuePair(key, params.get(key)));
@@ -180,7 +186,7 @@ public class HTTPRequestHelper {
             }
         }
     }
-
+    
     /**
      * Static utility method to create a default ResponseHandler that sends a
      * Message to the passed in Handler with the response as a String, after the
@@ -213,7 +219,8 @@ public class HTTPRequestHelper {
                         handler.sendMessage(message);
                     }
                 } else {
-                    Log.w(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " empty response entity, HTTP error occurred");
+                    Log.w(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG
+                            + " empty response entity, HTTP error occurred");
                     bundle.putString("RESPONSE", "Error - " + response.getStatusLine().getReasonPhrase());
                     message.setData(bundle);
                     handler.sendMessage(message);
@@ -223,5 +230,4 @@ public class HTTPRequestHelper {
         };
         return responseHandler;
     }
-
 }
