@@ -71,7 +71,7 @@ public class HTTPHelperForm extends Activity {
       this.url = (EditText) this.findViewById(R.id.htth_url);
       this.method = (Spinner) this.findViewById(R.id.htth_method);
       this.param1Name = (EditText) this.findViewById(R.id.htth_param1_name);
-      this.param1Value = (EditText) this.findViewById(R.id.htth_param1_name);
+      this.param1Value = (EditText) this.findViewById(R.id.htth_param1_value);
       this.param2Name = (EditText) this.findViewById(R.id.htth_param2_name);
       this.param2Value = (EditText) this.findViewById(R.id.htth_param2_value);
       this.param3Name = (EditText) this.findViewById(R.id.htth_param3_name);
@@ -160,12 +160,8 @@ public class HTTPHelperForm extends Activity {
                msg.setData(bundle);               
                HTTPHelperForm.this.handler.sendMessage(msg);
                Log.w(Constants.LOGTAG, " " + HTTPHelperForm.CLASSTAG + " unknown method, nothing to do");
-            }
-            // TODO select operation based on inputs
-            // this isn't in the book, and isn't done yet - but is on my TODO list
-            // check POST and GET methods with various params, and eventually multi part form, etc
+            }            
          }
       }.start();
    }
-
 }
