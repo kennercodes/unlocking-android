@@ -10,30 +10,39 @@
 		<TextView android:id="@+id/gclient_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px"
-			android:text="Fill in credentials and select GO to obtain and use Google ClientLogin Token" />
+			android:text="Fill in email, then select GET TOKEN, and then GET CONTACTS (must have token before get contacts will work)." />
 
-		<TextView android:id="@+id/gclient_user_label"
+		<TextView android:id="@+id/gclient_email_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:layout_marginBottom="10px" android:text="User:" />
+			android:layout_marginBottom="10px" android:text="Google Email Address:" />
+		<EditText android:id="@+id/gclient_email" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="10px" />
 
-		<EditText android:id="@+id/gclient_user" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_marginBottom="10px" />
+        <TextView android:id="@+id/gclient_password_label"
+            android:layout_width="fill_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="10px" android:text="Google Password:" />
+        <EditText android:id="@+id/gclient_password" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="10px" android:password="true" />
 
-		<TextView android:id="@+id/gclient_pass_label"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:layout_marginBottom="10px" android:text="Password:" />
+        <Button android:id="@+id/gclientgettoken_button" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="GET TOKEN" />
+        
+        <Button android:id="@+id/gclientcleartoken_button" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="CLEAR TOKEN" />        
 
-		<EditText android:id="@+id/gclient_pass" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_marginBottom="10px"
-			android:password="true" />
-
-		<Button android:id="@+id/gclientgo_button" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="GO" />
+		<Button android:id="@+id/gclientgetcontacts_button" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="GET CONTACTS" />
+			
+		<TextView android:id="@+id/gclient_token_label"
+            android:layout_width="fill_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="10px" android:text="Token:" />
+        <TextView android:id="@+id/gclient_token"
+            android:layout_width="fill_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="10px" android:textSize="10sp" />
 
 		<TextView android:id="@+id/gclient_output_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:text="Output:" />
-
 		<TextView android:id="@+id/gclient_output"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginBottom="10px" android:textSize="10sp" />

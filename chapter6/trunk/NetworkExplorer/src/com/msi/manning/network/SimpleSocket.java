@@ -19,8 +19,8 @@ import android.widget.TextView;
 /**
  * Android direct to Socket example.
  * 
- * For this to work you need a server listening on the IP address and port listed below in code. 
- * See NetworkSocketServer project for an example.
+ * For this to work you need a server listening on the IP address and port
+ * specified. See the NetworkSocketServer project for an example.
  * 
  * 
  * @author charliecollins
@@ -28,79 +28,78 @@ import android.widget.TextView;
  */
 public class SimpleSocket extends Activity {
 
-	private static final String CLASSTAG = SimpleSocket.class.getSimpleName();
+    private static final String CLASSTAG = SimpleSocket.class.getSimpleName();
 
-	private EditText socketInput;
-	private TextView socketOutput;
-	private Button socketButton;
+    private EditText ipAddress;
+    private EditText port;
+    private EditText socketInput;
+    private TextView socketOutput;
+    private Button socketButton;
 
-	@Override
-	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-		setContentView(R.layout.simple_socket);
+    private void callSocket(final String ip, final String port, final String socketData) {
 
-		socketInput = (EditText) this.findViewById(R.id.socket_input);
-		socketOutput = (TextView) this.findViewById(R.id.socket_output);
-		socketButton = (Button) this.findViewById(R.id.socket_button);
+        Socket socket = null;
+        BufferedWriter writer = null;
+        BufferedReader reader = null;
 
-		socketButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				socketOutput.setText("");
-				callSocket(socketInput.getText().toString());
-			}
-		});
-	};
+        try {
+            socket = new Socket(ip, Integer.parseInt(port));
+            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-	private void callSocket(final String socketData) {
+            // send input terminated with \n
+            String input = socketData;
+            writer.write(input + "\n", 0, input.length() + 1);
+            writer.flush();
 
-		String address = "192.168.0.12";
-		int port = 8889;
+            // read back output
+            String output = reader.readLine();
+            Log.d(Constants.LOGTAG, " " + SimpleSocket.CLASSTAG + " output - " + output);
+            this.socketOutput.setText(output);
 
-		Socket socket = null;
-		BufferedWriter writer = null;
-		BufferedReader reader = null;
+            // send EXIT and close
+            writer.write("EXIT\n", 0, 5);
+            writer.flush();
 
-		try {
-			socket = new Socket(address, port);
-			writer = new BufferedWriter(new OutputStreamWriter(socket
-					.getOutputStream()));
-			reader = new BufferedReader(new InputStreamReader(socket
-					.getInputStream()));
+        } catch (IOException e) {
+            Log.e(Constants.LOGTAG, " " + SimpleSocket.CLASSTAG + " IOException calling socket", e);
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                // swallow
+            }
+            try {
+                reader.close();
+            } catch (IOException e) {
+                // swallow
+            }
+            try {
+                socket.close();
+            } catch (IOException e) {
+                // swallow
+            }
+        }
+    };
 
-			// send input terminated with \n
-			String input = socketData;
-			writer.write(input + "\n", 0, input.length() + 1);
-			writer.flush();
+    @Override
+    public void onCreate(final Bundle icicle) {
+        super.onCreate(icicle);
+        this.setContentView(R.layout.simple_socket);
 
-			// read back output
-			String output = reader.readLine();
-			Log.d(Constants.LOGTAG, " " + CLASSTAG + " output - " + output);
-			socketOutput.setText(output);
+        this.ipAddress = (EditText) this.findViewById(R.id.socket_ip);
+        this.port = (EditText) this.findViewById(R.id.socket_port);
+        this.socketInput = (EditText) this.findViewById(R.id.socket_input);
+        this.socketOutput = (TextView) this.findViewById(R.id.socket_output);
+        this.socketButton = (Button) this.findViewById(R.id.socket_button);
 
-			// send EXIT and close
-			writer.write("EXIT\n", 0, 5);
-			writer.flush();
-
-		} catch (IOException e) {		    
-			Log.e(Constants.LOGTAG, " " + CLASSTAG
-					+ " IOException calling socket", e);
-		} finally {
-			try {
-				writer.close();				
-			} catch (IOException e) {
-				// swallow
-			}
-			try {
-				reader.close();				
-			} catch (IOException e) {
-				// swallow
-			}
-			try {
-				socket.close();				
-			} catch (IOException e) {
-				// swallow
-			}
-		}
-	}
+        this.socketButton.setOnClickListener(new OnClickListener() {
+            public void onClick(final View v) {
+                SimpleSocket.this.socketOutput.setText("");
+                SimpleSocket.this.callSocket(SimpleSocket.this.ipAddress.getText().toString(), SimpleSocket.this.port
+                        .getText().toString(), SimpleSocket.this.socketInput.getText().toString());
+            }
+        });
+    }
 
 }
