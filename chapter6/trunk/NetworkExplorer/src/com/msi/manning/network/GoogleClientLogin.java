@@ -62,9 +62,11 @@ public class GoogleClientLogin extends Activity {
         public void handleMessage(final Message msg) {
             GoogleClientLogin.this.progressDialog.dismiss();
             String bundleResult = msg.getData().getString("RESPONSE");
+            Log.d(Constants.LOGTAG, " " + GoogleClientLogin.CLASSTAG
+                    + " response body before auth trim - " + bundleResult);
             
-            String authToken = bundleResult;
-            authToken = authToken.substring(authToken.indexOf("Auth=") + 5, authToken.length());
+            String authToken = bundleResult;           
+            authToken = authToken.substring(authToken.indexOf("Auth=") + 5, authToken.length()).trim();
 
             GoogleClientLogin.this.tokenValue = authToken;
             GoogleClientLogin.this.tokenText.setText(authToken);
@@ -144,10 +146,9 @@ public class GoogleClientLogin extends Activity {
         new Thread() {
             @Override
             public void run() {
-                String auth = "auth=" + token;
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put(GoogleClientLogin.GTOKEN_AUTH_HEADER_NAME, 
-                        GoogleClientLogin.GTOKEN_AUTH_HEADER_VALUE_PREFIX + auth);
+                        GoogleClientLogin.GTOKEN_AUTH_HEADER_VALUE_PREFIX + token);
 
                 String encEmail = email;
                 try {
