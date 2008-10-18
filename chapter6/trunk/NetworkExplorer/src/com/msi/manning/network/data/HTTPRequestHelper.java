@@ -109,10 +109,7 @@ public class HTTPRequestHelper {
 
         // process additional headers using request interceptor
         final Map<String, String> headers = new HashMap<String, String>();
-        if ((additionalHeaders != null) && (additionalHeaders.size() > 0)) {
-            Log
-                    .d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG
-                            + " additional headers present, adding to request");
+        if ((additionalHeaders != null) && (additionalHeaders.size() > 0)) {           
             headers.putAll(additionalHeaders);
         }
         if (requestType == HTTPRequestHelper.POST_TYPE) {
@@ -124,6 +121,7 @@ public class HTTPRequestHelper {
                         IOException {
                     for (String key : headers.keySet()) {
                         if (!request.containsHeader(key)) {
+                            Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding header: " + key + " | " + headers.get(key));
                             request.addHeader(key, headers.get(key));
                         }
                     }
@@ -134,20 +132,17 @@ public class HTTPRequestHelper {
         // handle POST or GET request respectively
         if (requestType == HTTPRequestHelper.POST_TYPE) {
             Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " performRequest POST");
-
             HttpPost method = new HttpPost(url);
 
             // data - name/value params 
-            // (mutli part form data not supported with helper, yet, but HttpClient can handle it fine)
             List<NameValuePair> nvps = null;
-            if ((params != null) && (params.size() > 0)) {
-                Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " params present, adding to request");
+            if ((params != null) && (params.size() > 0)) {                
                 nvps = new ArrayList<NameValuePair>();
                 for (String key : params.keySet()) {
+                    Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding param: " + key + " | " + params.get(key));
                     nvps.add(new BasicNameValuePair(key, params.get(key)));
                 }
             }
-
             if (nvps != null) {
                 try {
                     method.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));

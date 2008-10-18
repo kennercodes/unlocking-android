@@ -143,18 +143,17 @@ public class GoogleClientLogin extends Activity {
         new Thread() {
             @Override
             public void run() {
-                // TODO parse the token
                 String auth = "auth=" + token;
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put(GoogleClientLogin.GTOKEN_AUTH_HEADER_NAME, auth);
 
-                String url = GoogleClientLogin.URL_GET_CONTACTS_PREFIX + email
-                        + GoogleClientLogin.URL_GET_CONTACTS_SUFFIX;
+                String encEmail = email;
                 try {
-                    url = URLEncoder.encode(url, "UTF-8");
+                    encEmail = URLEncoder.encode(encEmail, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     Log.e(Constants.LOGTAG, " " + GoogleClientLogin.CLASSTAG, e);
-                }
+                }                
+                String url = GoogleClientLogin.URL_GET_CONTACTS_PREFIX + encEmail + GoogleClientLogin.URL_GET_CONTACTS_SUFFIX;
                 Log.d(Constants.LOGTAG, " " + GoogleClientLogin.CLASSTAG + " getContacts URL - " + url);
 
                 HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
