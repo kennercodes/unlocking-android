@@ -39,7 +39,8 @@ import com.msi.manning.network.util.StringUtils;
  * Wrapper to help make HTTP requests easier - after all, we want to make it
  * nice for the people.
  * 
- * TODO cookies TODO multi-part form data
+ * TODO cookies 
+ * TODO multi-part binary data
  * 
  * @author charliecollins
  * 
@@ -51,7 +52,8 @@ public class HTTPRequestHelper {
     private static final int POST_TYPE = 1;
     private static final int GET_TYPE = 2;
     private static final String CONTENT_TYPE = "Content-Type";
-    private static final String FORM_ENCODED = "application/x-www-form-urlencoded";
+    public static final String MIME_FORM_ENCODED = "application/x-www-form-urlencoded";
+    public static final String MIME_TEXT_PLAIN = "text/plain";
    
     private final ResponseHandler<String> responseHandler;
 
@@ -65,32 +67,41 @@ public class HTTPRequestHelper {
      */
     public void performGet(final String url, final String user, final String pass,
             final Map<String, String> additionalHeaders) {
-        this.performRequest(url, user, pass, additionalHeaders, null, HTTPRequestHelper.GET_TYPE);
+        this.performRequest(null, url, user, pass, additionalHeaders, null, HTTPRequestHelper.GET_TYPE);
     }
 
     /**
-     * Perform an HTTP POST operation.
+     * Perform an HTTP POST operation with specified content type.
+     * 
+     */
+    public void performPost(final String contentType, final String url, final String user, final String pass,
+            final Map<String, String> additionalHeaders, final Map<String, String> params) {
+        this.performRequest(contentType, url, user, pass, additionalHeaders, params, HTTPRequestHelper.POST_TYPE);
+    }
+    
+    /**
+     * Perform an HTTP POST operation with a default conent-type of "application/x-www-form-urlencoded."
      * 
      */
     public void performPost(final String url, final String user, final String pass,
             final Map<String, String> additionalHeaders, final Map<String, String> params) {
-        this.performRequest(url, user, pass, additionalHeaders, params, HTTPRequestHelper.POST_TYPE);
+        this.performRequest(HTTPRequestHelper.MIME_FORM_ENCODED, url, user, pass, additionalHeaders, params, HTTPRequestHelper.POST_TYPE);
     }
 
     /**
      * Private heavy lifting method that performs GET or POST with supplied url,
      * user, pass, data, and headers.
      * 
-     * 
+     * @param contentType
      * @param url
      * @param user
      * @param pass
-     * @param additionalHeaders
+     * @param headers
      * @param params
      * @param requestType
      */
-    private void performRequest(final String url, final String user, final String pass,
-            final Map<String, String> additionalHeaders, final Map<String, String> params, final int requestType) {
+    private void performRequest(final String contentType, final String url, final String user, final String pass,
+            final Map<String, String> headers, final Map<String, String> params, final int requestType) {
 
         Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " making HTTP request to url - " + url);
 
@@ -107,22 +118,22 @@ public class HTTPRequestHelper {
             client.getCredentialsProvider().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(user, pass));
         }
 
-        // process additional headers using request interceptor
-        final Map<String, String> headers = new HashMap<String, String>();
-        if ((additionalHeaders != null) && (additionalHeaders.size() > 0)) {           
-            headers.putAll(additionalHeaders);
+        // process headers using request interceptor
+        final Map<String, String> sendHeaders = new HashMap<String, String>();
+        if ((headers != null) && (headers.size() > 0)) {           
+            sendHeaders.putAll(headers);
         }
         if (requestType == HTTPRequestHelper.POST_TYPE) {
-            headers.put(HTTPRequestHelper.CONTENT_TYPE, HTTPRequestHelper.FORM_ENCODED);
-        }
-        if (headers.size() > 0) {
+            sendHeaders.put(HTTPRequestHelper.CONTENT_TYPE, contentType);
+        } 
+        if (sendHeaders.size() > 0) {
             client.addRequestInterceptor(new HttpRequestInterceptor() {
                 public void process(final HttpRequest request, final HttpContext context) throws HttpException,
                         IOException {
-                    for (String key : headers.keySet()) {
+                    for (String key : sendHeaders.keySet()) {
                         if (!request.containsHeader(key)) {
-                            Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding header: " + key + " | " + headers.get(key));
-                            request.addHeader(key, headers.get(key));
+                            Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding header: " + key + " | " + sendHeaders.get(key));
+                            request.addHeader(key, sendHeaders.get(key));
                         }
                     }
                 }

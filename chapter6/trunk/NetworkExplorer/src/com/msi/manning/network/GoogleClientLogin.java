@@ -160,7 +160,7 @@ public class GoogleClientLogin extends Activity {
                 Log.d(Constants.LOGTAG, " " + GoogleClientLogin.CLASSTAG + " getContacts URL - " + url);
 
                 HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
-                helper.performPost(url, null, null, headers, null);
+                helper.performGet(url, null, null, headers);
             }
         }.start();
     }
@@ -182,7 +182,7 @@ public class GoogleClientLogin extends Activity {
                 params.put(GoogleClientLogin.PARAM_SOURCE, GoogleClientLogin.PARAM_SOURCE_VALUE);
 
                 HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
-                helper.performPost(GoogleClientLogin.URL_GET_GTOKEN, null, null, null, params);
+                helper.performPost(HTTPRequestHelper.MIME_FORM_ENCODED, GoogleClientLogin.URL_GET_GTOKEN, null, null, null, params);
             }
         }.start();
     }
