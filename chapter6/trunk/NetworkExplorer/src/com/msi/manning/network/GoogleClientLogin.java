@@ -34,7 +34,8 @@ public class GoogleClientLogin extends Activity {
     private static final String URL_GET_GTOKEN = "https://www.google.com/accounts/ClientLogin";
     private static final String URL_GET_CONTACTS_PREFIX = "http://www.google.com/m8/feeds/contacts/"; //liz%40gmail.com
     private static final String URL_GET_CONTACTS_SUFFIX = "/full";
-    private static final String GTOKEN_AUTH_HEADER_NAME = "Authorization: GoogleLogin";
+    private static final String GTOKEN_AUTH_HEADER_NAME = "Authorization";
+    private static final String GTOKEN_AUTH_HEADER_VALUE_PREFIX = "GoogleLogin auth=";
     private static final String PARAM_ACCOUNT_TYPE = "accountType";
     private static final String PARAM_ACCOUNT_TYPE_VALUE = "HOSTED_OR_GOOGLE";
     private static final String PARAM_EMAIL = "Email";
@@ -145,7 +146,8 @@ public class GoogleClientLogin extends Activity {
             public void run() {
                 String auth = "auth=" + token;
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put(GoogleClientLogin.GTOKEN_AUTH_HEADER_NAME, auth);
+                headers.put(GoogleClientLogin.GTOKEN_AUTH_HEADER_NAME, 
+                        GoogleClientLogin.GTOKEN_AUTH_HEADER_VALUE_PREFIX + auth);
 
                 String encEmail = email;
                 try {
