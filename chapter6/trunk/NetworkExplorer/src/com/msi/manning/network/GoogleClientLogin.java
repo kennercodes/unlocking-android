@@ -186,6 +186,4 @@ public class GoogleClientLogin extends Activity {
             }
         }.start();
     }
-
-
 }
