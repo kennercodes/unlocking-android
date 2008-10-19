@@ -86,5 +86,4 @@ public class SimpleGet extends Activity {
 		}
 		return result;
 	}
-
 }
