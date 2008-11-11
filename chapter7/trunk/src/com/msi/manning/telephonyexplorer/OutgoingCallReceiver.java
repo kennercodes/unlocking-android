@@ -17,27 +17,24 @@ import android.widget.Toast;
  */
 public class OutgoingCallReceiver extends BroadcastReceiver {
 
-	public static final String ABORT_PHONE_NUMBER = "1231231234";
+   public static final String ABORT_PHONE_NUMBER = "1231231234";
 
-	private static final String OUTGOING_CALL_ACTION = "android.intent.action.NEW_OUTGOING_CALL";
-	private static final String INTENT_PHONE_NUMBER = "android.intent.extra.PHONE_NUMBER";
+   private static final String OUTGOING_CALL_ACTION = "android.intent.action.NEW_OUTGOING_CALL";
+   private static final String INTENT_PHONE_NUMBER = "android.intent.extra.PHONE_NUMBER";
 
-	@Override
-	public void onReceive(final Context context, final Intent intent) {
-		Log.v("OutgoingCallReceiver", "onReceive");
-		if (intent.getAction().equals(OutgoingCallReceiver.OUTGOING_CALL_ACTION)) {
-			Log.v("OutgoingCallReceiver", "NEW_OUTGOING_CALL received");
+   @Override
+   public void onReceive(final Context context, final Intent intent) {
+      Log.v(Constants.LOGTAG, "OutgoingCallReceiver onReceive");
+      if (intent.getAction().equals(OutgoingCallReceiver.OUTGOING_CALL_ACTION)) {
+         Log.v(Constants.LOGTAG, "OutgoingCallReceiver NEW_OUTGOING_CALL received");
 
-			// get phone number from bundle
-			String phoneNumber = intent.getExtras().getString(
-					INTENT_PHONE_NUMBER);
-			if ((phoneNumber != null)
-					&& phoneNumber.equals(OutgoingCallReceiver.ABORT_PHONE_NUMBER)) {
-				Toast.makeText(context,
-						"NEW_OUTGOING_CALL intercepted to number 123-123-1234 - aborting call",
-							Toast.LENGTH_LONG).show();
-				this.abortBroadcast();
-			}
-		}
-	}
+         // get phone number from bundle
+         String phoneNumber = intent.getExtras().getString(OutgoingCallReceiver.INTENT_PHONE_NUMBER);
+         if ((phoneNumber != null) && phoneNumber.equals(OutgoingCallReceiver.ABORT_PHONE_NUMBER)) {
+            Toast.makeText(context, "NEW_OUTGOING_CALL intercepted to number 123-123-1234 - aborting call",
+                     Toast.LENGTH_LONG).show();
+            this.abortBroadcast();
+         }
+      }
+   }
 }

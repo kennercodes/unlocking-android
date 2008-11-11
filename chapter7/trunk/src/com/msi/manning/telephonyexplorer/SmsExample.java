@@ -25,66 +25,61 @@ import android.widget.Toast;
  * 
  */
 public class SmsExample extends Activity {
-	private EditText smsInputText;
-	private EditText smsInputDest;
-	private Button smsSend;
+   private EditText smsInputText;
+   private EditText smsInputDest;
+   private Button smsSend;
 
-	private SmsManager smsManager;
+   private SmsManager smsManager;
 
-	@Override
-	public void onCreate(Bundle icicle) {
-		Log.d("TelExp ******", "SmsExample onCreate");
+   @Override
+   public void onCreate(final Bundle icicle) {
+      Log.d(Constants.LOGTAG, "SmsExample onCreate");
 
-		super.onCreate(icicle);
-		setContentView(R.layout.smsexample);
+      super.onCreate(icicle);
+      this.setContentView(R.layout.smsexample);
 
-		smsInputDest = (EditText) findViewById(R.id.smsinputdest);
-		smsInputText = (EditText) findViewById(R.id.smsinputtext);
-		smsSend = (Button) findViewById(R.id.smssend_button);
+      this.smsInputDest = (EditText) this.findViewById(R.id.smsinputdest);
+      this.smsInputText = (EditText) this.findViewById(R.id.smsinputtext);
+      this.smsSend = (Button) this.findViewById(R.id.smssend_button);
 
-		smsManager = SmsManager.getDefault();
+      this.smsManager = SmsManager.getDefault();
 
-		// pending intent request code NOT USED
-		final PendingIntent sentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, SmsExample.class), 0);
-		
-		smsSend.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Log.d("TelExp ******", "sending SMS message via manager");
+      // pending intent request code NOT USED
+      final PendingIntent sentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SmsExample.class), 0);
 
-				String dest = smsInputDest.getText().toString();
-				if (PhoneNumberUtils.isWellFormedSmsAddress(dest)) {
+      this.smsSend.setOnClickListener(new OnClickListener() {
+         public void onClick(final View v) {
+            Log.d(Constants.LOGTAG, "SmsExample sending SMS message via manager");
 
-					// dest, serviceCenter (null for default), message,
-					// sentIntent, deliveryIntent
-					//
-					// Set the second parameter to null. The scAddress relates
-					// to the address of the server on the cellular network that will handle
-					// the message, it is not the address of the sender.
-					smsManager.sendTextMessage(smsInputDest.getText()
-							.toString(), null, smsInputText.getText()
-							.toString(), sentIntent, null);
-					
-					Toast.makeText(SmsExample.this,
-							"SMS message sent",
-							Toast.LENGTH_LONG).show();
+            String dest = SmsExample.this.smsInputDest.getText().toString();
+            if (PhoneNumberUtils.isWellFormedSmsAddress(dest)) {
 
-				} else {
-					Toast.makeText(SmsExample.this,
-							"SMS destination invalid - try again",
-							Toast.LENGTH_LONG).show();
-				}
-			}
-		});
-	}
+               // dest, serviceCenter (null for default), message,
+               // sentIntent, deliveryIntent
+               //
+               // Set the second parameter to null. The scAddress relates
+               // to the address of the server on the cellular network that will handle
+               // the message, it is not the address of the sender.
+               SmsExample.this.smsManager.sendTextMessage(SmsExample.this.smsInputDest.getText().toString(), null,
+                        SmsExample.this.smsInputText.getText().toString(), sentIntent, null);
 
-	@Override
-	public void onStart() {
-		super.onStart();
-	}
+               Toast.makeText(SmsExample.this, "SMS message sent", Toast.LENGTH_LONG).show();
 
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
+            }
+            else {
+               Toast.makeText(SmsExample.this, "SMS destination invalid - try again", Toast.LENGTH_LONG).show();
+            }
+         }
+      });
+   }
+
+   @Override
+   public void onStart() {
+      super.onStart();
+   }
+
+   @Override
+   public void onPause() {
+      super.onPause();
+   }
 }
