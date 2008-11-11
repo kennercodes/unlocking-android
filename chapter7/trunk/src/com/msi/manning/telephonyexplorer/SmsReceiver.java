@@ -25,6 +25,14 @@ public class SmsReceiver extends BroadcastReceiver {
             Log.v("SmsReceiver", "SMS received");
             StringBuilder sb = new StringBuilder();
 
+            // TODO check this (no longer public in API, but a lot easier to use if it still works?)
+            /*
+             SmsMessage[] messages =                 #4
+                        Telephony.Sms.Intents.getMessagesFromIntent(intent);
+                   for (SmsMessage currentMessage : messages){ 
+                   }             
+             */
+            
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 Object[] pdus = (Object[]) bundle.get("pdus");
