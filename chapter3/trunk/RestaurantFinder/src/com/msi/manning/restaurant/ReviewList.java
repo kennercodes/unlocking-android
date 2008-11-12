@@ -36,7 +36,6 @@ public class ReviewList extends ListActivity {
     private TextView empty;
 
     // use a Handler in order to update UI thread after worker done
-    // (cannot update UI thread inline (not done yet), or from separate thread)
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
