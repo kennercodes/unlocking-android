@@ -105,7 +105,7 @@ public class ReportViewDetail extends Activity {
                 }
                 ReportViewDetail.this.forecast.setText(fore.toString());
 
-                // TODO cache the images, and at least background thread this net call
+                // TODO cache the images, no need to make this network trip
                 try {
                     URL url = new URL(ReportViewDetail.this.report.getCondition().getImageLink());
                     URLConnection conn = url.openConnection();
