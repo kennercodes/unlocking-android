@@ -38,6 +38,8 @@ public class GeocodeExample extends Activity {
         });        
     }
     
+    // Note that this is not at all robust, rather it's a quick and dirty example
+    // (splitting a string and then parsing as a double is a brittle approach, use more checks in production code)
     private String performGeocode(final String in, final boolean isAddr) {
         String result = "Unable to Geocode - " + in;
         if (input != null) {
