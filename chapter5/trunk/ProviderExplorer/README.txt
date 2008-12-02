@@ -2,7 +2,7 @@ Unlocking Android - ProviderExplorer
 ------------------------------------
 
 Android project example that demonstrates
-creating using a built in ContentProvider.
+using a built in ContentProvider (for the phone contacts).
 
 --------------------------------------
 
