@@ -1,4 +1,4 @@
-Unlocking Android - ProviderExplorer
+Unlocking Android - ProviderWidgets
 ------------------------------------
 
 Android project example that demonstrates
