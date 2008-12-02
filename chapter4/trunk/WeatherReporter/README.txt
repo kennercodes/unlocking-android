@@ -1,5 +1,5 @@
-WeatherReporter
-================
+Unlocking Android - WeatherReporter
+---------------------------------------------
 
 Concept: 
 ---------
@@ -7,8 +7,8 @@ Weather information application,
 combined with location based weather alerting mechanism.
 General idea, a hand-held type of weather radio that 
 updates it's own current location. 
-(And this was around before the two or three similar apps
-now in the Android Developer Challenge ;).) 
+(And we had this example/idea around before the two or three similar apps
+now in the Android App Store and before the Developer Challenge ;).) 
 
 Details: 
 ---------
@@ -46,6 +46,14 @@ Uses a custom scheme and authority as a registered Intent to allow other
 applications to invoke it easily with a "weather://com.msi.manning?loc=ZIP" style URI. 
 
 
+--------------------------------------
 
+Checkout:
+svn co http://unlocking-android.googlecode.com/svn/chapter4/trunk/WeatherReporter
+
+
+Eclipse:
+Setup a SVN repository for the UAD code project (http://unlocking-android.googlecode.com/svn). 
+Then checkout chapter4/trunk/WeatherReporter as an Eclipse project. 
 
 
