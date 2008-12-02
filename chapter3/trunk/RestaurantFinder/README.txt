@@ -9,7 +9,7 @@ call to make a network request.  This works most of the time, but
 is flaky in Android 1.0 for small requests (you may see socket errors
 in logcat). This will probably be upgraded to using HttpClient in the future
 (which doesn't seem to suffer the same issues) - just something to be 
-aware of. 
+aware of (still works as is 98% of the time). 
 
 --------------------------------------
 
