@@ -1,7 +1,7 @@
 Unlocking Android - FileStorage
 ------------------------------------
 
-Android code example that uses the walks through
+Android code example that walks through
 creating and writing text to a file, then 
 reading from a file, then reading from a raw
 resource, then reading from an XML resource, and 
