@@ -2,17 +2,24 @@ package com.msi.manning.restaurant.data;
 
 import java.util.Date;
 
+/**
+ * Simple data bean to represent a Review - no getters and setters on purpose (more efficient on
+ * Android).
+ * 
+ * @author ccollins
+ */
 public class Review {
-    public String name;
+
     public String author;
-    public String link;
-    public String imageLink;
-    public String location;
-    public String phone;
-    public String rating;
-    public Date date;
     public String content;
     public String cuisine; // input only
+    public Date date;
+    public String imageLink;
+    public String link;
+    public String location;
+    public String name;
+    public String phone;
+    public String rating;
 
     @Override
     public String toString() {

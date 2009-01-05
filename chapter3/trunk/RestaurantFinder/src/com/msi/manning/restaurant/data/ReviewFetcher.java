@@ -1,5 +1,12 @@
 package com.msi.manning.restaurant.data;
 
+import android.util.Log;
+
+import com.msi.manning.restaurant.Constants;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -8,38 +15,29 @@ import java.util.ArrayList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import android.util.Log;
-
-import com.msi.manning.restaurant.Constants;
-
 /**
  * Use Google Base with specified criteria to obtain Review data.
  * 
  * @author charliecollins
- * 
  */
 public class ReviewFetcher {
-    
+
     private static final String CLASSTAG = ReviewFetcher.class.getSimpleName();
     private static final String QBASE = "http://www.google.com/base/feeds/snippets/-/reviews?bq=[review%20type:restaurant]";
-    private static final String QL_PREFIX = "[location:";
-    private static final String QL_SUFFIX = "]";
     private static final String QD_PREFIX = "[description:";
     private static final String QD_SUFFIX = "]";
+    private static final String QL_PREFIX = "[location:";
+    private static final String QL_SUFFIX = "]";
+    private static final String QMAX_RESULTS = "&max-results=";
     private static final String QR_PREFIX = "[rating:";
     private static final String QR_SUFFIX = "]";
     private static final String QSTART_INDEX = "&start-index=";
-    private static final String QMAX_RESULTS = "&max-results=";
-    private final int start;
     private final int numResults;
     private String query;
+    private final int start;
 
     /**
-     * Construct ReviewFetcher with location, description, rating, and paging
-     * params.
+     * Construct ReviewFetcher with location, description, rating, and paging params.
      * 
      * @param location
      * @param description
@@ -47,11 +45,11 @@ public class ReviewFetcher {
      * @param start
      * @param numResults
      */
-    public ReviewFetcher(final String loc, final String description, final String rat, final int start, final int numResults) {
+    public ReviewFetcher(String loc, String description, String rat, int start, int numResults) {
 
-        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " location = " + loc + " rating = " 
-                + rat + " start = " + start + " numResults = " + numResults);
-        
+        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " location = " + loc + " rating = "
+            + rat + " start = " + start + " numResults = " + numResults);
+
         this.start = start;
         this.numResults = numResults;
         String location = loc;
@@ -110,7 +108,8 @@ public class ReviewFetcher {
             Log.e(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG, e);
         }
         long duration = System.currentTimeMillis() - startTime;
-        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " call and parse duration - " + duration);
+        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " call and parse duration - "
+            + duration);
         return results;
     }
 }
