@@ -16,7 +16,6 @@ import com.msi.manning.restaurant.data.Review;
  * maps, etc).
  * 
  * @author charliecollins
- * 
  */
 public class RestaurantFinderApplication extends Application {
 
