@@ -16,8 +16,8 @@ import java.util.Date;
 /**
  * SAX Handler impl for National Data Buoy Center RSS feeds.
  * 
- * This class has some ugly because of the way the feed is variable, and the way the feed embeds data in
- * HTML formatted CDATA (rather than using defined fields).
+ * This class has some ugly because of the way the feed is variable, and the way the feed embeds
+ * data in HTML formatted CDATA (rather than using defined fields).
  * 
  * @author charliecollins
  * 
@@ -204,5 +204,5 @@ public class NDBCHandler extends DefaultHandler {
                 this.inGeoRss = true;
             }
         }
-    }   
+    }
 }

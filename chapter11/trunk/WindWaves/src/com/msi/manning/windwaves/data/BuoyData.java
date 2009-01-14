@@ -21,6 +21,7 @@ public class BuoyData {
     public String link;
     public String geoRssPoint;
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("BuoyData - " + this.title);

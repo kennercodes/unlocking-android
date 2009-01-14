@@ -91,8 +91,7 @@ public class BuoyDetailActivity extends Activity {
         this.buttonWeb.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                    .parse(BuoyDetailActivity.buoyData.link)));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuoyDetailActivity.buoyData.link)));
             };
         });
     }

@@ -95,13 +95,14 @@ public class BuoyItemizedOverlay extends ItemizedOverlay<BuoyOverlayItem> {
 
         new AlertDialog.Builder(this.context).setView(bView).setPositiveButton("More Detail",
             new DialogInterface.OnClickListener() {
+
                 public void onClick(DialogInterface di, int what) {
-                    Intent intent = new Intent(context, BuoyDetailActivity.class);
+                    Intent intent = new Intent(BuoyItemizedOverlay.this.context, BuoyDetailActivity.class);
                     // quick and dirty hack to set data on another activity
                     // (not really ideal, but don't need a Parcelable here either, and don't want to
                     // pass in Bundle separately, etc)
                     BuoyDetailActivity.buoyData = bd;
-                    context.startActivity(intent);
+                    BuoyItemizedOverlay.this.context.startActivity(intent);
                 }
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 

@@ -18,6 +18,7 @@ public class StartActivity extends Activity {
     private static final String CLASSTAG = StartActivity.class.getSimpleName();
 
     private final Handler handler = new Handler() {
+
         @Override
         public void handleMessage(final Message msg) {
             StartActivity.this.startActivity(new Intent(StartActivity.this, MapViewActivity.class));
@@ -38,6 +39,7 @@ public class StartActivity extends Activity {
         // move to the next screen via a delayed message
         new Thread() {
 
+            @Override
             public void run() {
                 StartActivity.this.handler.sendMessageDelayed(StartActivity.this.handler.obtainMessage(), 3000);
             };
