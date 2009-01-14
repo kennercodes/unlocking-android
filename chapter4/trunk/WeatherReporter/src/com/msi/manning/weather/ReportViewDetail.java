@@ -59,7 +59,6 @@ public class ReportViewDetail extends Activity {
     private DBHelper dbHelper;
 
     private final Handler handler = new Handler() {
-
         @Override
         public void handleMessage(final Message msg) {
             progressDialog.dismiss();
