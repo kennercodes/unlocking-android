@@ -1,8 +1,5 @@
 package com.msi.manning.windwaves;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -26,6 +23,8 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.msi.manning.windwaves.data.BuoyData;
 import com.msi.manning.windwaves.data.NDBCFetcher;
+
+import java.util.ArrayList;
 
 // NOTE apiKey stuff in layout file - note that that seems dumb (in the layout, not the manifest?)
 // NOTE lastKnownLocation via emulator may be NULL though, need to set at least one location (w/tools) for it to not be

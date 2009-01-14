@@ -1,12 +1,11 @@
 package com.msi.manning.windwaves;
 
-import java.text.DecimalFormat;
-
-import android.location.Criteria;
 import android.location.Location;
 import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
+
+import java.text.DecimalFormat;
 
 public class LocationHelper {
 
