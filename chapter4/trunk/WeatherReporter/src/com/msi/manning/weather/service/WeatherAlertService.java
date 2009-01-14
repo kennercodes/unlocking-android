@@ -46,18 +46,19 @@ public class WeatherAlertService extends Service {
     private static final String LOC = "LOC";
     private static final String ZIP = "ZIP";
     private static final long ALERT_QUIET_PERIOD = 10000;
-    private static final long ALERT_POLL_INTERVAL = 15000;   
+    private static final long ALERT_POLL_INTERVAL = 15000;
 
     // convenience for Activity classes in the same process to get current device location
     // (so they don't have to repeat all the LocationManager and provider stuff locally)
     // (this would NOT work across applications, only for things in the same PROCESS)
     public static String deviceLocationZIP = "94102";
-    
+
     private Timer timer;
     private DBHelper dbHelper;
     private NotificationManager nm;
 
     private TimerTask task = new TimerTask() {
+
         @Override
         public void run() {
             // poll user specified locations
@@ -152,11 +153,9 @@ public class WeatherAlertService extends Service {
             public void onProviderDisabled(String s) {
                 Log.v(Constants.LOGTAG, " " + WeatherAlertService.CLASSTAG + "   locationProvider DISABLED - " + s);
             }
-
             public void onProviderEnabled(String s) {
                 Log.v(Constants.LOGTAG, " " + WeatherAlertService.CLASSTAG + "   locationProvider ENABLED - " + s);
             }
-
             public void onStatusChanged(String s, int i, Bundle b) {
                 Log
                     .v(Constants.LOGTAG, " " + WeatherAlertService.CLASSTAG + "   locationProvider STATUS CHANGE - "

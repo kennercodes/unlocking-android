@@ -59,6 +59,7 @@ public class ReportViewDetail extends Activity {
     private DBHelper dbHelper;
 
     private final Handler handler = new Handler() {
+
         @Override
         public void handleMessage(final Message msg) {
             progressDialog.dismiss();
@@ -79,7 +80,7 @@ public class ReportViewDetail extends Activity {
                 cond.append("Sunrise: " + report.getSunrise() + " - Sunset:  " + report.getSunset());
                 condition.setText(cond.toString());
 
-                StringBuffer fore = new StringBuffer();
+                StringBuilder fore = new StringBuilder();
                 for (int i = 0; (report.getForecasts() != null) && (i < report.getForecasts().length); i++) {
                     WeatherForecast fc = report.getForecasts()[i];
                     fore.append(fc.getDay() + ":\n");
@@ -89,10 +90,9 @@ public class ReportViewDetail extends Activity {
                         fore.append("\n\n");
                     }
                 }
+                
                 forecast.setText(fore.toString());
-                // package:type/entry
                 String resPath = "com.msi.manning.weather:drawable/" + "cond" + report.getCondition().getId();
-                Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " resPath = " + resPath);
                 int resId = getResources().getIdentifier(resPath, null, null);
                 conditionImage.setImageDrawable(getResources().getDrawable(resId));
             }

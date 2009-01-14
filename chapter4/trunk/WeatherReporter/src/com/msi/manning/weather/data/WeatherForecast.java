@@ -50,7 +50,7 @@ public class WeatherForecast {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("WeatherForecast:");
         sb.append(" date-" + this.date);
         sb.append(" day-" + this.day);

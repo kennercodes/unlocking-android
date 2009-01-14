@@ -45,12 +45,10 @@ public class ReportViewSavedLocations extends ListActivity {
         public void handleMessage(final Message msg) {
             Log.v(Constants.LOGTAG, " " + ReportViewSavedLocations.CLASSTAG + " worker thread done, setup list");
             progressDialog.dismiss();
-            if ((locations == null)
-                || (locations.size() == 0)) {
+            if ((locations == null) || (locations.size() == 0)) {
                 empty.setText("No Data");
             } else {
-                adapter = new ArrayAdapter<Location>(ReportViewSavedLocations.this,
-                    R.layout.list_item_1, locations);
+                adapter = new ArrayAdapter<Location>(ReportViewSavedLocations.this, R.layout.list_item_1, locations);
                 setListAdapter(adapter);
             }
         }
@@ -117,6 +115,7 @@ public class ReportViewSavedLocations extends ListActivity {
         Log.v(Constants.LOGTAG, " " + ReportViewSavedLocations.CLASSTAG + " loadLocations");
         this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving saved locations", true, false);
         new Thread() {
+
             @Override
             public void run() {
                 locations = dbHelper.getAll();

@@ -39,15 +39,14 @@ public class ReportSpecifyLocation extends Activity {
         this.location = (EditText) findViewById(R.id.location);
         this.button = (Button) findViewById(R.id.specify_location_button);
 
-        this.location.addTextChangedListener(new TextWatcher() {   
+        this.location.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
                 if (location.getText().toString().length() > 5) {
                     Toast
                         .makeText(ReportSpecifyLocation.this, "Please enter no more than 5 digits", Toast.LENGTH_SHORT)
                         .show();
-                        location.setText(location.getText()
-                        .toString().substring(0, 5));
+                    location.setText(location.getText().toString().substring(0, 5));
                 }
             }
             @Override
@@ -64,7 +63,7 @@ public class ReportSpecifyLocation extends Activity {
                 handleLoadReport();
             }
         });
-    }   
+    }
 
     @Override
     protected void onResume() {
@@ -100,7 +99,7 @@ public class ReportSpecifyLocation extends Activity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
-    
+
     private void handleLoadReport() {
         Intent intent = null;
         Uri uri = null;
@@ -125,6 +124,7 @@ public class ReportSpecifyLocation extends Activity {
             new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.alert_label)).setMessage(
                 validationText.toString()).setPositiveButton("Continue",
                 new android.content.DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(final DialogInterface dialog, final int arg1) {
                         setResult(Activity.RESULT_OK);
