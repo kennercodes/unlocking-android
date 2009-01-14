@@ -1,7 +1,5 @@
 package com.msi.manning.chapter5.widget;
 
-import java.util.HashMap;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -17,6 +15,8 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.HashMap;
+
 public class WidgetProvider extends ContentProvider {
 
     private static final String CLASSNAME = WidgetProvider.class.getSimpleName();
@@ -27,7 +27,7 @@ public class WidgetProvider extends ContentProvider {
     public static final int DB_VERSION = 1;
     private static UriMatcher URI_MATCHER = null;
     private static HashMap<String, String> PROJECTION_MAP;
-    
+
     private SQLiteDatabase db;
 
     static {
@@ -43,11 +43,12 @@ public class WidgetProvider extends ContentProvider {
         WidgetProvider.PROJECTION_MAP.put(Widget.CREATED, "created");
         WidgetProvider.PROJECTION_MAP.put(Widget.UPDATED, "updated");
     }
-    
+
     private static class DBOpenHelper extends SQLiteOpenHelper {
+
         private static final String DB_CREATE = "CREATE TABLE "
-                + WidgetProvider.DB_TABLE
-                + " (_id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, type TEXT, category TEXT, updated INTEGER, created INTEGER);";
+            + WidgetProvider.DB_TABLE
+            + " (_id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, type TEXT, category TEXT, updated INTEGER, created INTEGER);";
 
         // private static final String DB_UPDATE = "";
 
@@ -75,15 +76,15 @@ public class WidgetProvider extends ContentProvider {
         @Override
         public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
             Log.w(Constants.LOGTAG, WidgetProvider.CLASSNAME + " OpenHelper Upgrading database from version "
-                    + oldVersion + " to " + newVersion + " all data will be clobbered");
+                + oldVersion + " to " + newVersion + " all data will be clobbered");
             db.execSQL("DROP TABLE IF EXISTS " + WidgetProvider.DB_TABLE);
             this.onCreate(db);
         }
     }
-    
+
     @Override
     public boolean onCreate() {
-        DBOpenHelper dbHelper = new DBOpenHelper(this.getContext());
+        DBOpenHelper dbHelper = new DBOpenHelper(getContext());
         this.db = dbHelper.getWritableDatabase();
 
         if (this.db == null) {
@@ -92,13 +93,12 @@ public class WidgetProvider extends ContentProvider {
             return true;
         }
     }
-    
+
     /**
      * Per Android JavaDoc:
      * 
      * Return the MIME type of the data at the given URI. This should start with
-     * vnd.android.cursor.item/ for a single record, or vnd.android.cursor.dir/
-     * for multiple items. 
+     * vnd.android.cursor.item/ for a single record, or vnd.android.cursor.dir/ for multiple items.
      * 
      * (Though this is NOT how the samples provided by Google work.)
      * 
@@ -109,32 +109,32 @@ public class WidgetProvider extends ContentProvider {
     @Override
     public String getType(final Uri uri) {
         switch (WidgetProvider.URI_MATCHER.match(uri)) {
-        case WIDGETS:
-            return Widget.MIME_TYPE_MULTIPLE;
-        case WIDGET:
-            return Widget.MIME_TYPE_SINGLE;
-        default:
-            throw new IllegalArgumentException("Unknown URI " + uri);
+            case WIDGETS:
+                return Widget.MIME_TYPE_MULTIPLE;
+            case WIDGET:
+                return Widget.MIME_TYPE_SINGLE;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
-    }  
+    }
 
     @Override
     public Cursor query(final Uri uri, final String[] projection, final String selection, final String[] selectionArgs,
-            final String sortOrder) {
+        final String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         String orderBy = null;
 
         switch (WidgetProvider.URI_MATCHER.match(uri)) {
-        case WIDGETS:
-            queryBuilder.setTables(WidgetProvider.DB_TABLE);
-            queryBuilder.setProjectionMap(WidgetProvider.PROJECTION_MAP);
-            break;
-        case WIDGET:
-            queryBuilder.setTables(WidgetProvider.DB_TABLE);
-            queryBuilder.appendWhere("_id=" + uri.getPathSegments().get(1));
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown URI " + uri);
+            case WIDGETS:
+                queryBuilder.setTables(WidgetProvider.DB_TABLE);
+                queryBuilder.setProjectionMap(WidgetProvider.PROJECTION_MAP);
+                break;
+            case WIDGET:
+                queryBuilder.setTables(WidgetProvider.DB_TABLE);
+                queryBuilder.appendWhere("_id=" + uri.getPathSegments().get(1));
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
         if (TextUtils.isEmpty(sortOrder)) {
@@ -144,10 +144,10 @@ public class WidgetProvider extends ContentProvider {
         }
 
         Cursor c = queryBuilder.query(this.db, projection, selection, selectionArgs, null, null, orderBy);
-        c.setNotificationUri(this.getContext().getContentResolver(), uri);
+        c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
-    
+
     @Override
     public Uri insert(final Uri uri, final ContentValues initialValues) {
         long rowId = 0L;
@@ -186,7 +186,7 @@ public class WidgetProvider extends ContentProvider {
 
         if (rowId > 0) {
             Uri result = ContentUris.withAppendedId(Widget.CONTENT_URI, rowId);
-            this.getContext().getContentResolver().notifyChange(result, null);
+            getContext().getContentResolver().notifyChange(result, null);
             return result;
         }
         throw new SQLException("Failed to insert row into " + uri);
@@ -196,44 +196,44 @@ public class WidgetProvider extends ContentProvider {
     public int update(final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
         int count = 0;
         switch (WidgetProvider.URI_MATCHER.match(uri)) {
-        case WIDGETS:
-            count = this.db.update(WidgetProvider.DB_TABLE, values, selection, selectionArgs);
-            break;
-        case WIDGET:
-            String segment = uri.getPathSegments().get(1);
-            String where = "";
-            if (!TextUtils.isEmpty(selection)) {
-                where = " AND (" + selection + ")";
-            }
-            count = this.db.update(WidgetProvider.DB_TABLE, values, "_id=" + segment + where, selectionArgs);
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown URI " + uri);
+            case WIDGETS:
+                count = this.db.update(WidgetProvider.DB_TABLE, values, selection, selectionArgs);
+                break;
+            case WIDGET:
+                String segment = uri.getPathSegments().get(1);
+                String where = "";
+                if (!TextUtils.isEmpty(selection)) {
+                    where = " AND (" + selection + ")";
+                }
+                count = this.db.update(WidgetProvider.DB_TABLE, values, "_id=" + segment + where, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
-        this.getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
-    
+
     @Override
     public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
         int count;
 
         switch (WidgetProvider.URI_MATCHER.match(uri)) {
-        case WIDGETS:
-            count = this.db.delete(WidgetProvider.DB_TABLE, selection, selectionArgs);
-            break;
-        case WIDGET:
-            String segment = uri.getPathSegments().get(1);
-            String where = "";
-            if (!TextUtils.isEmpty(selection)) {
-                where = " AND (" + selection + ")";
-            }
-            count = this.db.delete(WidgetProvider.DB_TABLE, "_id=" + segment + where, selectionArgs);
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown URI " + uri);
+            case WIDGETS:
+                count = this.db.delete(WidgetProvider.DB_TABLE, selection, selectionArgs);
+                break;
+            case WIDGET:
+                String segment = uri.getPathSegments().get(1);
+                String where = "";
+                if (!TextUtils.isEmpty(selection)) {
+                    where = " AND (" + selection + ")";
+                }
+                count = this.db.delete(WidgetProvider.DB_TABLE, "_id=" + segment + where, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
-        this.getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
 }
