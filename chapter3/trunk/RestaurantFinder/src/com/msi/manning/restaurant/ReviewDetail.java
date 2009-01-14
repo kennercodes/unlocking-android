@@ -96,6 +96,14 @@ public class ReviewDetail extends Activity {
             this.phone.setText("NA");
         }
     }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " onResume");
+        // tell handler to load image
+        this.handler.sendEmptyMessage(1);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,15 +169,7 @@ public class ReviewDetail extends Activity {
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " onResume");
-        // tell handler to load image
-        this.handler.sendEmptyMessage(1);
-    }
+    }    
     
     private String parsePhone(final String p) {
         String tempP = p;
