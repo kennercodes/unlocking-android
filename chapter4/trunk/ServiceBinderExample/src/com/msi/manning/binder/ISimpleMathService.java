@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /opt/projects/uad-gcode-root/chapter4/trunk/ServiceBinderExample/src/com/msi/manning/binder/ISimpleMathService.aidl
+ * Original file: /home/ccollins/projects/uad-ServiceBinderExample/src/com/msi/manning/binder/ISimpleMathService.aidl
  */
 package com.msi.manning.binder;
 import java.lang.String;
