@@ -26,7 +26,7 @@ public class ReviewCriteria extends Activity {
     private static final String CLASSTAG = ReviewCriteria.class.getSimpleName();
     private static final int MENU_GET_REVIEWS = Menu.FIRST;
     private Spinner cuisine;
-    private Button getReviews;
+    private Button grabReviews;
     private EditText location;    
 
     @Override
@@ -38,14 +38,14 @@ public class ReviewCriteria extends Activity {
 
         this.location = (EditText) findViewById(R.id.location);
         this.cuisine = (Spinner) findViewById(R.id.cuisine);
-        this.getReviews = (Button) findViewById(R.id.get_reviews_button);
+        this.grabReviews = (Button) findViewById(R.id.get_reviews_button);
 
         ArrayAdapter<String> cuisines = new ArrayAdapter<String>(this, R.layout.spinner_view, getResources()
             .getStringArray(R.array.cuisines));
         cuisines.setDropDownViewResource(R.layout.spinner_view_dropdown);
         this.cuisine.setAdapter(cuisines);
 
-        this.getReviews.setOnClickListener(new OnClickListener() {
+        this.grabReviews.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleGetReviews();
@@ -105,7 +105,7 @@ public class ReviewCriteria extends Activity {
             new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.alert_label)).setMessage(
                 validationText.toString()).setPositiveButton("Continue",
                 new android.content.DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int arg1) {
+                    public void onClick(DialogInterface dialog, int arg1) {
                         // in this case, don't need to do anything other than close alert
                     }
                 }).show();

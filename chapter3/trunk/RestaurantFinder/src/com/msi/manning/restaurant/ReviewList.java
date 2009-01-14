@@ -81,9 +81,9 @@ public class ReviewList extends ListActivity {
         // get start from, an int, from extras
         int startFrom = getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1);
 
-        loadReviews(criteriaLocation, criteriaCuisine, "ALL", startFrom);
-    }
-    
+        loadReviews(criteriaLocation, criteriaCuisine, startFrom);
+    }    
+   
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -92,19 +92,7 @@ public class ReviewList extends ListActivity {
         menu.add(0, ReviewList.MENU_CHANGE_CRITERIA, 0, R.string.menu_change_criteria).setIcon(
             android.R.drawable.ic_menu_edit);
         return true;
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        // set the current review to the Application (global state placed there)
-        RestaurantFinderApplication application = (RestaurantFinderApplication) getApplication();
-        application.setCurrentReview(this.reviews.get(position));
-
-        // startFrom page is not stored in application, for example purposes it's a simple "extra"
-        Intent intent = new Intent(Constants.INTENT_ACTION_VIEW_DETAIL);
-        intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1));
-        startActivity(intent);
-    }
+    }    
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -125,11 +113,23 @@ public class ReviewList extends ListActivity {
         return super.onMenuItemSelected(featureId, item);
     }
     
-    private void loadReviews(String location, String cuisine, String rating, final int startFrom) {
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        // set the current review to the Application (global state placed there)
+        RestaurantFinderApplication application = (RestaurantFinderApplication) getApplication();
+        application.setCurrentReview(this.reviews.get(position));
+
+        // startFrom page is not stored in application, for example purposes it's a simple "extra"
+        Intent intent = new Intent(Constants.INTENT_ACTION_VIEW_DETAIL);
+        intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1));
+        startActivity(intent);
+    }    
+    
+    private void loadReviews(String location, String cuisine, int startFrom) {
 
         Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " loadReviews");
 
-        final ReviewFetcher rf = new ReviewFetcher(location, cuisine, rating, startFrom,
+        final ReviewFetcher rf = new ReviewFetcher(location, cuisine, "ALL", startFrom,
             ReviewList.NUM_RESULTS_PER_PAGE);
 
         this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving reviews", true, false);
@@ -137,7 +137,6 @@ public class ReviewList extends ListActivity {
         // get reviews in a separate thread for ProgressDialog/Handler
         // when complete send "empty" message to handler
         new Thread() {
-
             @Override
             public void run() {
                 reviews = rf.getReviews();
