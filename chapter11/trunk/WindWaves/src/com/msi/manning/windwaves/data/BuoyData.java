@@ -3,7 +3,7 @@ package com.msi.manning.windwaves.data;
 import java.util.Date;
 
 public class BuoyData {
-    
+
     public Date date;
     public String dateString;
     public String title;
@@ -20,25 +20,25 @@ public class BuoyData {
     public String waterTemp;
     public String link;
     public String geoRssPoint;
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("BuoyData - " + title);
-        sb.append("\ndate - " + date);
-        sb.append("\ndateString - " + dateString);
-        sb.append("\nlink - " + link);
-        sb.append("\ngeoRssPoint - " + geoRssPoint);
-        sb.append("\ndescription - " + description);
-        sb.append("\nlocation - " + location);
-        sb.append("\nwindDirection - " + windDirection);
-        sb.append("\nwindSpeed - " + windSpeed);
-        sb.append("\nwindGust - " + windGust);
-        sb.append("\nwaveHeight - " + waveHeight);
-        sb.append("\nwavePeriod - " + wavePeriod);
-        sb.append("\natmoPressure - " + atmoPressure);
-        sb.append("\natmoPressureTendency - " + atmoPressureTendency);
-        sb.append("\nairTemp - " + airTemp);
-        sb.append("\nwaterTemp - " + waterTemp);
+        sb.append("BuoyData - " + this.title);
+        sb.append("\ndate - " + this.date);
+        sb.append("\ndateString - " + this.dateString);
+        sb.append("\nlink - " + this.link);
+        sb.append("\ngeoRssPoint - " + this.geoRssPoint);
+        sb.append("\ndescription - " + this.description);
+        sb.append("\nlocation - " + this.location);
+        sb.append("\nwindDirection - " + this.windDirection);
+        sb.append("\nwindSpeed - " + this.windSpeed);
+        sb.append("\nwindGust - " + this.windGust);
+        sb.append("\nwaveHeight - " + this.waveHeight);
+        sb.append("\nwavePeriod - " + this.wavePeriod);
+        sb.append("\natmoPressure - " + this.atmoPressure);
+        sb.append("\natmoPressureTendency - " + this.atmoPressureTendency);
+        sb.append("\nairTemp - " + this.airTemp);
+        sb.append("\nwaterTemp - " + this.waterTemp);
         return sb.toString();
-    }    
+    }
 }

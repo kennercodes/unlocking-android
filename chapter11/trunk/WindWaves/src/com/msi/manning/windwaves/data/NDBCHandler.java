@@ -1,23 +1,23 @@
 package com.msi.manning.windwaves.data;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import android.util.Log;
+
+import com.msi.manning.windwaves.Constants;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.util.Log;
-
-import com.msi.manning.windwaves.Constants;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * SAX Handler impl for National Data Buoy Center RSS feeds.
  * 
- * This is sort of ugly because of the way the feed is variable, and the way the
- * feed embeds data in HTML formatted CDATA.
+ * This class has some ugly because of the way the feed is variable, and the way the feed embeds data in
+ * HTML formatted CDATA (rather than using defined fields).
  * 
  * @author charliecollins
  * 
@@ -25,28 +25,21 @@ import com.msi.manning.windwaves.Constants;
 public class NDBCHandler extends DefaultHandler {
 
     /*
-     <item>
-     <pubDate>Sun, 16 Nov 2008 16:30:01 UT</pubDate>
-     <title>Station 46091</title>
-     <description><![CDATA[
-         <strong>November 16, 2008 7:50 am PST</strong><br />
-         <strong>Location:</strong> 36.753N 122.423W or 25 nautical miles SW of search location of 37N 122W.<br />
-         <strong>Wind Direction:</strong> NE (40&#176;)<br />
-         <strong>Wind Speed:</strong> 8 knots<br />
-         <strong>Wind Gust:</strong> 10 knots<br />
-         <strong>Significant Wave Height:</strong> 5 ft<br />
-         <strong>Dominant Wave Period:</strong> 13 sec<br />
-         <strong>Atmospheric Pressure:</strong> 30.07 in (1018.3 mb)<br />
-         <strong>Pressure Tendency:</strong> +0.03 in (+1.0 mb)<br />
-         <strong>Air Temperature:</strong> 60&#176;F (15.5&#176;C)<br />
-         <strong>Water Temperature:</strong> 57&#176;F (13.7&#176;C)<br />
-     ]]></description>
-
-     <link>http://www.ndbc.noaa.gov/station_page.php?station=46091</link>
-     <guid>http://www.ndbc.noaa.gov/station_page.php?station=46091</guid>
-     <georss:point>36.835 -121.899</georss:point>
-    </item>
-    */
+     * <item> <pubDate>Sun, 16 Nov 2008 16:30:01 UT</pubDate> <title>Station 46091</title>
+     * <description><![CDATA[ <strong>November 16, 2008 7:50 am PST</strong><br />
+     * <strong>Location:</strong> 36.753N 122.423W or 25 nautical miles SW of search location of 37N
+     * 122W.<br /> <strong>Wind Direction:</strong> NE (40&#176;)<br /> <strong>Wind Speed:</strong>
+     * 8 knots<br /> <strong>Wind Gust:</strong> 10 knots<br /> <strong>Significant Wave
+     * Height:</strong> 5 ft<br /> <strong>Dominant Wave Period:</strong> 13 sec<br />
+     * <strong>Atmospheric Pressure:</strong> 30.07 in (1018.3 mb)<br /> <strong>Pressure
+     * Tendency:</strong> +0.03 in (+1.0 mb)<br /> <strong>Air Temperature:</strong> 60&#176;F
+     * (15.5&#176;C)<br /> <strong>Water Temperature:</strong> 57&#176;F (13.7&#176;C)<br />
+     * ]]></description>
+     * 
+     * <link>http://www.ndbc.noaa.gov/station_page.php?station=46091</link>
+     * <guid>http://www.ndbc.noaa.gov/station_page.php?station=46091</guid> <georss:point>36.835
+     * -121.899</georss:point> </item>
+     */
 
     private static final String CLASSTAG = NDBCHandler.class.getSimpleName();
 
@@ -112,34 +105,37 @@ public class NDBCHandler extends DefaultHandler {
 
         if (this.inDesc) {
             this.buoy.description = chString;
-            // parse the description into separate elements (annoying, but the feed puts all this data in one CDATA block)
+            // parse the description into separate elements (annoying, but the feed puts all this
+            // data in one CDATA block)
             String[] descArray = chString.split("<br />");
             for (String s : descArray) {
                 if (s.indexOf("Location:</strong>") != -1) {
                     this.buoy.location = s.substring(s.indexOf("Location:</strong>") + 18, s.length()).trim();
                 } else if (s.indexOf("Wind Direction:</strong>") != -1) {
                     this.buoy.windDirection = s.substring(s.indexOf("Wind Direction:</strong>") + 24, s.length())
-                            .trim().replaceAll("&#176;", "");
+                        .trim().replaceAll("&#176;", "");
                 } else if (s.indexOf("Wind Speed:</strong>") != -1) {
                     this.buoy.windSpeed = s.substring(s.indexOf("Wind Speed:</strong>") + 20, s.length()).trim();
                 } else if (s.indexOf("Wind Gust:</strong>") != -1) {
                     this.buoy.windGust = s.substring(s.indexOf("Wind Gust:</strong>") + 19, s.length()).trim();
                 } else if (s.indexOf("Significant Wave Height:</strong>") != -1) {
                     this.buoy.waveHeight = s.substring(s.indexOf("Significant Wave Height:</strong>") + 33, s.length())
-                            .trim();
+                        .trim();
                 } else if (s.indexOf("Dominant Wave Period:</strong>") != -1) {
                     this.buoy.wavePeriod = s.substring(s.indexOf("Dominant Wave Period:</strong>") + 30, s.length())
-                            .trim();
+                        .trim();
                 } else if (s.indexOf("Atmospheric Pressure:</strong>") != -1) {
                     this.buoy.atmoPressure = s.substring(s.indexOf("Atmospheric Pressure:</strong>") + 30, s.length())
-                            .trim();
+                        .trim();
                 } else if (s.indexOf("Pressure Tendency:</strong>") != -1) {
                     this.buoy.atmoPressureTendency = s.substring(s.indexOf("Pressure Tendency:</strong>") + 27,
-                            s.length()).trim();
+                        s.length()).trim();
                 } else if (s.indexOf("Air Temperature:</strong>") != -1) {
-                    this.buoy.airTemp = s.substring(s.indexOf("Air Temperature:</strong>") + 25, s.length()).trim().replaceAll("&#176;", "");
+                    this.buoy.airTemp = s.substring(s.indexOf("Air Temperature:</strong>") + 25, s.length()).trim()
+                        .replaceAll("&#176;", "");
                 } else if (s.indexOf("Water Temperature:</strong>") != -1) {
-                    this.buoy.waterTemp = s.substring(s.indexOf("Water Temperature:</strong>") + 27, s.length()).trim().replaceAll("&#176;", "");
+                    this.buoy.waterTemp = s.substring(s.indexOf("Water Temperature:</strong>") + 27, s.length()).trim()
+                        .replaceAll("&#176;", "");
                 }
             }
         }
@@ -189,7 +185,7 @@ public class NDBCHandler extends DefaultHandler {
 
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName,
-            final Attributes atts) throws SAXException {
+        final Attributes atts) throws SAXException {
         if (localName.equals(NDBCHandler.ITEM)) {
             this.inItem = true;
             this.buoy = new BuoyData();
@@ -208,19 +204,5 @@ public class NDBCHandler extends DefaultHandler {
                 this.inGeoRss = true;
             }
         }
-    }
-
-    /*
-    private String getAttributeValue(String attName, Attributes atts) {
-        String result = null;
-        for (int i = 0; i < atts.getLength(); i++) {
-            String thisAtt = atts.getLocalName(i);
-            if (attName.equals(thisAtt)) {
-                result = atts.getValue(i);
-                break;
-            }
-        }
-        return result;
-    }
-    */
+    }   
 }

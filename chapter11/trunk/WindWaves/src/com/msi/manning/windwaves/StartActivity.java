@@ -1,6 +1,5 @@
 package com.msi.manning.windwaves;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ public class StartActivity extends Activity {
 
     private final Handler handler = new Handler() {
         @Override
-        public void handleMessage(final Message msg) {            
+        public void handleMessage(final Message msg) {
             StartActivity.this.startActivity(new Intent(StartActivity.this, MapViewActivity.class));
         }
     };
@@ -31,18 +30,18 @@ public class StartActivity extends Activity {
         Log.v(Constants.LOGTAG, " " + StartActivity.CLASSTAG + " onCreate");
 
         this.setContentView(R.layout.start_activity);
-
     }
 
     @Override
     public void onStart() {
-        super.onStart();  
+        super.onStart();
         // move to the next screen via a delayed message
         new Thread() {
+
             public void run() {
-                StartActivity.this.handler.sendMessageDelayed(handler.obtainMessage(), 3000);
+                StartActivity.this.handler.sendMessageDelayed(StartActivity.this.handler.obtainMessage(), 3000);
             };
-        }.start();        
+        }.start();
     }
 
     @Override

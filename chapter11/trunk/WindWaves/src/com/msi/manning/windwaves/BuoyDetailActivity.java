@@ -12,14 +12,13 @@ import android.widget.TextView;
 
 import com.msi.manning.windwaves.data.BuoyData;
 
-// ENHANCE build charts from the realtime data (http://www.ndbc.noaa.gov/data/realtime2/41002.txt) or scrape
+// ENHANCE build charts from the realtime data (http://www.ndbc.noaa.gov/data/realtime2/41002.txt)
 // ENHANCE hook in with other NOAA data - http://www.weather.gov/rss/
 
 /**
  * BuoyDetail Activity for WindWaves.
  * 
  * @author charliecollins
- * 
  */
 public class BuoyDetailActivity extends Activity {
 
@@ -50,39 +49,52 @@ public class BuoyDetailActivity extends Activity {
 
         this.setContentView(R.layout.buoydetail_activity);
 
-        this.buttonWeb = (Button) this.findViewById(R.id.button_web);
-        this.title = (TextView) this.findViewById(R.id.bd_title);
-        this.location = (TextView) this.findViewById(R.id.bd_location);
-        this.date = (TextView) this.findViewById(R.id.bd_date);
-        this.airTemp = (TextView) this.findViewById(R.id.bd_air_temp);
-        this.waterTemp = (TextView) this.findViewById(R.id.bd_water_temp);
-        this.atmoPress = (TextView) this.findViewById(R.id.bd_atmo_press);
-        this.atmoTend = (TextView) this.findViewById(R.id.bd_atmo_tend);
-        this.windDir = (TextView) this.findViewById(R.id.bd_wind_dir);
-        this.windSpeed = (TextView) this.findViewById(R.id.bd_wind_speed);
-        this.windGust = (TextView) this.findViewById(R.id.bd_wind_gust);
-        this.waveHeight = (TextView) this.findViewById(R.id.bd_wave_height);
-        this.wavePeriod = (TextView) this.findViewById(R.id.bd_wave_period);
-        
-        this.title.setText(buoyData.title);
-        this.location.setText("Location:" + buoyData.location);
-        this.date.setText("Data Poll Date: " + (buoyData.dateString != null ? buoyData.dateString : "NA"));
-        this.airTemp.setText("Air Temp: " + (buoyData.airTemp != null ? buoyData.airTemp : "NA"));
-        this.waterTemp.setText("Water Temp: " + (buoyData.waterTemp != null ? buoyData.waterTemp : "NA"));
-        this.atmoPress.setText("Barometric Press: " + (buoyData.atmoPressure != null ? buoyData.atmoPressure : "NA"));
-        this.atmoTend.setText("Barometric Trend: " + (buoyData.atmoPressureTendency != null ? buoyData.atmoPressureTendency : "NA"));
-        this.windDir.setText("Wind Direction: " + (buoyData.windDirection != null ? buoyData.windDirection : "NA"));
-        this.windSpeed.setText("Wind Speed: " + (buoyData.windSpeed != null ? buoyData.windSpeed : "NA"));
-        this.windGust.setText("Wind Gust: " + (buoyData.windGust != null ? buoyData.windGust : "NA"));
-        this.waveHeight.setText("Wave Height: " + (buoyData.waveHeight != null ? buoyData.waveHeight : "NA"));
-        this.wavePeriod.setText("Wave Period: " + (buoyData.wavePeriod != null ? buoyData.wavePeriod : "NA"));        
+        this.buttonWeb = (Button) findViewById(R.id.button_web);
+        this.title = (TextView) findViewById(R.id.bd_title);
+        this.location = (TextView) findViewById(R.id.bd_location);
+        this.date = (TextView) findViewById(R.id.bd_date);
+        this.airTemp = (TextView) findViewById(R.id.bd_air_temp);
+        this.waterTemp = (TextView) findViewById(R.id.bd_water_temp);
+        this.atmoPress = (TextView) findViewById(R.id.bd_atmo_press);
+        this.atmoTend = (TextView) findViewById(R.id.bd_atmo_tend);
+        this.windDir = (TextView) findViewById(R.id.bd_wind_dir);
+        this.windSpeed = (TextView) findViewById(R.id.bd_wind_speed);
+        this.windGust = (TextView) findViewById(R.id.bd_wind_gust);
+        this.waveHeight = (TextView) findViewById(R.id.bd_wave_height);
+        this.wavePeriod = (TextView) findViewById(R.id.bd_wave_period);
+
+        this.title.setText(BuoyDetailActivity.buoyData.title);
+        this.location.setText("Location:" + BuoyDetailActivity.buoyData.location);
+        this.date.setText("Data Poll Date: "
+            + (BuoyDetailActivity.buoyData.dateString != null ? BuoyDetailActivity.buoyData.dateString : "NA"));
+        this.airTemp.setText("Air Temp: "
+            + (BuoyDetailActivity.buoyData.airTemp != null ? BuoyDetailActivity.buoyData.airTemp : "NA"));
+        this.waterTemp.setText("Water Temp: "
+            + (BuoyDetailActivity.buoyData.waterTemp != null ? BuoyDetailActivity.buoyData.waterTemp : "NA"));
+        this.atmoPress.setText("Barometric Press: "
+            + (BuoyDetailActivity.buoyData.atmoPressure != null ? BuoyDetailActivity.buoyData.atmoPressure : "NA"));
+        this.atmoTend
+            .setText("Barometric Trend: "
+                + (BuoyDetailActivity.buoyData.atmoPressureTendency != null ? BuoyDetailActivity.buoyData.atmoPressureTendency
+                    : "NA"));
+        this.windDir.setText("Wind Direction: "
+            + (BuoyDetailActivity.buoyData.windDirection != null ? BuoyDetailActivity.buoyData.windDirection : "NA"));
+        this.windSpeed.setText("Wind Speed: "
+            + (BuoyDetailActivity.buoyData.windSpeed != null ? BuoyDetailActivity.buoyData.windSpeed : "NA"));
+        this.windGust.setText("Wind Gust: "
+            + (BuoyDetailActivity.buoyData.windGust != null ? BuoyDetailActivity.buoyData.windGust : "NA"));
+        this.waveHeight.setText("Wave Height: "
+            + (BuoyDetailActivity.buoyData.waveHeight != null ? BuoyDetailActivity.buoyData.waveHeight : "NA"));
+        this.wavePeriod.setText("Wave Period: "
+            + (BuoyDetailActivity.buoyData.wavePeriod != null ? BuoyDetailActivity.buoyData.wavePeriod : "NA"));
 
         this.buttonWeb.setOnClickListener(new OnClickListener() {
+
             public void onClick(View v) {
-                BuoyDetailActivity.this.startActivity(
-                    new Intent(Intent.ACTION_VIEW, Uri.parse(BuoyDetailActivity.buoyData.link)));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                    .parse(BuoyDetailActivity.buoyData.link)));
             };
-         });
+        });
     }
 
     @Override

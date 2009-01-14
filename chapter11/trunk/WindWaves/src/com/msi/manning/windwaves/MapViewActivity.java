@@ -27,10 +27,12 @@ import com.msi.manning.windwaves.data.NDBCFetcher;
 import java.util.ArrayList;
 
 // NOTE apiKey stuff in layout file - note that that seems dumb (in the layout, not the manifest?)
-// NOTE lastKnownLocation via emulator may be NULL though, need to set at least one location (w/tools) for it to not be
+// NOTE lastKnownLocation via emulator may be NULL though, need to set at least one location
+// (w/tools) for it to not be
 // NOTE have to setBounds on defaultMarker
 // NOTE can also create a receiver for LOCATION_CHANGED (alternative way to get updated)
-// NOTE can also get lastLocation and locationChanged callback from MyLocationOverlay (more coarse grained though)
+// NOTE can also get lastLocation and locationChanged callback from MyLocationOverlay (more coarse
+// grained though)
 // NOTE can also get location using CellLocation via TelephonyManager
 // NOTE can use Geocode to go back and forth with lat/long addresses/places
 
@@ -52,35 +54,38 @@ public class MapViewActivity extends MapActivity {
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
-            Log.d(Constants.LOGTAG, " " + CLASSTAG + " handleMessage invoked - update overlays with new data");
-            Log.d(Constants.LOGTAG, " " + CLASSTAG + "   buoys (List<BuoyOverlayItem>) size - "
-                    + MapViewActivity.this.buoys.size());
+            Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG
+                + " handleMessage invoked - update overlays with new data");
+            Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "   buoys (List<BuoyOverlayItem>) size - "
+                + buoys.size());
 
-            MapViewActivity.this.progressDialog.dismiss();
+            progressDialog.dismiss();
 
-            // clear the buoys itemized overlay - if it's already there 
-            if (MapViewActivity.this.mapView.getOverlays().contains(MapViewActivity.this.buoyOverlay)) {
-                MapViewActivity.this.mapView.getOverlays().remove(MapViewActivity.this.buoyOverlay);
+            // clear the buoys itemized overlay - if it's already there
+            if (mapView.getOverlays().contains(buoyOverlay)) {
+                mapView.getOverlays().remove(buoyOverlay);
             }
 
             // add buoys itemized overlay
-            MapViewActivity.this.buoyOverlay = new BuoyItemizedOverlay(MapViewActivity.this.buoys,
-                    MapViewActivity.this.defaultMarker, MapViewActivity.this);
-            MapViewActivity.this.mapView.getOverlays().add(MapViewActivity.this.buoyOverlay);
-            
+            buoyOverlay = new BuoyItemizedOverlay(buoys,
+                defaultMarker, MapViewActivity.this);
+            mapView.getOverlays().add(buoyOverlay);
+
             // did invalidate here, but don't think we need it
         }
     };
 
     private final LocationListener locationListenerGetBuoyData = new LocationListener() {
         public void onLocationChanged(final Location loc) {
-            Log.v(Constants.LOGTAG, " " + CLASSTAG + "   locationProviderGetBuoyData LOCATION CHANGED - " + loc);
+            Log.v(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG
+                + "   locationProviderGetBuoyData LOCATION CHANGED - " + loc);
             int lat = (int) (loc.getLatitude() * LocationHelper.MILLION);
             int lon = (int) (loc.getLongitude() * LocationHelper.MILLION);
-            // update buoy data 
+            // update buoy data
             GeoPoint geoPoint = new GeoPoint(lat, lon);
-            MapViewActivity.this.getBuoyData(geoPoint);
+            getBuoyData(geoPoint);
         }
+
         public void onProviderDisabled(final String s) {
         }
         public void onProviderEnabled(final String s) {
@@ -88,16 +93,18 @@ public class MapViewActivity extends MapActivity {
         public void onStatusChanged(final String s, final int i, final Bundle b) {
         }
     };
-    
+
     private final LocationListener locationListenerRecenterMap = new LocationListener() {
+        @Override
         public void onLocationChanged(final Location loc) {
-            Log.v(Constants.LOGTAG, " " + CLASSTAG + "   locationProvider LOCATION CHANGED - " + loc);
+            Log.v(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "   locationProvider LOCATION CHANGED - " + loc);
             int lat = (int) (loc.getLatitude() * LocationHelper.MILLION);
             int lon = (int) (loc.getLongitude() * LocationHelper.MILLION);
             // animate to new location
             GeoPoint geoPoint = new GeoPoint(lat, lon);
-            MapViewActivity.this.mapController.animateTo(geoPoint);
+            mapController.animateTo(geoPoint);
         }
+
         public void onProviderDisabled(final String s) {
         }
         public void onProviderEnabled(final String s) {
@@ -122,13 +129,13 @@ public class MapViewActivity extends MapActivity {
         Log.v(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + " onCreate");
         this.setContentView(R.layout.mapview_activity);
 
-        this.mapView = (MapView) this.findViewById(R.id.map_view);
+        this.mapView = (MapView) findViewById(R.id.map_view);
         this.zoom = (ViewGroup) findViewById(R.id.zoom);
         this.zoom.addView(this.mapView.getZoomControls());
 
-        this.defaultMarker = MapViewActivity.this.getResources().getDrawable(R.drawable.redpin);
+        this.defaultMarker = getResources().getDrawable(R.drawable.redpin);
         this.defaultMarker.setBounds(0, 0, this.defaultMarker.getIntrinsicWidth(), this.defaultMarker
-                .getIntrinsicHeight());
+            .getIntrinsicHeight());
 
         this.buoys = new ArrayList<BuoyOverlayItem>();
     }
@@ -137,37 +144,46 @@ public class MapViewActivity extends MapActivity {
     public void onStart() {
         super.onStart();
         Log.v(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + " onStart");
-        this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        //this.locationProvider = this.locationManager.getBestProvider(myCriteria, true);        
-        //this.locationProvider = this.locationManager.getProviders(true).get(0);
-        this.locationProvider = this.locationManager.getProvider(LocationManager.GPS_PROVIDER);        
-        
-        Log.v(Constants.LOGTAG, " " + CLASSTAG + "   locationProvider from criteria - " + locationProvider);
+        // this.locationProvider = this.locationManager.getBestProvider(myCriteria, true);
+        // this.locationProvider = this.locationManager.getProviders(true).get(0);
+        this.locationProvider = this.locationManager.getProvider(LocationManager.GPS_PROVIDER);
+
+        Log.v(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "   locationProvider from criteria - "
+            + this.locationProvider);
 
         // get location updates from locationProvider
-        // we set minTime(milliseconds) and minDistance(meters) to low values here to get updated often (for emulator/debug)
+        // we set minTime(milliseconds) and minDistance(meters) to low values here to get updated
+        // often (for emulator/debug)
         // in real life you *DO NOT* want to do this, it may consume too many resources
-        // see LocationMangaer in JavaDoc for guidelines (time less than 60000ms for minTime is NOT recommended)
+        // see LocationMangaer in JavaDoc for guidelines (time less than 60000ms for minTime is NOT
+        // recommended)
         //
         // we use separate locationListeners for different purposes
-        // one to update buoy data only if we move a long distance (185000 meters, just under the 100 nautical miles we are parsing the data for)
+        // one to update buoy data only if we move a long distance (185000 meters, just under the
+        // 100 nautical miles we are parsing the data for)
         // another to recenter the map, even when we move a short distance (1000 meters)
-        if (locationProvider != null) {
-            this.locationManager.requestLocationUpdates(locationProvider.getName(), 3000, 185000, this.locationListenerGetBuoyData);
-            this.locationManager.requestLocationUpdates(locationProvider.getName(), 3000, 1000, this.locationListenerRecenterMap);
+        if (this.locationProvider != null) {
+            this.locationManager.requestLocationUpdates(this.locationProvider.getName(), 3000, 185000,
+                this.locationListenerGetBuoyData);
+            this.locationManager.requestLocationUpdates(this.locationProvider.getName(), 3000, 1000,
+                this.locationListenerRecenterMap);
         } else {
-            Log.e(Constants.LOGTAG, " " + CLASSTAG + "  NO LOCATION PROVIDER AVAILABLE");
-            Toast.makeText(this, "Wind and Waves cannot continue, the GPS location provider is not available at this time.", Toast.LENGTH_SHORT).show();
-            this.finish();
+            Log.e(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "  NO LOCATION PROVIDER AVAILABLE");
+            Toast.makeText(this,
+                "Wind and Waves cannot continue, the GPS location provider is not available at this time.",
+                Toast.LENGTH_SHORT).show();
+            finish();
         }
-        
-        // animate to, and get buoy data for lastKnownPoint on startup (or fake/prime point if no last known)
-        GeoPoint lastKnownPoint = this.getLastKnownPoint();
+
+        // animate to, and get buoy data for lastKnownPoint on startup (or fake/prime point if no
+        // last known)
+        GeoPoint lastKnownPoint = getLastKnownPoint();
         this.mapController = this.mapView.getController();
         this.mapController.setZoom(10);
         this.mapController.animateTo(lastKnownPoint);
-        this.getBuoyData(lastKnownPoint);
+        getBuoyData(lastKnownPoint);
     }
 
     @Override
@@ -192,28 +208,28 @@ public class MapViewActivity extends MapActivity {
         menu.add(0, MapViewActivity.MENU_SET_MAP, 0, "Map").setIcon(android.R.drawable.ic_menu_mapmode);
         menu.add(0, MapViewActivity.MENU_SET_SATELLITE, 0, "Satellite").setIcon(android.R.drawable.ic_menu_mapmode);
         menu.add(1, MapViewActivity.MENU_BUOYS_FROM_MAP_CENTER, 0, "Get Buoy Data").setIcon(
-                android.R.drawable.ic_menu_directions);
+            android.R.drawable.ic_menu_directions);
         menu.add(2, MapViewActivity.MENU_BACK_TO_LAST_LOCATION, 0, "My Location").setIcon(
-                android.R.drawable.ic_menu_mylocation);
+            android.R.drawable.ic_menu_mylocation);
         return true;
     }
 
     @Override
     public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
         switch (item.getItemId()) {
-        case MapViewActivity.MENU_SET_MAP:
-            this.mapView.setSatellite(false);
-            break;
-        case MapViewActivity.MENU_SET_SATELLITE:
-            this.mapView.setSatellite(true);
-            break;
-        case MapViewActivity.MENU_BUOYS_FROM_MAP_CENTER:
-            this.getBuoyData(this.mapView.getMapCenter());
-            break;
-        case MapViewActivity.MENU_BACK_TO_LAST_LOCATION:
-            this.mapController.animateTo(this.getLastKnownPoint());
-            this.getBuoyData(this.getLastKnownPoint());
-            break;
+            case MapViewActivity.MENU_SET_MAP:
+                this.mapView.setSatellite(false);
+                break;
+            case MapViewActivity.MENU_SET_SATELLITE:
+                this.mapView.setSatellite(true);
+                break;
+            case MapViewActivity.MENU_BUOYS_FROM_MAP_CENTER:
+                getBuoyData(this.mapView.getMapCenter());
+                break;
+            case MapViewActivity.MENU_BACK_TO_LAST_LOCATION:
+                this.mapController.animateTo(getLastKnownPoint());
+                getBuoyData(getLastKnownPoint());
+                break;
         }
         return super.onMenuItemSelected(featureId, item);
     }
@@ -228,44 +244,45 @@ public class MapViewActivity extends MapActivity {
 
         // last KNOWN may be null, if none set after power up, or in emulator and not setup
         Location lastKnownLocation = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Log.i(Constants.LOGTAG, " " + CLASSTAG + "  lastKnownLocation - " + lastKnownLocation);
+        Log.i(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "  lastKnownLocation - " + lastKnownLocation);
 
         // get lastKnown GeoPoint (either from lastKnownLocation, or prime the pump manually)
         if (lastKnownLocation != null) {
             lastKnownPoint = LocationHelper.getGeoPoint(lastKnownLocation);
         } else {
-            Log.w(Constants.LOGTAG, " " + CLASSTAG
-                    + "  lastKnownLocation NULL - override to Golden Gate (gotta start somewhere)");
+            Log.w(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG
+                + "  lastKnownLocation NULL - override to Golden Gate (gotta start somewhere)");
             lastKnownPoint = LocationHelper.GOLDEN_GATE;
         }
         return lastKnownPoint;
     }
 
     private void getBuoyData(final GeoPoint point) {
-        Log.d(Constants.LOGTAG, " " + CLASSTAG + "  getBuoyData invoked");
+        Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "  getBuoyData invoked");
         this.progressDialog = ProgressDialog.show(this, "Processing . . .", "Getting buoy data", true, false);
 
         new Thread() {
+
             public void run() {
                 // parse lat/lon from GeoPoint back into Strings with direction (37N, 112W - etc)
                 String lats = LocationHelper.parsePoint(point.getLatitudeE6() / LocationHelper.MILLION, true);
                 String lons = LocationHelper.parsePoint(point.getLongitudeE6() / LocationHelper.MILLION, false);
 
-                // for now we hard code the radius to 100 nautical miles from current point 
+                // for now we hard code the radius to 100 nautical miles from current point
                 // (enhancement, dynamically set radius based on map zoom bounds, or add user prefs)
                 NDBCFetcher fetcher = new NDBCFetcher(lats, lons, "100");
                 long start = System.currentTimeMillis();
-                Log.d(Constants.LOGTAG, " " + CLASSTAG + " fetcher start");
+                Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + " fetcher start");
                 ArrayList<BuoyData> buoyDataList = fetcher.getData();
-                Log.d(Constants.LOGTAG, " " + CLASSTAG + " fetcher finish - duration = "
-                        + (System.currentTimeMillis() - start));
-                Log.d(Constants.LOGTAG, " " + CLASSTAG + " buoyDataList size = " + buoyDataList.size());
+                Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + " fetcher finish - duration = "
+                    + (System.currentTimeMillis() - start));
+                Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + " buoyDataList size = " + buoyDataList.size());
 
                 // parse the List<BuoyData> from network call into a List<BuoyOverlayItem>
-                MapViewActivity.this.buoys = MapViewActivity.this.getBuoyOverlayItems(buoyDataList);
+                buoys = getBuoyOverlayItems(buoyDataList);
 
                 // send message to Handler to update UI
-                MapViewActivity.this.handler.sendEmptyMessage(1);
+                handler.sendEmptyMessage(1);
             };
         }.start();
     }
@@ -279,11 +296,12 @@ public class MapViewActivity extends MapActivity {
                     BuoyOverlayItem boi = new BuoyOverlayItem(gp, bd);
                     buoyOverylayItemList.add(boi);
                 } else {
-                    Log.w(Constants.LOGTAG, " " + CLASSTAG + "  buoy WITH incomplete geoRssPoint data skipped - "
-                            + bd.title);
+                    Log.w(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG
+                        + "  buoy WITH incomplete geoRssPoint data skipped - " + bd.title);
                 }
             } else {
-                Log.w(Constants.LOGTAG, " " + CLASSTAG + "  buoy WITHOUT geoRssPoint data skipped - " + bd.title);
+                Log.w(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "  buoy WITHOUT geoRssPoint data skipped - "
+                    + bd.title);
             }
         }
         return buoyOverylayItemList;
