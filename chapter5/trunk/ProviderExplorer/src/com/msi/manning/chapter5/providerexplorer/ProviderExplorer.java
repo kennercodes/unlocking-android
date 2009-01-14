@@ -187,7 +187,11 @@ public class ProviderExplorer extends Activity {
     //
     // end resolver methods
     //
-
+    
+    //
+    // addtl classes
+    //
+    
     private class Contact {
         public long id;
         public String name;
