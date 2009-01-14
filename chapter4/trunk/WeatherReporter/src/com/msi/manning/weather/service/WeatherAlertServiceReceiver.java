@@ -14,8 +14,9 @@ public class WeatherAlertServiceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Log.v(Constants.LOGTAG, " " + CLASSTAG + " received intent via BOOT, starting service");
+            Log.v(Constants.LOGTAG, " " + WeatherAlertServiceReceiver.CLASSTAG
+                + " received intent via BOOT, starting service");
             context.startService(new Intent(context, WeatherAlertService.class));
-        } 
+        }
     }
 }

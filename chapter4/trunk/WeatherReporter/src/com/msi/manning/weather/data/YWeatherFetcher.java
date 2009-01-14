@@ -1,16 +1,16 @@
 package com.msi.manning.weather.data;
 
-import java.net.URL;
+import android.util.Log;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import com.msi.manning.weather.Constants;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import android.util.Log;
+import java.net.URL;
 
-import com.msi.manning.weather.Constants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Invoke Yahoo! Weather API and parse into WeatherRecord.
@@ -38,8 +38,8 @@ public class YWeatherFetcher {
         this.zip = zip;
 
         // build query
-        this.query = QBASE + this.zip;
-        ///Log.v(Constants.LOGTAG, " " + CLASSTAG + " query - " + query);
+        this.query = YWeatherFetcher.QBASE + this.zip;
+        // /Log.v(Constants.LOGTAG, " " + CLASSTAG + " query - " + query);
     }
 
     public YWeatherFetcher(String zip) {
@@ -47,7 +47,7 @@ public class YWeatherFetcher {
     }
 
     public WeatherRecord getWeather() {
-        ///long start = System.currentTimeMillis();
+        // /long start = System.currentTimeMillis();
         WeatherRecord r = new WeatherRecord();
 
         try {
@@ -62,12 +62,12 @@ public class YWeatherFetcher {
             r = handler.getWeatherRecord();
             r.setOverrideSevere(true); // override severe for dev/testing
         } catch (Exception e) {
-            Log.e(Constants.LOGTAG, " " + CLASSTAG, e);
+            Log.e(Constants.LOGTAG, " " + YWeatherFetcher.CLASSTAG, e);
         }
 
-        ///long duration = (System.currentTimeMillis() - start) / 1000;
-        ///Log.v(Constants.LOGTAG, " " + CLASSTAG + " call duration - " + duration);
-        ///Log.v(Constants.LOGTAG, " " + CLASSTAG + " WeatherReport = " + r);
+        // /long duration = (System.currentTimeMillis() - start) / 1000;
+        // /Log.v(Constants.LOGTAG, " " + CLASSTAG + " call duration - " + duration);
+        // /Log.v(Constants.LOGTAG, " " + CLASSTAG + " WeatherReport = " + r);
         return r;
     }
 

@@ -1,15 +1,8 @@
 package com.msi.manning.weather;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,8 +25,8 @@ import com.msi.manning.weather.data.DBHelper.Location;
 import com.msi.manning.weather.service.WeatherAlertService;
 
 /**
- * Show Review detail for review item user selected, allow user to
- * enable/disable alerts, and show/react menu for other actions.
+ * Show Review detail for review item user selected, allow user to enable/disable alerts, and
+ * show/react menu for other actions.
  * 
  * @author charliecollins
  * 
@@ -64,59 +57,45 @@ public class ReportViewDetail extends Activity {
     private Location deviceAlertEnabledLocation;
 
     private DBHelper dbHelper;
-    
+
     private final Handler handler = new Handler() {
+
         @Override
         public void handleMessage(final Message msg) {
-
-            ReportViewDetail.this.progressDialog.dismiss();
-            if ((ReportViewDetail.this.report == null) || (ReportViewDetail.this.report.getCondition() == null)) {
+            progressDialog.dismiss();
+            if ((report == null) || (report.getCondition() == null)) {
                 Toast.makeText(ReportViewDetail.this, R.string.message_report_unavailable, Toast.LENGTH_SHORT).show();
             } else {
-                Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + "   HANDLER report - "
-                        + ReportViewDetail.this.report);
-                ReportViewDetail.this.location.setText(ReportViewDetail.this.report.getCity() + ", "
-                        + ReportViewDetail.this.report.getRegion() + " " + ReportViewDetail.this.report.getCountry());
-                ReportViewDetail.this.date.setText(ReportViewDetail.this.report.getDate());
+                Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + "   HANDLER report - " + report);
+                location.setText(report.getCity() + ", " + report.getRegion() + " " + report.getCountry());
+                date.setText(report.getDate());
 
                 StringBuffer cond = new StringBuffer();
-                cond.append(ReportViewDetail.this.report.getCondition().getDisplay() + "\n");
-                cond.append("Temperature: " + ReportViewDetail.this.report.getTemp() + " F " + " (wind chill "
-                        + ReportViewDetail.this.report.getWindChill() + " F)\n");
-                cond.append("Barometer: " + ReportViewDetail.this.report.getPressure() + " and "
-                        + ReportViewDetail.this.report.getPressureState() + "\n");
-                cond.append("Humidity: " + ReportViewDetail.this.report.getHumidity() + "% - Wind: "
-                        + ReportViewDetail.this.report.getWindDirection() + " "
-                        + ReportViewDetail.this.report.getWindSpeed() + "mph\n");
-                cond.append("Sunrise: " + ReportViewDetail.this.report.getSunrise() + " - Sunset:  "
-                        + ReportViewDetail.this.report.getSunset());
-                ReportViewDetail.this.condition.setText(cond.toString());
+                cond.append(report.getCondition().getDisplay() + "\n");
+                cond.append("Temperature: " + report.getTemp() + " F " + " (wind chill " + report.getWindChill()
+                    + " F)\n");
+                cond.append("Barometer: " + report.getPressure() + " and " + report.getPressureState() + "\n");
+                cond.append("Humidity: " + report.getHumidity() + "% - Wind: " + report.getWindDirection() + " "
+                    + report.getWindSpeed() + "mph\n");
+                cond.append("Sunrise: " + report.getSunrise() + " - Sunset:  " + report.getSunset());
+                condition.setText(cond.toString());
 
                 StringBuffer fore = new StringBuffer();
-                for (int i = 0; (ReportViewDetail.this.report.getForecasts() != null)
-                        && (i < ReportViewDetail.this.report.getForecasts().length); i++) {
-                    WeatherForecast fc = ReportViewDetail.this.report.getForecasts()[i];
+                for (int i = 0; (report.getForecasts() != null) && (i < report.getForecasts().length); i++) {
+                    WeatherForecast fc = report.getForecasts()[i];
                     fore.append(fc.getDay() + ":\n");
                     fore.append(fc.getCondition().getDisplay() + " High:" + fc.getHigh() + " F - Low:" + fc.getLow()
-                            + " F");
+                        + " F");
                     if (i == 0) {
                         fore.append("\n\n");
                     }
                 }
-                ReportViewDetail.this.forecast.setText(fore.toString());
-
-                // TODO cache the images, no need to make this network trip
-                try {
-                    URL url = new URL(ReportViewDetail.this.report.getCondition().getImageLink());
-                    URLConnection conn = url.openConnection();
-                    conn.connect();
-                    BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-                    Bitmap bm = BitmapFactory.decodeStream(bis);
-                    bis.close();
-                    ReportViewDetail.this.conditionImage.setImageBitmap(bm);
-                } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG, e);
-                }
+                forecast.setText(fore.toString());
+                // package:type/entry
+                String resPath = "com.msi.manning.weather:drawable/" + "cond" + report.getCondition().getId();
+                Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " resPath = " + resPath);
+                int resId = getResources().getIdentifier(resPath, null, null);
+                conditionImage.setImageDrawable(getResources().getDrawable(resId));
             }
         }
     };
@@ -128,96 +107,27 @@ public class ReportViewDetail extends Activity {
 
         this.setContentView(R.layout.report_view_detail);
 
-        this.location = (TextView) this.findViewById(R.id.view_location);
-        this.date = (TextView) this.findViewById(R.id.view_date);
-        this.condition = (TextView) this.findViewById(R.id.view_condition);
-        this.forecast = (TextView) this.findViewById(R.id.view_forecast);
-        this.conditionImage = (ImageView) this.findViewById(R.id.condition_image);
-        this.currentCheck = (CheckBox) this.findViewById(R.id.view_configure_alerts);
+        this.location = (TextView) findViewById(R.id.view_location);
+        this.date = (TextView) findViewById(R.id.view_date);
+        this.condition = (TextView) findViewById(R.id.view_condition);
+        this.forecast = (TextView) findViewById(R.id.view_forecast);
+        this.conditionImage = (ImageView) findViewById(R.id.condition_image);
+        this.currentCheck = (CheckBox) findViewById(R.id.view_configure_alerts);
 
         // currentCheck listener, enable/disable alerts
         this.currentCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
             public void onCheckedChanged(final CompoundButton button, final boolean isChecked) {
                 Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " onCheckedChanged - isChecked - "
-                        + isChecked);
-                ReportViewDetail.this.updateAlertStatus(isChecked);
+                    + isChecked);
+                updateAlertStatus(isChecked);
             }
         });
 
         // start the service - though it may already have been started on boot
         // multiple starts don't hurt it, and if app is installed and device NOT
         // booted needs this
-        this.startService(new Intent(this, WeatherAlertService.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        if (this.useDeviceLocation) {
-            menu.add(0, ReportViewDetail.MENU_SPECIFY_LOCATION, 0,
-                    this.getResources().getText(R.string.menu_specify_location))
-                    .setIcon(android.R.drawable.ic_menu_edit);
-        } else {
-            menu.add(0, ReportViewDetail.MENU_VIEW_CURRENT_LOCATION, 2,
-                    this.getResources().getText(R.string.menu_device_location)).setIcon(
-                    android.R.drawable.ic_menu_mylocation);
-            menu.add(0, ReportViewDetail.MENU_SPECIFY_LOCATION, 3, this.getResources().getText(
-                    R.string.menu_specify_location)).setIcon(android.R.drawable.ic_menu_edit);
-            if (this.savedLocation != null) {
-                menu.add(0, ReportViewDetail.MENU_REMOVE_SAVED_LOCATION, 4,
-                        this.getResources().getText(R.string.menu_remove_location)).setIcon(
-                        android.R.drawable.ic_menu_delete);
-            } else {
-                menu.add(0, ReportViewDetail.MENU_SAVE_LOCATION, 5,
-                        this.getResources().getText(R.string.menu_save_location)).setIcon(
-                        android.R.drawable.ic_menu_add);
-            }
-        }
-        menu.add(0, ReportViewDetail.MENU_VIEW_SAVED_LOCATIONS, 1,
-                this.getResources().getText(R.string.menu_goto_saved)).setIcon(android.R.drawable.ic_menu_myplaces);
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
-        Intent intent = null;
-        Uri uri = null;
-        switch (item.getItemId()) {
-        case MENU_VIEW_CURRENT_LOCATION:
-            uri = Uri.parse("weather://com.msi.manning/loc?zip=" + this.deviceZip);
-            intent = new Intent(Intent.ACTION_VIEW, uri);
-            this.startActivity(intent);
-            break;
-        case MENU_SPECIFY_LOCATION:
-            this.startActivity(new Intent(ReportViewDetail.this, ReportSpecifyLocation.class));
-            break;
-        case MENU_VIEW_SAVED_LOCATIONS:
-            intent = new Intent(ReportViewDetail.this, ReportViewSavedLocations.class);
-            intent.putExtra("deviceZip", this.deviceZip);
-            this.startActivity(intent);
-            break;
-        case MENU_SAVE_LOCATION:
-            Location loc = new Location();
-            loc.alertenabled = 0;
-            loc.lastalert = 0;
-            loc.zip = this.reportZip;
-            loc.city = this.report.getCity();
-            loc.region = this.report.getRegion();
-            this.dbHelper.insert(loc);
-            uri = Uri.parse("weather://com.msi.manning/loc?zip=" + this.reportZip);
-            intent = new Intent(Intent.ACTION_VIEW, uri);
-            this.startActivity(intent);
-            break;
-        case MENU_REMOVE_SAVED_LOCATION:
-            if (this.savedLocation != null) {
-                this.dbHelper.delete(this.reportZip);
-            }
-            uri = Uri.parse("weather://com.msi.manning/loc?zip=" + this.reportZip);
-            intent = new Intent(Intent.ACTION_VIEW, uri);
-            this.startActivity(intent);
-            break;
-        }
-        return super.onMenuItemSelected(featureId, item);
+        startService(new Intent(this, WeatherAlertService.class));
     }
 
     @Override
@@ -227,8 +137,8 @@ public class ReportViewDetail extends Activity {
         this.dbHelper.cleanup();
         this.deviceZip = WeatherAlertService.deviceLocationZIP;
         if (this.progressDialog.isShowing()) {
-           this.progressDialog.dismiss();
-        }        
+            this.progressDialog.dismiss();
+        }
     }
 
     @Override
@@ -249,15 +159,16 @@ public class ReportViewDetail extends Activity {
         Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " onStart");
         this.dbHelper = new DBHelper(this);
 
-        // determine current location zip using convenience deviceLocationZIP member of WeatherAlertService
+        // determine current location zip using convenience deviceLocationZIP member of
+        // WeatherAlertService
         // (it is established there via LocationManager)
         this.deviceZip = WeatherAlertService.deviceLocationZIP;
 
         // determine reportZip from Uri (or default to deviceZip)
-        if ((this.getIntent().getData() != null) && (this.getIntent().getData().getEncodedQuery() != null)
-                && (this.getIntent().getData().getEncodedQuery().length() > 8)) {
+        if ((getIntent().getData() != null) && (getIntent().getData().getEncodedQuery() != null)
+            && (getIntent().getData().getEncodedQuery().length() > 8)) {
             Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " Intent data and query present, parse for zip");
-            String queryString = this.getIntent().getData().getEncodedQuery();
+            String queryString = getIntent().getData().getEncodedQuery();
             Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " queryString - " + queryString);
             this.reportZip = queryString.substring(4, 9);
             this.useDeviceLocation = false;
@@ -288,22 +199,74 @@ public class ReportViewDetail extends Activity {
                 }
             }
         }
+        loadReport(this.reportZip);
+    }
 
-        // clear any currently active alerts 
-        // DISABLED now that Notification app has it's own dismiss button as of 1.0
-        /*
-        this.nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)
-        List<Location> alerts = this.dbHelper.getAllAlertEnabled();
-        for (Location loc : alerts) {
-            Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " attempt to cancel alert - " + loc.zip);
-            this.nm.cancel(Integer.parseInt(loc.zip));
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (this.useDeviceLocation) {
+            menu.add(0, ReportViewDetail.MENU_SPECIFY_LOCATION, 0,
+                getResources().getText(R.string.menu_specify_location)).setIcon(android.R.drawable.ic_menu_edit);
+        } else {
+            menu.add(0, ReportViewDetail.MENU_VIEW_CURRENT_LOCATION, 2,
+                getResources().getText(R.string.menu_device_location)).setIcon(android.R.drawable.ic_menu_mylocation);
+            menu.add(0, ReportViewDetail.MENU_SPECIFY_LOCATION, 3,
+                getResources().getText(R.string.menu_specify_location)).setIcon(android.R.drawable.ic_menu_edit);
+            if (this.savedLocation != null) {
+                menu.add(0, ReportViewDetail.MENU_REMOVE_SAVED_LOCATION, 4,
+                    getResources().getText(R.string.menu_remove_location)).setIcon(android.R.drawable.ic_menu_delete);
+            } else {
+                menu
+                    .add(0, ReportViewDetail.MENU_SAVE_LOCATION, 5, getResources().getText(R.string.menu_save_location))
+                    .setIcon(android.R.drawable.ic_menu_add);
+            }
         }
-        if (this.deviceAlertEnabledLocation != null) {
-            this.nm.cancel(Integer.parseInt(this.deviceZip));
-        }
-        */
+        menu.add(0, ReportViewDetail.MENU_VIEW_SAVED_LOCATIONS, 1, getResources().getText(R.string.menu_goto_saved))
+            .setIcon(android.R.drawable.ic_menu_myplaces);
+        return true;
+    }
 
-        this.loadReport(this.reportZip);
+    @Override
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
+        Intent intent = null;
+        Uri uri = null;
+        switch (item.getItemId()) {
+            case MENU_VIEW_CURRENT_LOCATION:
+                uri = Uri.parse("weather://com.msi.manning/loc?zip=" + this.deviceZip);
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                break;
+            case MENU_SPECIFY_LOCATION:
+                startActivity(new Intent(ReportViewDetail.this, ReportSpecifyLocation.class));
+                break;
+            case MENU_VIEW_SAVED_LOCATIONS:
+                intent = new Intent(ReportViewDetail.this, ReportViewSavedLocations.class);
+                intent.putExtra("deviceZip", this.deviceZip);
+                startActivity(intent);
+                break;
+            case MENU_SAVE_LOCATION:
+                Location loc = new Location();
+                loc.alertenabled = 0;
+                loc.lastalert = 0;
+                loc.zip = this.reportZip;
+                loc.city = this.report.getCity();
+                loc.region = this.report.getRegion();
+                this.dbHelper.insert(loc);
+                uri = Uri.parse("weather://com.msi.manning/loc?zip=" + this.reportZip);
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                break;
+            case MENU_REMOVE_SAVED_LOCATION:
+                if (this.savedLocation != null) {
+                    this.dbHelper.delete(this.reportZip);
+                }
+                uri = Uri.parse("weather://com.msi.manning/loc?zip=" + this.reportZip);
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                break;
+        }
+        return super.onMenuItemSelected(featureId, item);
     }
 
     private void updateAlertStatus(final boolean isChecked) {
@@ -355,20 +318,20 @@ public class ReportViewDetail extends Activity {
         Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + " loadReport");
         Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + "    zip - " + zip);
 
-        this.progressDialog = ProgressDialog.show(this, this.getResources().getText(R.string.view_working), this
-                .getResources().getText(R.string.view_get_report), true, false);
-        
+        this.progressDialog = ProgressDialog.show(this, getResources().getText(R.string.view_working), getResources()
+            .getText(R.string.view_get_report), true, false);
+
         final YWeatherFetcher ywh = new YWeatherFetcher(zip);
 
         // get report in a separate thread for ProgressDialog/Handler
         // when complete send "empty" msg to handler indicating thread is done
         new Thread() {
+
             @Override
             public void run() {
-                ReportViewDetail.this.report = ywh.getWeather();
-                Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + "    report - "
-                        + ReportViewDetail.this.report);
-                ReportViewDetail.this.handler.sendEmptyMessage(0);
+                report = ywh.getWeather();
+                Log.v(Constants.LOGTAG, " " + ReportViewDetail.CLASSTAG + "    report - " + report);
+                handler.sendEmptyMessage(0);
             }
         }.start();
     }

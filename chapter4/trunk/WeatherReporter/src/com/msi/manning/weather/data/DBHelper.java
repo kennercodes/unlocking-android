@@ -1,8 +1,5 @@
 package com.msi.manning.weather.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.msi.manning.weather.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper {
 
@@ -29,13 +29,14 @@ public class DBHelper {
     // 
     // inner classes
     //
-    
+
     public static class Location {
+
         public long id;
         public long lastalert;
         public int alertenabled;
         public String zip;
-        // include city and region because geocode is expensive 
+        // include city and region because geocode is expensive
         public String city;
         public String region;
 
@@ -43,7 +44,7 @@ public class DBHelper {
         }
 
         public Location(final long id, final long lastalert, final int alertenabled, final String zip,
-                final String city, final String region) {
+            final String city, final String region) {
             this.id = id;
             this.lastalert = lastalert;
             this.alertenabled = alertenabled;
@@ -57,12 +58,12 @@ public class DBHelper {
             return this.zip + " " + this.city + ", " + this.region;
         }
     }
-    
+
     private static class DBOpenHelper extends SQLiteOpenHelper {
 
         private static final String DB_CREATE = "CREATE TABLE "
-                + DBHelper.DB_TABLE
-                + " (_id INTEGER PRIMARY KEY, zip TEXT UNIQUE NOT NULL, city TEXT, region TEXT, lastalert INTEGER, alertenabled INTEGER);";
+            + DBHelper.DB_TABLE
+            + " (_id INTEGER PRIMARY KEY, zip TEXT UNIQUE NOT NULL, city TEXT, region TEXT, lastalert INTEGER, alertenabled INTEGER);";
 
         public DBOpenHelper(final Context context) {
             super(context, DBHelper.DB_NAME, null, DBHelper.DB_VERSION);
@@ -85,18 +86,18 @@ public class DBHelper {
         @Override
         public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + DBHelper.DB_TABLE);
-            this.onCreate(db);
+            onCreate(db);
         }
-    }    
+    }
 
     //
     // end inner classes
     //
-    
+
     public DBHelper(final Context context) {
         this.dbOpenHelper = new DBOpenHelper(context);
-        this.establishDb();
-    }    
+        establishDb();
+    }
 
     private void establishDb() {
         if (this.db == null) {
@@ -110,7 +111,7 @@ public class DBHelper {
             this.db = null;
         }
     }
-    
+
     public void insert(final Location location) {
         ContentValues values = new ContentValues();
         values.put("zip", location.zip);
@@ -144,7 +145,7 @@ public class DBHelper {
         Location location = null;
         try {
             c = this.db.query(true, DBHelper.DB_TABLE, DBHelper.COLS, "zip = '" + zip + "'", null, null, null, null,
-                    null);
+                null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 location = new Location();
@@ -225,5 +226,5 @@ public class DBHelper {
             }
         }
         return ret;
-    }    
+    }
 }

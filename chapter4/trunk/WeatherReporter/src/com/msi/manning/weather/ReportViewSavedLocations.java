@@ -1,7 +1,5 @@
 package com.msi.manning.weather;
 
-import java.util.List;
-
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,6 +18,8 @@ import android.widget.TextView;
 
 import com.msi.manning.weather.data.DBHelper;
 import com.msi.manning.weather.data.DBHelper.Location;
+
+import java.util.List;
 
 /**
  * Allow user to choose previously saved locations.
@@ -40,17 +40,18 @@ public class ReportViewSavedLocations extends ListActivity {
     private ListAdapter adapter;
 
     private final Handler handler = new Handler() {
+
         @Override
         public void handleMessage(final Message msg) {
             Log.v(Constants.LOGTAG, " " + ReportViewSavedLocations.CLASSTAG + " worker thread done, setup list");
-            ReportViewSavedLocations.this.progressDialog.dismiss();
-            if ((ReportViewSavedLocations.this.locations == null)
-                    || (ReportViewSavedLocations.this.locations.size() == 0)) {
-                ReportViewSavedLocations.this.empty.setText("No Data");
+            progressDialog.dismiss();
+            if ((locations == null)
+                || (locations.size() == 0)) {
+                empty.setText("No Data");
             } else {
-                ReportViewSavedLocations.this.adapter = new ArrayAdapter(ReportViewSavedLocations.this,
-                        R.layout.list_item_1, ReportViewSavedLocations.this.locations);
-                ReportViewSavedLocations.this.setListAdapter(ReportViewSavedLocations.this.adapter);
+                adapter = new ArrayAdapter<Location>(ReportViewSavedLocations.this,
+                    R.layout.list_item_1, locations);
+                setListAdapter(adapter);
             }
         }
     };
@@ -59,46 +60,10 @@ public class ReportViewSavedLocations extends ListActivity {
     public void onCreate(final Bundle icicle) {
         super.onCreate(icicle);
         this.setContentView(R.layout.report_view_saved_locations);
-        this.getListView().setEmptyView(this.findViewById(R.id.view_saved_locations_empty));
-        this.empty = (TextView) this.findViewById(R.id.view_saved_locations_empty);
+        getListView().setEmptyView(findViewById(R.id.view_saved_locations_empty));
+        this.empty = (TextView) findViewById(R.id.view_saved_locations_empty);
         this.dbHelper = new DBHelper(this);
-        this.loadLocations();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(0, ReportViewSavedLocations.MENU_SPECIFY_LOCATION, 0, this.getResources().getText(
-                R.string.menu_specify_location)).setIcon(android.R.drawable.ic_menu_edit);
-        menu.add(0, ReportViewSavedLocations.MENU_VIEW_CURRENT_LOCATION, 1, this.getResources().getText(
-                R.string.menu_device_location)).setIcon(android.R.drawable.ic_menu_mylocation);
-
-        return true;
-    }
-
-    @Override
-    protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
-        Log.v(Constants.LOGTAG, " " + ReportViewSavedLocations.CLASSTAG + " selected list item");
-        Location loc = this.locations.get(position);
-        Uri uri = Uri.parse("weather://com.msi.manning/loc?zip=" + loc.zip);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        this.startActivity(intent);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
-        switch (item.getItemId()) {
-        case MENU_VIEW_CURRENT_LOCATION:
-            String deviceZip = this.getIntent().getStringExtra("deviceZip");
-            Uri uri = Uri.parse("weather://com.msi.manning/loc?zip=" + deviceZip);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            this.startActivity(intent);
-            break;
-        case MENU_SPECIFY_LOCATION:
-            this.startActivity(new Intent(ReportViewSavedLocations.this, ReportSpecifyLocation.class));
-            break;
-        }
-        return super.onMenuItemSelected(featureId, item);
+        loadLocations();
     }
 
     @Override
@@ -111,7 +76,42 @@ public class ReportViewSavedLocations extends ListActivity {
     protected void onResume() {
         super.onResume();
     }
-    
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, ReportViewSavedLocations.MENU_SPECIFY_LOCATION, 0,
+            getResources().getText(R.string.menu_specify_location)).setIcon(android.R.drawable.ic_menu_edit);
+        menu.add(0, ReportViewSavedLocations.MENU_VIEW_CURRENT_LOCATION, 1,
+            getResources().getText(R.string.menu_device_location)).setIcon(android.R.drawable.ic_menu_mylocation);
+
+        return true;
+    }
+
+    @Override
+    protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
+        Log.v(Constants.LOGTAG, " " + ReportViewSavedLocations.CLASSTAG + " selected list item");
+        Location loc = this.locations.get(position);
+        Uri uri = Uri.parse("weather://com.msi.manning/loc?zip=" + loc.zip);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_VIEW_CURRENT_LOCATION:
+                String deviceZip = getIntent().getStringExtra("deviceZip");
+                Uri uri = Uri.parse("weather://com.msi.manning/loc?zip=" + deviceZip);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                break;
+            case MENU_SPECIFY_LOCATION:
+                startActivity(new Intent(ReportViewSavedLocations.this, ReportSpecifyLocation.class));
+                break;
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
 
     private void loadLocations() {
         Log.v(Constants.LOGTAG, " " + ReportViewSavedLocations.CLASSTAG + " loadLocations");
@@ -119,8 +119,8 @@ public class ReportViewSavedLocations extends ListActivity {
         new Thread() {
             @Override
             public void run() {
-                ReportViewSavedLocations.this.locations = ReportViewSavedLocations.this.dbHelper.getAll();
-                ReportViewSavedLocations.this.handler.sendEmptyMessage(0);
+                locations = dbHelper.getAll();
+                handler.sendEmptyMessage(0);
             }
         }.start();
     }

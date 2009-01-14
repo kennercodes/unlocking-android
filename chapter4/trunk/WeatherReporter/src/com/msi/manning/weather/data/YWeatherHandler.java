@@ -8,11 +8,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * SAX Handler impl for Yahoo! Weather API and WeatherRecord bean.
  * 
  * @author charliecollins
- *
+ * 
  */
 public class YWeatherHandler extends DefaultHandler {
 
-    //private static final String CLASSTAG = YWeatherHandler.class.getSimpleName();
+    // private static final String CLASSTAG = YWeatherHandler.class.getSimpleName();
 
     private static final String YLOC = "location";
     private static final String YWIND = "wind";
@@ -25,7 +25,7 @@ public class YWeatherHandler extends DefaultHandler {
     private WeatherRecord weatherRecord;
 
     public YWeatherHandler() {
-        weatherRecord = new WeatherRecord();
+        this.weatherRecord = new WeatherRecord();
     }
 
     @Override
@@ -38,48 +38,48 @@ public class YWeatherHandler extends DefaultHandler {
 
     @Override
     public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-        if (localName.equals(YLOC)) {
-            weatherRecord.setCity(getAttributeValue("city", atts));
-            weatherRecord.setRegion(getAttributeValue("region", atts));
-            weatherRecord.setCountry(getAttributeValue("country", atts));
+        if (localName.equals(YWeatherHandler.YLOC)) {
+            this.weatherRecord.setCity(getAttributeValue("city", atts));
+            this.weatherRecord.setRegion(getAttributeValue("region", atts));
+            this.weatherRecord.setCountry(getAttributeValue("country", atts));
         }
 
-        if (localName.equals(YWIND)) {
-            weatherRecord.setWindChill(getAttributeValue("chill", atts));
+        if (localName.equals(YWeatherHandler.YWIND)) {
+            this.weatherRecord.setWindChill(getAttributeValue("chill", atts));
             int windDirectionDegrees = Integer.parseInt(getAttributeValue("direction", atts));
-            weatherRecord.setWindDirection(convertDirection(windDirectionDegrees));
-            weatherRecord.setWindSpeed(Integer.parseInt(getAttributeValue("speed", atts)));
+            this.weatherRecord.setWindDirection(convertDirection(windDirectionDegrees));
+            this.weatherRecord.setWindSpeed(Integer.parseInt(getAttributeValue("speed", atts)));
         }
 
-        if (localName.equals(YATMO)) {
-            weatherRecord.setHumidity(Integer.parseInt(getAttributeValue("humidity", atts)));
-            weatherRecord.setVisibility(Integer.parseInt(getAttributeValue("visibility", atts)));
-            weatherRecord.setPressure(Double.parseDouble(getAttributeValue("pressure", atts)));
+        if (localName.equals(YWeatherHandler.YATMO)) {
+            this.weatherRecord.setHumidity(Integer.parseInt(getAttributeValue("humidity", atts)));
+            this.weatherRecord.setVisibility(Integer.parseInt(getAttributeValue("visibility", atts)));
+            this.weatherRecord.setPressure(Double.parseDouble(getAttributeValue("pressure", atts)));
             String pressureState = getAttributeValue("rising", atts);
             if (pressureState.equals("0")) {
-                weatherRecord.setPressureState(WeatherRecord.PRESSURE_STEADY);
+                this.weatherRecord.setPressureState(WeatherRecord.PRESSURE_STEADY);
             } else if (pressureState.equals("1")) {
-                weatherRecord.setPressureState(WeatherRecord.PRESSURE_FALLING);
+                this.weatherRecord.setPressureState(WeatherRecord.PRESSURE_FALLING);
             } else if (pressureState.equals("2")) {
-                weatherRecord.setPressureState(WeatherRecord.PRESSURE_RISING);
+                this.weatherRecord.setPressureState(WeatherRecord.PRESSURE_RISING);
             }
         }
 
-        if (localName.equals(YASTRO)) {
-            weatherRecord.setSunrise(getAttributeValue("sunrise", atts));
-            weatherRecord.setSunset(getAttributeValue("sunset", atts));
+        if (localName.equals(YWeatherHandler.YASTRO)) {
+            this.weatherRecord.setSunrise(getAttributeValue("sunrise", atts));
+            this.weatherRecord.setSunset(getAttributeValue("sunset", atts));
         }
 
-        if (localName.equals(YCOND)) {
-            weatherRecord.setTemp(Integer.parseInt(getAttributeValue("temp", atts)));
+        if (localName.equals(YWeatherHandler.YCOND)) {
+            this.weatherRecord.setTemp(Integer.parseInt(getAttributeValue("temp", atts)));
             int code = Integer.parseInt(getAttributeValue("code", atts));
             WeatherCondition cond = WeatherCondition.getWeatherCondition(code);
-            weatherRecord.setCondition(cond);
-            weatherRecord.setDate(getAttributeValue("date", atts));
+            this.weatherRecord.setCondition(cond);
+            this.weatherRecord.setDate(getAttributeValue("date", atts));
         }
 
-        if (localName.equals(YFCAST)) {
-            if (forecastCount < 2) {
+        if (localName.equals(YWeatherHandler.YFCAST)) {
+            if (this.forecastCount < 2) {
                 WeatherForecast forecast = new WeatherForecast();
                 forecast.setDate(getAttributeValue("date", atts));
                 forecast.setDay(getAttributeValue("day", atts));
@@ -88,9 +88,9 @@ public class YWeatherHandler extends DefaultHandler {
                 int code = Integer.parseInt(getAttributeValue("code", atts));
                 WeatherCondition cond = WeatherCondition.getWeatherCondition(code);
                 forecast.setCondition(cond);
-                weatherRecord.getForecasts()[forecastCount] = forecast;
+                this.weatherRecord.getForecasts()[this.forecastCount] = forecast;
             }
-            forecastCount++;
+            this.forecastCount++;
         }
     }
 
@@ -100,7 +100,7 @@ public class YWeatherHandler extends DefaultHandler {
 
     @Override
     public void characters(char ch[], int start, int length) {
-    }   
+    }
 
     private String getAttributeValue(String attName, Attributes atts) {
         String result = null;
@@ -113,7 +113,7 @@ public class YWeatherHandler extends DefaultHandler {
         }
         return result;
     }
-    
+
     private String convertDirection(int d) {
         String result = "";
         if (d >= 348.75 && d < 11.25) {
@@ -148,12 +148,12 @@ public class YWeatherHandler extends DefaultHandler {
             result = "NW";
         } else if (d >= 326.25 && d < 348.75) {
             result = "NNW";
-        } 
+        }
         return result;
     }
 
     public WeatherRecord getWeatherRecord() {
-        return weatherRecord;
+        return this.weatherRecord;
     }
 
     public void setWeatherRecord(WeatherRecord weatherRecord) {

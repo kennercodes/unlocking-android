@@ -40,17 +40,17 @@ public class WeatherRecord {
     private WeatherForecast[] forecasts;
 
     static {
-        severeConditions = new ArrayList<WeatherCondition>();
-        severeConditions.add(WeatherCondition.BLOWING_SNOW);
-        severeConditions.add(WeatherCondition.FREEZING_RAIN);
-        severeConditions.add(WeatherCondition.FREEZING_DRIZZLE);
-        severeConditions.add(WeatherCondition.HAIL);
-        severeConditions.add(WeatherCondition.HEAVY_SNOW);
-        severeConditions.add(WeatherCondition.HEAVY_SNOW_WINDY);
-        severeConditions.add(WeatherCondition.HURRICANE);
-        severeConditions.add(WeatherCondition.SEVERE_THUNDERSTORMS);
-        severeConditions.add(WeatherCondition.TORNADO);
-        severeConditions.add(WeatherCondition.TROPICAL_STORM);
+        WeatherRecord.severeConditions = new ArrayList<WeatherCondition>();
+        WeatherRecord.severeConditions.add(WeatherCondition.BLOWING_SNOW);
+        WeatherRecord.severeConditions.add(WeatherCondition.FREEZING_RAIN);
+        WeatherRecord.severeConditions.add(WeatherCondition.FREEZING_DRIZZLE);
+        WeatherRecord.severeConditions.add(WeatherCondition.HAIL);
+        WeatherRecord.severeConditions.add(WeatherCondition.HEAVY_SNOW);
+        WeatherRecord.severeConditions.add(WeatherCondition.HEAVY_SNOW_WINDY);
+        WeatherRecord.severeConditions.add(WeatherCondition.HURRICANE);
+        WeatherRecord.severeConditions.add(WeatherCondition.SEVERE_THUNDERSTORMS);
+        WeatherRecord.severeConditions.add(WeatherCondition.TORNADO);
+        WeatherRecord.severeConditions.add(WeatherCondition.TROPICAL_STORM);
     }
 
     public WeatherRecord(boolean overrideSevere) {
@@ -63,7 +63,7 @@ public class WeatherRecord {
     }
 
     public boolean isOverrideSevere() {
-        return overrideSevere;
+        return this.overrideSevere;
     }
 
     public void setOverrideSevere(boolean overrideSevere) {
@@ -71,22 +71,23 @@ public class WeatherRecord {
     }
 
     public boolean isSevere() {
-        // if any FORECAST is one of "severeConditions" then it's severe (or if it's overridden for dev)
+        // if any FORECAST is one of "severeConditions" then it's severe (or if it's overridden for
+        // dev)
         if (this.overrideSevere) {
             return true;
         }
         for (int i = 0; this.forecasts != null && i < this.forecasts.length; i++) {
             WeatherCondition cond = this.forecasts[i].getCondition();
-            if (cond != null && severeConditions.contains(cond)) {
-                severe = true;
+            if (cond != null && WeatherRecord.severeConditions.contains(cond)) {
+                this.severe = true;
                 break;
             }
         }
-        return severe;
+        return this.severe;
     }
 
     public String getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(String date) {
@@ -94,7 +95,7 @@ public class WeatherRecord {
     }
 
     public int getTemp() {
-        return temp;
+        return this.temp;
     }
 
     public void setTemp(int temp) {
@@ -102,7 +103,7 @@ public class WeatherRecord {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -110,7 +111,7 @@ public class WeatherRecord {
     }
 
     public String getRegion() {
-        return region;
+        return this.region;
     }
 
     public void setRegion(String region) {
@@ -118,7 +119,7 @@ public class WeatherRecord {
     }
 
     public String getCountry() {
-        return country;
+        return this.country;
     }
 
     public void setCountry(String country) {
@@ -126,7 +127,7 @@ public class WeatherRecord {
     }
 
     public String getWindDirection() {
-        return windDirection;
+        return this.windDirection;
     }
 
     public void setWindDirection(String windDirection) {
@@ -134,7 +135,7 @@ public class WeatherRecord {
     }
 
     public int getWindSpeed() {
-        return windSpeed;
+        return this.windSpeed;
     }
 
     public void setWindSpeed(int windSpeed) {
@@ -142,7 +143,7 @@ public class WeatherRecord {
     }
 
     public String getWindChill() {
-        return windChill;
+        return this.windChill;
     }
 
     public void setWindChill(String windChill) {
@@ -150,7 +151,7 @@ public class WeatherRecord {
     }
 
     public int getHumidity() {
-        return humidity;
+        return this.humidity;
     }
 
     public void setHumidity(int humidity) {
@@ -158,7 +159,7 @@ public class WeatherRecord {
     }
 
     public int getVisibility() {
-        return visibility;
+        return this.visibility;
     }
 
     public void setVisibility(int visibility) {
@@ -166,7 +167,7 @@ public class WeatherRecord {
     }
 
     public double getPressure() {
-        return pressure;
+        return this.pressure;
     }
 
     public void setPressure(double pressure) {
@@ -174,7 +175,7 @@ public class WeatherRecord {
     }
 
     public String getPressureState() {
-        return pressureState;
+        return this.pressureState;
     }
 
     public void setPressureState(String pressureState) {
@@ -182,7 +183,7 @@ public class WeatherRecord {
     }
 
     public String getSunrise() {
-        return sunrise;
+        return this.sunrise;
     }
 
     public void setSunrise(String sunrise) {
@@ -190,7 +191,7 @@ public class WeatherRecord {
     }
 
     public String getSunset() {
-        return sunset;
+        return this.sunset;
     }
 
     public void setSunset(String sunset) {
@@ -198,7 +199,7 @@ public class WeatherRecord {
     }
 
     public String getLink() {
-        return link;
+        return this.link;
     }
 
     public void setLink(String link) {
@@ -206,7 +207,7 @@ public class WeatherRecord {
     }
 
     public WeatherCondition getCondition() {
-        return condition;
+        return this.condition;
     }
 
     public void setCondition(WeatherCondition condition) {
@@ -221,6 +222,7 @@ public class WeatherRecord {
         this.forecasts = forecasts;
     }
 
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("WeatherRecord:");
@@ -249,9 +251,9 @@ public class WeatherRecord {
             sb.append(" condition-null");
         }
         if (this.forecasts != null) {
-            for (int i = 0; i < this.forecasts.length; i++) {
-                if (this.forecasts[i] != null) {
-                    sb.append(" " + this.forecasts[i].toString());
+            for (WeatherForecast forecast : this.forecasts) {
+                if (forecast != null) {
+                    sb.append(" " + forecast.toString());
                 } else {
                     sb.append(" forecast-null");
                 }
