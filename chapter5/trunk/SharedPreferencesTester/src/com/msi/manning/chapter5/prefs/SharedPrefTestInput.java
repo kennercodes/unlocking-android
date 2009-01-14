@@ -40,39 +40,37 @@ public class SharedPrefTestInput extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.shared_preftest_input);
 
-        this.inputPrivate = (EditText) this.findViewById(R.id.input_private);
-        this.inputWorldRead = (EditText) this.findViewById(R.id.input_worldread);
-        this.inputWorldWrite = (EditText) this.findViewById(R.id.input_worldwrite);
-        this.inputWorldReadWrite = (EditText) this.findViewById(R.id.input_worldreadwrite);
-        this.button = (Button) this.findViewById(R.id.prefs_test_button);
+        this.inputPrivate = (EditText) findViewById(R.id.input_private);
+        this.inputWorldRead = (EditText) findViewById(R.id.input_worldread);
+        this.inputWorldWrite = (EditText) findViewById(R.id.input_worldwrite);
+        this.inputWorldReadWrite = (EditText) findViewById(R.id.input_worldreadwrite);
+        this.button = (Button) findViewById(R.id.prefs_test_button);
+
         this.button.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
-
-                boolean valid = SharedPrefTestInput.this.validate();
+                boolean valid = validate();
                 if (valid) {
-                    SharedPrefTestInput.this.prefsPrivate = SharedPrefTestInput.this.getSharedPreferences(
-                            SharedPrefTestInput.PREFS_PRIVATE, Context.MODE_PRIVATE);
-                    SharedPrefTestInput.this.prefsWorldRead = SharedPrefTestInput.this.getSharedPreferences(
-                            SharedPrefTestInput.PREFS_WORLD_READ, Context.MODE_WORLD_READABLE);
-                    SharedPrefTestInput.this.prefsWorldWrite = SharedPrefTestInput.this.getSharedPreferences(
-                            SharedPrefTestInput.PREFS_WORLD_WRITE, Context.MODE_WORLD_WRITEABLE);
-                    SharedPrefTestInput.this.prefsWorldReadWrite = SharedPrefTestInput.this.getSharedPreferences(
-                            SharedPrefTestInput.PREFS_WORLD_READ_WRITE, Context.MODE_WORLD_READABLE
-                                    + Context.MODE_WORLD_WRITEABLE);
+                    prefsPrivate = getSharedPreferences(SharedPrefTestInput.PREFS_PRIVATE, Context.MODE_PRIVATE);
+                    prefsWorldRead = getSharedPreferences(SharedPrefTestInput.PREFS_WORLD_READ,
+                        Context.MODE_WORLD_READABLE);
+                    prefsWorldWrite = getSharedPreferences(SharedPrefTestInput.PREFS_WORLD_WRITE,
+                        Context.MODE_WORLD_WRITEABLE);
+                    prefsWorldReadWrite = getSharedPreferences(SharedPrefTestInput.PREFS_WORLD_READ_WRITE,
+                        Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
 
-                    Editor prefsPrivateEditor = SharedPrefTestInput.this.prefsPrivate.edit();
-                    Editor prefsWorldReadEditor = SharedPrefTestInput.this.prefsWorldRead.edit();
-                    Editor prefsWorldWriteEditor = SharedPrefTestInput.this.prefsWorldWrite.edit();
-                    Editor prefsWorldReadWriteEditor = SharedPrefTestInput.this.prefsWorldReadWrite.edit();
+                    Editor prefsPrivateEditor = prefsPrivate.edit();
+                    Editor prefsWorldReadEditor = prefsWorldRead.edit();
+                    Editor prefsWorldWriteEditor = prefsWorldWrite.edit();
+                    Editor prefsWorldReadWriteEditor = prefsWorldReadWrite.edit();
 
-                    prefsPrivateEditor.putString(SharedPrefTestInput.KEY_PRIVATE, SharedPrefTestInput.this.inputPrivate
-                            .getText().toString());
-                    prefsWorldReadEditor.putString(SharedPrefTestInput.KEY_WORLD_READ,
-                            SharedPrefTestInput.this.inputWorldRead.getText().toString());
-                    prefsWorldWriteEditor.putString(SharedPrefTestInput.KEY_WORLD_WRITE,
-                            SharedPrefTestInput.this.inputWorldWrite.getText().toString());
-                    prefsWorldReadWriteEditor.putString(SharedPrefTestInput.KEY_WORLD_READ_WRITE,
-                            SharedPrefTestInput.this.inputWorldReadWrite.getText().toString());
+                    prefsPrivateEditor.putString(SharedPrefTestInput.KEY_PRIVATE, inputPrivate.getText().toString());
+                    prefsWorldReadEditor.putString(SharedPrefTestInput.KEY_WORLD_READ, inputWorldRead.getText()
+                        .toString());
+                    prefsWorldWriteEditor.putString(SharedPrefTestInput.KEY_WORLD_WRITE, inputWorldWrite.getText()
+                        .toString());
+                    prefsWorldReadWriteEditor.putString(SharedPrefTestInput.KEY_WORLD_READ_WRITE, inputWorldReadWrite
+                        .getText().toString());
 
                     prefsPrivateEditor.commit();
                     prefsWorldReadEditor.commit();
@@ -80,7 +78,7 @@ public class SharedPrefTestInput extends Activity {
                     prefsWorldReadWriteEditor.commit();
 
                     Intent intent = new Intent(SharedPrefTestInput.this, SharedPrefTestOutput.class);
-                    SharedPrefTestInput.this.startActivity(intent);
+                    startActivity(intent);
                 }
             }
         });
@@ -91,30 +89,30 @@ public class SharedPrefTestInput extends Activity {
         StringBuffer sb = new StringBuffer();
         sb.append("Validation failed: \n");
 
-        if ((this.inputPrivate == null) || (this.inputPrivate.getText().toString() == null)
-                || this.inputPrivate.getText().toString().equals("")) {
+        if (isEmpty(this.inputPrivate)) {
             sb.append("First input, private pref, must be present.\n");
             valid = false;
         }
-        if ((this.inputWorldRead == null) || (this.inputWorldRead.getText().toString() == null)
-                || this.inputWorldRead.getText().toString().equals("")) {
+        if (isEmpty(this.inputWorldRead)) {
             sb.append("Second input, world read pref, must be present.\n");
             valid = false;
         }
-        if ((this.inputWorldWrite == null) || (this.inputWorldWrite.getText().toString() == null)
-                || this.inputWorldWrite.getText().toString().equals("")) {
+        if (isEmpty(this.inputWorldWrite)) {
             sb.append("Third input, world write pref, must be present.\n");
             valid = false;
         }
-        if ((this.inputWorldReadWrite == null) || (this.inputWorldReadWrite.getText().toString() == null)
-                || this.inputWorldReadWrite.getText().toString().equals("")) {
+        if (isEmpty(this.inputWorldReadWrite)) {
             sb.append("Fourth input, world read write pref, must be present.\n");
             valid = false;
         }
 
         if (!valid) {
-            Toast.makeText(SharedPrefTestInput.this, sb.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
         }
         return valid;
+    }
+
+    private boolean isEmpty(EditText et) {
+        return ((et == null) || (et.getText().toString() == null) || et.getText().toString().equals(""));
     }
 }
