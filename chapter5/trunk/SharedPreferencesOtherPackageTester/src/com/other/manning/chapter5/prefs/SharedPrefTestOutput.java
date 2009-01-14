@@ -37,10 +37,10 @@ public class SharedPrefTestOutput extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.shared_preftest_output);
 
-        this.outputPrivate = (TextView) this.findViewById(R.id.output_private);
-        this.outputWorldRead = (TextView) this.findViewById(R.id.output_worldread);
-        this.outputWorldWrite = (TextView) this.findViewById(R.id.output_worldwrite);
-        this.outputWorldReadWrite = (TextView) this.findViewById(R.id.output_worldreadwrite);
+        this.outputPrivate = (TextView) findViewById(R.id.output_private);
+        this.outputWorldRead = (TextView) findViewById(R.id.output_worldread);
+        this.outputWorldWrite = (TextView) findViewById(R.id.output_worldwrite);
+        this.outputWorldReadWrite = (TextView) findViewById(R.id.output_worldreadwrite);
     }
 
     @Override
@@ -49,8 +49,7 @@ public class SharedPrefTestOutput extends Activity {
         super.onStart();
         Context otherAppsContext = null;
         try {
-            otherAppsContext = this
-                    .createPackageContext("com.msi.manning.chapter5.prefs", Context.MODE_WORLD_WRITEABLE);
+            otherAppsContext = createPackageContext("com.msi.manning.chapter5.prefs", Context.MODE_WORLD_WRITEABLE);
         } catch (NameNotFoundException e) {
             Log.e(SharedPrefTestOutput.LOGTAG, e.getLocalizedMessage());
         }
@@ -59,13 +58,13 @@ public class SharedPrefTestOutput extends Activity {
         this.prefsWorldRead = otherAppsContext.getSharedPreferences(SharedPrefTestOutput.PREFS_WORLD_READ, 0);
         this.prefsWorldWrite = otherAppsContext.getSharedPreferences(SharedPrefTestOutput.PREFS_WORLD_WRITE, 0);
         this.prefsWorldReadWrite = otherAppsContext
-                .getSharedPreferences(SharedPrefTestOutput.PREFS_WORLD_READ_WRITE, 0);
+            .getSharedPreferences(SharedPrefTestOutput.PREFS_WORLD_READ_WRITE, 0);
 
         this.outputPrivate.setText(this.prefsPrivate.getString(SharedPrefTestOutput.KEY_PRIVATE, "NA"));
         this.outputWorldRead.setText(this.prefsWorldRead.getString(SharedPrefTestOutput.KEY_WORLD_READ, "NA"));
         this.outputWorldWrite.setText(this.prefsWorldWrite.getString(SharedPrefTestOutput.KEY_WORLD_WRITE, "NA"));
         this.outputWorldReadWrite.setText(this.prefsWorldReadWrite.getString(SharedPrefTestOutput.KEY_WORLD_READ_WRITE,
-                "NA"));
+            "NA"));
     }
 
 }
