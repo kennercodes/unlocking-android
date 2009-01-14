@@ -46,7 +46,6 @@ public class ReviewCriteria extends Activity {
         this.cuisine.setAdapter(cuisines);
 
         this.getReviews.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 handleGetReviews();
