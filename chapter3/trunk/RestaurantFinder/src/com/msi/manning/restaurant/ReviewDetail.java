@@ -35,36 +35,8 @@ public class ReviewDetail extends Activity {
     private static final String CLASSTAG = ReviewDetail.class.getSimpleName();
     private static final int MENU_CALL_REVIEW = Menu.FIRST + 2;
     private static final int MENU_MAP_REVIEW = Menu.FIRST + 1;
-    private static final int MENU_WEB_REVIEW = Menu.FIRST;
-
-    public static String parsePhone(final String p) {
-        String tempP = p;
-        tempP = tempP.replaceAll("\\D", "");
-        tempP = tempP.replaceAll("\\s", "");
-        return tempP.trim();
-    }
-
-    private Handler handler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            if ((ReviewDetail.this.imageLink != null) && !ReviewDetail.this.imageLink.equals("")) {
-                try {
-                    URL url = new URL(ReviewDetail.this.imageLink);
-                    URLConnection conn = url.openConnection();
-                    conn.connect();
-                    BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-                    Bitmap bm = BitmapFactory.decodeStream(bis);
-                    bis.close();
-                    ReviewDetail.this.reviewImage.setImageBitmap(bm);
-                } catch (IOException e) {
-                    Log.e(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG, e);
-                }
-            } else {
-                ReviewDetail.this.reviewImage.setImageResource(R.drawable.no_review_image);
-            }
-        }
-    };
+    private static final int MENU_WEB_REVIEW = Menu.FIRST; 
+    
     private String imageLink;
     private String link;
     private TextView location;
@@ -73,6 +45,27 @@ public class ReviewDetail extends Activity {
     private TextView rating;
     private TextView review;
     private ImageView reviewImage;
+    
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if ((imageLink != null) && !imageLink.equals("")) {
+                try {
+                    URL url = new URL(imageLink);
+                    URLConnection conn = url.openConnection();
+                    conn.connect();
+                    BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+                    Bitmap bm = BitmapFactory.decodeStream(bis);
+                    bis.close();
+                    reviewImage.setImageBitmap(bm);
+                } catch (IOException e) {
+                    Log.e(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG, e);
+                }
+            } else {
+                reviewImage.setImageResource(R.drawable.no_review_image);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,51 +119,44 @@ public class ReviewDetail extends Activity {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.link));
                     startActivity(intent);
                 } else {
-                    new AlertDialog.Builder(this).setTitle(
-                        getResources().getString(R.string.alert_label)).setMessage(
-                        R.string.no_link_message).setPositiveButton("Continue",
-                        new OnClickListener() {
+                    new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.alert_label)).setMessage(
+                        R.string.no_link_message).setPositiveButton("Continue", new OnClickListener() {
 
-                            public void onClick(final DialogInterface dialog, final int arg1) {
-                            }
-                        }).show();
+                        public void onClick(final DialogInterface dialog, final int arg1) {
+                        }
+                    }).show();
                 }
                 return true;
             case MENU_MAP_REVIEW:
                 Log.v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " MAP ");
                 if ((this.location.getText() != null) && !this.location.getText().equals("")) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="
-                        + this.location.getText().toString()));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri
+                        .parse("geo:0,0?q=" + this.location.getText().toString()));
                     startActivity(intent);
                 } else {
-                    new AlertDialog.Builder(this).setTitle(
-                        getResources().getString(R.string.alert_label)).setMessage(
-                        R.string.no_location_message).setPositiveButton("Continue",
-                        new OnClickListener() {
-
-                            public void onClick(final DialogInterface dialog, final int arg1) {
-                            }
-                        }).show();
+                    new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.alert_label)).setMessage(
+                        R.string.no_location_message).setPositiveButton("Continue", new OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int arg1) {
+                        }
+                    }).show();
                 }
                 return true;
             case MENU_CALL_REVIEW:
                 Log.v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " PHONE ");
                 if ((this.phone.getText() != null) && !this.phone.getText().equals("")
                     && !this.phone.getText().equals("NA")) {
-                    Log.v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " phone - "
-                        + this.phone.getText().toString());
-                    String phoneString = ReviewDetail.parsePhone(this.phone.getText().toString());
+                    Log
+                        .v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " phone - "
+                            + this.phone.getText().toString());
+                    String phoneString = parsePhone(this.phone.getText().toString());
                     intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneString));
                     startActivity(intent);
                 } else {
-                    new AlertDialog.Builder(this).setTitle(
-                        getResources().getString(R.string.alert_label)).setMessage(
-                        R.string.no_phone_message).setPositiveButton("Continue",
-                        new OnClickListener() {
-
-                            public void onClick(final DialogInterface dialog, final int arg1) {
-                            }
-                        }).show();
+                    new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.alert_label)).setMessage(
+                        R.string.no_phone_message).setPositiveButton("Continue", new OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int arg1) {
+                        }
+                    }).show();
                 }
                 return true;
         }
@@ -183,5 +169,12 @@ public class ReviewDetail extends Activity {
         Log.v(Constants.LOGTAG, " " + ReviewDetail.CLASSTAG + " onResume");
         // tell handler to load image
         this.handler.sendEmptyMessage(1);
+    }
+    
+    private String parsePhone(final String p) {
+        String tempP = p;
+        tempP = tempP.replaceAll("\\D", "");
+        tempP = tempP.replaceAll("\\s", "");
+        return tempP.trim();
     }
 }

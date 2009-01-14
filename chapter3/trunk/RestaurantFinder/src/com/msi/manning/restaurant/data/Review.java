@@ -23,7 +23,7 @@ public class Review {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("*Review*\n");
         sb.append("name:" + this.name + "\n");
         sb.append("author:" + this.author + "\n");

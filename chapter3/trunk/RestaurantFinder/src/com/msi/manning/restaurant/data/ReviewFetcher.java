@@ -47,8 +47,8 @@ public class ReviewFetcher {
      */
     public ReviewFetcher(String loc, String description, String rat, int start, int numResults) {
 
-        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " location = " + loc + " rating = "
-            + rat + " start = " + start + " numResults = " + numResults);
+        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " location = " + loc + " rating = " + rat + " start = "
+            + start + " numResults = " + numResults);
 
         this.start = start;
         this.numResults = numResults;
@@ -108,8 +108,7 @@ public class ReviewFetcher {
             Log.e(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG, e);
         }
         long duration = System.currentTimeMillis() - startTime;
-        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " call and parse duration - "
-            + duration);
+        Log.v(Constants.LOGTAG, " " + ReviewFetcher.CLASSTAG + " call and parse duration - " + duration);
         return results;
     }
 }

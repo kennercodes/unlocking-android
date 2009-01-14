@@ -27,6 +27,16 @@ public class RestaurantFinderApplication extends Application {
         super();
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
+
     public Review getCurrentReview() {
         return this.currentReview;
     }
@@ -37,16 +47,6 @@ public class RestaurantFinderApplication extends Application {
 
     public String getReviewCriteriaLocation() {
         return this.reviewCriteriaLocation;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
     }
 
     public void setCurrentReview(Review currentReview) {
@@ -60,5 +60,4 @@ public class RestaurantFinderApplication extends Application {
     public void setReviewCriteriaLocation(String reviewCriteriaLocation) {
         this.reviewCriteriaLocation = reviewCriteriaLocation;
     }
-
 }

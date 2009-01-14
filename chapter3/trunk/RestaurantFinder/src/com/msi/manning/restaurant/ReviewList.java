@@ -30,51 +30,26 @@ public class ReviewList extends ListActivity {
     private static final int MENU_CHANGE_CRITERIA = Menu.FIRST + 1;
     private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
     private static final int NUM_RESULTS_PER_PAGE = 8;
-    private TextView empty;
-    // use a Handler in order to update UI thread after worker done
-    private final Handler handler = new Handler() {
-
-        @Override
-        public void handleMessage(final Message msg) {
-            Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG
-                + " worker thread done, setup ReviewAdapter");
-            ReviewList.this.progressDialog.dismiss();
-            if ((ReviewList.this.reviews == null) || (ReviewList.this.reviews.size() == 0)) {
-                ReviewList.this.empty.setText("No Data");
-            } else {
-                ReviewList.this.reviewAdapter = new ReviewAdapter(ReviewList.this,
-                    ReviewList.this.reviews);
-                ReviewList.this.setListAdapter(ReviewList.this.reviewAdapter);
-            }
-        }
-    };
+    
+    private TextView empty;    
     private ProgressDialog progressDialog;
     private ReviewAdapter reviewAdapter;
     private List<Review> reviews;
-
-    private void loadReviews(String location, String cuisine, String rating, final int startFrom) {
-
-        Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " loadReviews");
-
-        final ReviewFetcher rf = new ReviewFetcher(location, cuisine, rating, startFrom,
-            ReviewList.NUM_RESULTS_PER_PAGE);
-
-        this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving reviews", true,
-            false);
-
-        // get reviews in a separate thread for ProgressDialog/Handler
-        // when complete send "empty" message to handler
-        new Thread() {
-
-            @Override
-            public void run() {
-                ReviewList.this.reviews = rf.getReviews();
-                ReviewList.this.handler.sendEmptyMessage(0);
+    
+    private final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(final Message msg) {
+            Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " worker thread done, setup ReviewAdapter");
+            progressDialog.dismiss();
+            if ((reviews == null) || (reviews.size() == 0)) {
+                empty.setText("No Data");
+            } else {
+                reviewAdapter = new ReviewAdapter(ReviewList.this, reviews);
+                setListAdapter(reviewAdapter);
             }
-        }.start();
-    }
+        }
+    };   
 
-    // onCreate is called when Activity is initialized
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +67,23 @@ public class ReviewList extends ListActivity {
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setEmptyView(this.empty);
-    }
+    }   
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " onResume");
+        // get the current review criteria from the Application (global state placed there)
+        RestaurantFinderApplication application = (RestaurantFinderApplication) getApplication();
+        String criteriaCuisine = application.getReviewCriteriaCuisine();
+        String criteriaLocation = application.getReviewCriteriaLocation();
+
+        // get start from, an int, from extras
+        int startFrom = getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1);
+
+        loadReviews(criteriaLocation, criteriaCuisine, "ALL", startFrom);
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -112,8 +102,7 @@ public class ReviewList extends ListActivity {
 
         // startFrom page is not stored in application, for example purposes it's a simple "extra"
         Intent intent = new Intent(Constants.INTENT_ACTION_VIEW_DETAIL);
-        intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(
-            Constants.STARTFROM_EXTRA, 1));
+        intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1));
         startActivity(intent);
     }
 
@@ -124,8 +113,7 @@ public class ReviewList extends ListActivity {
             case MENU_GET_NEXT_PAGE:
                 // increment the startFrom value and call this Activity again
                 intent = new Intent(Constants.INTENT_ACTION_VIEW_LIST);
-                intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(
-                    Constants.STARTFROM_EXTRA, 1)
+                intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1)
                     + ReviewList.NUM_RESULTS_PER_PAGE);
                 startActivity(intent);
                 return true;
@@ -136,20 +124,25 @@ public class ReviewList extends ListActivity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
+    
+    private void loadReviews(String location, String cuisine, String rating, final int startFrom) {
 
-    // onResume is called when Activity hits foreground
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " onResume");
-        // get the current review criteria from the Application (global state placed there)
-        RestaurantFinderApplication application = (RestaurantFinderApplication) getApplication();
-        String criteriaCuisine = application.getReviewCriteriaCuisine();
-        String criteriaLocation = application.getReviewCriteriaLocation();
+        Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " loadReviews");
 
-        // get start from, an int, from extras
-        int startFrom = getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1);
+        final ReviewFetcher rf = new ReviewFetcher(location, cuisine, rating, startFrom,
+            ReviewList.NUM_RESULTS_PER_PAGE);
 
-        loadReviews(criteriaLocation, criteriaCuisine, "ALL", startFrom);
+        this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving reviews", true, false);
+
+        // get reviews in a separate thread for ProgressDialog/Handler
+        // when complete send "empty" message to handler
+        new Thread() {
+
+            @Override
+            public void run() {
+                reviews = rf.getReviews();
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
     }
 }

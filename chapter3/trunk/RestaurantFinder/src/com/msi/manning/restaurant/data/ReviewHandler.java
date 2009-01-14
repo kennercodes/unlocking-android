@@ -15,7 +15,6 @@ import java.util.ArrayList;
  */
 public class ReviewHandler extends DefaultHandler {
 
-    private static final String CLASSTAG = ReviewHandler.class.getSimpleName();
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final String ENTRY = "entry";
     private static final String R_AUTHOR = "review_author";
@@ -46,40 +45,43 @@ public class ReviewHandler extends DefaultHandler {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
-        String chString = "";
-        if (ch != null) {
-            chString = new String(ch, start, length);
+    public void startDocument() throws SAXException {
+    }
+  
+    @Override
+    public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
+
+        if (localName.equals(ReviewHandler.ENTRY)) {
+            this.startEntry = true;
+            this.review = new Review();
         }
 
-        // /Log.v(Constants.LOGTAG, " " + ReviewHandler.CLASSTAG + " chString = " + chString);
         if (this.startEntry) {
-            if (this.nameChars) {
-                this.review.name = chString;
-            } else if (this.authorChars) {
-                this.review.author = chString;
-            } else if (this.locationChars) {
-                this.review.location = chString;
-            } else if (this.ratingChars) {
-                this.review.rating = chString;
-            } else if (this.phoneChars) {
-                this.review.phone = chString;
-            } else if (this.dateChars) {
-                if (ch != null) {
-                    try {
-                        this.review.date = ReviewHandler.DATE_FORMAT.parse(chString);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+            if (localName.equals(ReviewHandler.R_NAME)) {
+                this.nameChars = true;
+            } else if (localName.equals(ReviewHandler.R_AUTHOR)) {
+                this.authorChars = true;
+            } else if (localName.equals(ReviewHandler.R_LINK)) {
+                String rel = getAttributeValue("rel", atts);
+                if (rel != null && rel.equals("alternate")) {
+                    this.review.link = getAttributeValue("href", atts);
                 }
-            } else if (this.contentChars) {
-                this.review.content = new String(chString);
-            } else if (this.imageLinkChars) {
-                this.review.imageLink = new String(chString);
+            } else if (localName.equals(ReviewHandler.R_LOCATION)) {
+                this.locationChars = true;
+            } else if (localName.equals(ReviewHandler.R_RATING)) {
+                this.ratingChars = true;
+            } else if (localName.equals(ReviewHandler.R_PHONE)) {
+                this.phoneChars = true;
+            } else if (localName.equals(ReviewHandler.R_DATE)) {
+                this.dateChars = true;
+            } else if (localName.equals(ReviewHandler.R_CONTENT)) {
+                this.contentChars = true;
+            } else if (localName.equals(ReviewHandler.R_IMAGE_LINK)) {
+                this.imageLinkChars = true;
             }
         }
     }
-
+    
     @Override
     public void endDocument() throws SAXException {
     }
@@ -111,8 +113,46 @@ public class ReviewHandler extends DefaultHandler {
                 this.imageLinkChars = false;
             }
         }
-    }
+    }   
+    
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        String chString = "";
+        if (ch != null) {
+            chString = new String(ch, start, length);
+        }
 
+        if (this.startEntry) {
+            if (this.nameChars) {
+                this.review.name = chString;
+            } else if (this.authorChars) {
+                this.review.author = chString;
+            } else if (this.locationChars) {
+                this.review.location = chString;
+            } else if (this.ratingChars) {
+                this.review.rating = chString;
+            } else if (this.phoneChars) {
+                this.review.phone = chString;
+            } else if (this.dateChars) {
+                if (ch != null) {
+                    try {
+                        this.review.date = ReviewHandler.DATE_FORMAT.parse(chString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (this.contentChars) {
+                this.review.content = new String(chString);
+            } else if (this.imageLinkChars) {
+                this.review.imageLink = new String(chString);
+            }
+        }
+    }
+    
+    public ArrayList<Review> getReviews() {
+        return this.reviews;
+    }
+    
     private String getAttributeValue(String attName, Attributes atts) {
         String result = null;
         for (int i = 0; i < atts.getLength(); i++) {
@@ -123,55 +163,5 @@ public class ReviewHandler extends DefaultHandler {
             }
         }
         return result;
-    }
-
-    public ArrayList<Review> getReviews() {
-        return this.reviews;
-    }
-
-    @Override
-    public void startDocument() throws SAXException {
-    }
-
-    // Note that Android 1.0 has potential bugs relating to SAX parsing, setting the namespace and
-    // namespace-prefix
-    // features result in error, and "qName" is always empty - have to use localName (was the
-    // opposite pre 1.0)
-    @Override
-    public void startElement(String namespaceURI, String localName, String qName, Attributes atts)
-        throws SAXException {
-
-        // /Log.v(Constants.LOGTAG, " " + ReviewHandler.CLASSTAG + " qName - " + qName +
-        // " localName - " + localName);
-
-        if (localName.equals(ReviewHandler.ENTRY)) {
-            this.startEntry = true;
-            this.review = new Review();
-        }
-
-        if (this.startEntry) {
-            if (localName.equals(ReviewHandler.R_NAME)) {
-                this.nameChars = true;
-            } else if (localName.equals(ReviewHandler.R_AUTHOR)) {
-                this.authorChars = true;
-            } else if (localName.equals(ReviewHandler.R_LINK)) {
-                String rel = getAttributeValue("rel", atts);
-                if (rel != null && rel.equals("alternate")) {
-                    this.review.link = getAttributeValue("href", atts);
-                }
-            } else if (localName.equals(ReviewHandler.R_LOCATION)) {
-                this.locationChars = true;
-            } else if (localName.equals(ReviewHandler.R_RATING)) {
-                this.ratingChars = true;
-            } else if (localName.equals(ReviewHandler.R_PHONE)) {
-                this.phoneChars = true;
-            } else if (localName.equals(ReviewHandler.R_DATE)) {
-                this.dateChars = true;
-            } else if (localName.equals(ReviewHandler.R_CONTENT)) {
-                this.contentChars = true;
-            } else if (localName.equals(ReviewHandler.R_IMAGE_LINK)) {
-                this.imageLinkChars = true;
-            }
-        }
     }
 }
