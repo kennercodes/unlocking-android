@@ -1,15 +1,5 @@
 package com.msi.manning.network;
 
-import java.io.StringReader;
-import java.util.List;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.http.client.ResponseHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -26,9 +16,19 @@ import com.msi.manning.network.data.HTTPRequestHelper;
 import com.msi.manning.network.data.xml.DeliciousHandler;
 import com.msi.manning.network.data.xml.DeliciousPost;
 
+import org.apache.http.client.ResponseHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import java.io.StringReader;
+import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 /**
- * Android HTTP example demonstrating basic auth over Apache HttpClient 4 (using
- * del.icio.us API), and XML parsing (HTTP and Plain XML - POX).
+ * Android HTTP example demonstrating basic auth over Apache HttpClient 4 (using del.icio.us API),
+ * and XML parsing (HTTP and Plain XML - POX).
  * 
  * 
  * @author charliecollins
@@ -43,16 +43,17 @@ public class DeliciousRecentPosts extends Activity {
     private EditText pass;
     private TextView output;
     private Button button;
-    
+
     private ProgressDialog progressDialog;
-    
+
     // use a handler to update the UI (send the handler messages from other threads)
     private final Handler handler = new Handler() {
+
         @Override
         public void handleMessage(final Message msg) {
             progressDialog.dismiss();
             String bundleResult = msg.getData().getString("RESPONSE");
-            DeliciousRecentPosts.this.output.setText(DeliciousRecentPosts.this.parseXMLResult(bundleResult));
+            output.setText(parseXMLResult(bundleResult));
         }
     };
 
@@ -61,17 +62,17 @@ public class DeliciousRecentPosts extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.delicious_posts);
 
-        this.user = (EditText) this.findViewById(R.id.del_user);
-        this.pass = (EditText) this.findViewById(R.id.del_pass);
-        this.button = (Button) this.findViewById(R.id.delgo_button);
-        this.output = (TextView) this.findViewById(R.id.del_output);
+        this.user = (EditText) findViewById(R.id.del_user);
+        this.pass = (EditText) findViewById(R.id.del_pass);
+        this.button = (Button) findViewById(R.id.delgo_button);
+        this.output = (TextView) findViewById(R.id.del_output);
 
         this.button.setOnClickListener(new OnClickListener() {
-            public void onClick(final View v) {
-                DeliciousRecentPosts.this.output.setText("");
 
-                DeliciousRecentPosts.this.performRequest(DeliciousRecentPosts.this.user.getText()
-                        .toString(), DeliciousRecentPosts.this.pass.getText().toString());                
+            public void onClick(final View v) {
+                output.setText("");
+
+                performRequest(user.getText().toString(), pass.getText().toString());
             }
         });
     };
@@ -85,7 +86,8 @@ public class DeliciousRecentPosts extends Activity {
     }
 
     /**
-     * Perform asynchronous HTTP using Apache <code>HttpClient</code> and <code>ResponseHandler</code>.
+     * Perform asynchronous HTTP using Apache <code>HttpClient</code> and
+     * <code>ResponseHandler</code>.
      * 
      * @param user
      * @param pass
@@ -93,22 +95,23 @@ public class DeliciousRecentPosts extends Activity {
     private void performRequest(final String user, final String pass) {
 
         this.progressDialog = ProgressDialog.show(this, "working . . .", "performing HTTP post to del.icio.us");
-        
+
         final ResponseHandler<String> responseHandler = HTTPRequestHelper.getResponseHandlerInstance(this.handler);
-        
-        // do the HTTP dance in a separate thread (the responseHandler will fire when complete)    
+
+        // do the HTTP dance in a separate thread (the responseHandler will fire when complete)
         new Thread() {
+
             @Override
             public void run() {
                 HTTPRequestHelper helper = new HTTPRequestHelper(responseHandler);
-                helper.performPost(URL_GET_POSTS_RECENT, user, pass, null, null);
+                helper.performPost(DeliciousRecentPosts.URL_GET_POSTS_RECENT, user, pass, null, null);
             }
-        }.start();     
-        
+        }.start();
+
     }
 
     /**
-     * Parse XML result into data objects. 
+     * Parse XML result into data objects.
      * 
      * @param xmlString
      * @return

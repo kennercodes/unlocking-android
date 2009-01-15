@@ -1,11 +1,12 @@
 package com.msi.manning.network.data;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+
+import com.msi.manning.network.Constants;
+import com.msi.manning.network.util.StringUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
@@ -27,20 +28,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-
-import com.msi.manning.network.Constants;
-import com.msi.manning.network.util.StringUtils;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Wrapper to help make HTTP requests easier - after all, we want to make it
- * nice for the people.
+ * Wrapper to help make HTTP requests easier - after all, we want to make it nice for the people.
  * 
- * TODO cookies 
- * TODO multi-part binary data
+ * TODO cookies TODO multi-part binary data
  * 
  * @author charliecollins
  * 
@@ -54,7 +52,7 @@ public class HTTPRequestHelper {
     private static final String CONTENT_TYPE = "Content-Type";
     public static final String MIME_FORM_ENCODED = "application/x-www-form-urlencoded";
     public static final String MIME_TEXT_PLAIN = "text/plain";
-   
+
     private final ResponseHandler<String> responseHandler;
 
     public HTTPRequestHelper(final ResponseHandler<String> responseHandler) {
@@ -66,8 +64,8 @@ public class HTTPRequestHelper {
      * 
      */
     public void performGet(final String url, final String user, final String pass,
-            final Map<String, String> additionalHeaders) {
-        this.performRequest(null, url, user, pass, additionalHeaders, null, HTTPRequestHelper.GET_TYPE);
+        final Map<String, String> additionalHeaders) {
+        performRequest(null, url, user, pass, additionalHeaders, null, HTTPRequestHelper.GET_TYPE);
     }
 
     /**
@@ -75,22 +73,24 @@ public class HTTPRequestHelper {
      * 
      */
     public void performPost(final String contentType, final String url, final String user, final String pass,
-            final Map<String, String> additionalHeaders, final Map<String, String> params) {
-        this.performRequest(contentType, url, user, pass, additionalHeaders, params, HTTPRequestHelper.POST_TYPE);
-    }
-    
-    /**
-     * Perform an HTTP POST operation with a default conent-type of "application/x-www-form-urlencoded."
-     * 
-     */
-    public void performPost(final String url, final String user, final String pass,
-            final Map<String, String> additionalHeaders, final Map<String, String> params) {
-        this.performRequest(HTTPRequestHelper.MIME_FORM_ENCODED, url, user, pass, additionalHeaders, params, HTTPRequestHelper.POST_TYPE);
+        final Map<String, String> additionalHeaders, final Map<String, String> params) {
+        performRequest(contentType, url, user, pass, additionalHeaders, params, HTTPRequestHelper.POST_TYPE);
     }
 
     /**
-     * Private heavy lifting method that performs GET or POST with supplied url,
-     * user, pass, data, and headers.
+     * Perform an HTTP POST operation with a default conent-type of
+     * "application/x-www-form-urlencoded."
+     * 
+     */
+    public void performPost(final String url, final String user, final String pass,
+        final Map<String, String> additionalHeaders, final Map<String, String> params) {
+        performRequest(HTTPRequestHelper.MIME_FORM_ENCODED, url, user, pass, additionalHeaders, params,
+            HTTPRequestHelper.POST_TYPE);
+    }
+
+    /**
+     * Private heavy lifting method that performs GET or POST with supplied url, user, pass, data,
+     * and headers.
      * 
      * @param contentType
      * @param url
@@ -101,7 +101,7 @@ public class HTTPRequestHelper {
      * @param requestType
      */
     private void performRequest(final String contentType, final String url, final String user, final String pass,
-            final Map<String, String> headers, final Map<String, String> params, final int requestType) {
+        final Map<String, String> headers, final Map<String, String> params, final int requestType) {
 
         Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " making HTTP request to url - " + url);
 
@@ -114,25 +114,27 @@ public class HTTPRequestHelper {
         // add user and pass to client credentials if present
         if ((user != null) && (pass != null)) {
             Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG
-                    + " user and pass present, adding credentials to request");
+                + " user and pass present, adding credentials to request");
             client.getCredentialsProvider().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(user, pass));
         }
 
         // process headers using request interceptor
         final Map<String, String> sendHeaders = new HashMap<String, String>();
-        if ((headers != null) && (headers.size() > 0)) {           
+        if ((headers != null) && (headers.size() > 0)) {
             sendHeaders.putAll(headers);
         }
         if (requestType == HTTPRequestHelper.POST_TYPE) {
             sendHeaders.put(HTTPRequestHelper.CONTENT_TYPE, contentType);
-        } 
+        }
         if (sendHeaders.size() > 0) {
             client.addRequestInterceptor(new HttpRequestInterceptor() {
+
                 public void process(final HttpRequest request, final HttpContext context) throws HttpException,
-                        IOException {
+                    IOException {
                     for (String key : sendHeaders.keySet()) {
                         if (!request.containsHeader(key)) {
-                            Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding header: " + key + " | " + sendHeaders.get(key));
+                            Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding header: " + key + " | "
+                                + sendHeaders.get(key));
                             request.addHeader(key, sendHeaders.get(key));
                         }
                     }
@@ -145,12 +147,13 @@ public class HTTPRequestHelper {
             Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " performRequest POST");
             HttpPost method = new HttpPost(url);
 
-            // data - name/value params 
+            // data - name/value params
             List<NameValuePair> nvps = null;
-            if ((params != null) && (params.size() > 0)) {                
+            if ((params != null) && (params.size() > 0)) {
                 nvps = new ArrayList<NameValuePair>();
                 for (String key : params.keySet()) {
-                    Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding param: " + key + " | " + params.get(key));
+                    Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " adding param: " + key + " | "
+                        + params.get(key));
                     nvps.add(new BasicNameValuePair(key, params.get(key)));
                 }
             }
@@ -192,24 +195,24 @@ public class HTTPRequestHelper {
             }
         }
     }
-    
+
     /**
-     * Static utility method to create a default ResponseHandler that sends a
-     * Message to the passed in Handler with the response as a String, after the
-     * request completes.
+     * Static utility method to create a default ResponseHandler that sends a Message to the passed
+     * in Handler with the response as a String, after the request completes.
      * 
      * @param handler
      * @return
      */
     public static ResponseHandler<String> getResponseHandlerInstance(final Handler handler) {
         final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+
             public String handleResponse(final HttpResponse response) {
                 Message message = new Message();
                 Bundle bundle = new Bundle();
                 StatusLine status = response.getStatusLine();
                 Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " statusCode - " + status.getStatusCode());
                 Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " statusReasonPhrase - "
-                        + status.getReasonPhrase());
+                    + status.getReasonPhrase());
                 HttpEntity entity = response.getEntity();
                 String result = null;
                 if (entity != null) {
@@ -226,7 +229,7 @@ public class HTTPRequestHelper {
                     }
                 } else {
                     Log.w(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG
-                            + " empty response entity, HTTP error occurred");
+                        + " empty response entity, HTTP error occurred");
                     bundle.putString("RESPONSE", "Error - " + response.getStatusLine().getReasonPhrase());
                     message.setData(bundle);
                     handler.sendMessage(message);

@@ -1,15 +1,5 @@
 package com.msi.manning.network;
 
-import java.io.IOException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -24,6 +14,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.msi.manning.network.util.StringUtils;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
 
 /**
  * Android basic HTTP example using Apache HttpClient.
@@ -46,11 +46,12 @@ public class ApacheHTTPSimple extends Activity {
 
     // use a handler to update the UI (send the handler messages from other threads)
     private final Handler handler = new Handler() {
+
         @Override
         public void handleMessage(final Message msg) {
             progressDialog.dismiss();
             String bundleResult = msg.getData().getString("RESPONSE");
-            ApacheHTTPSimple.this.output.setText(bundleResult);
+            output.setText(bundleResult);
         }
     };
 
@@ -59,19 +60,20 @@ public class ApacheHTTPSimple extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.apache_http_simple);
 
-        this.urlChooser = (Spinner) this.findViewById(R.id.apache_url);
+        this.urlChooser = (Spinner) findViewById(R.id.apache_url);
         ArrayAdapter<String> urls = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[] {
-                URL1, URL2 });
+            ApacheHTTPSimple.URL1, ApacheHTTPSimple.URL2 });
         urls.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         this.urlChooser.setAdapter(urls);
 
-        this.button = (Button) this.findViewById(R.id.apachego_button);
-        this.output = (TextView) this.findViewById(R.id.apache_output);
+        this.button = (Button) findViewById(R.id.apachego_button);
+        this.output = (TextView) findViewById(R.id.apache_output);
 
         this.button.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
-                ApacheHTTPSimple.this.output.setText("");
-                ApacheHTTPSimple.this.performRequest();
+                output.setText("");
+                performRequest();
             }
         });
     };
@@ -95,12 +97,13 @@ public class ApacheHTTPSimple extends Activity {
 
         // use a response handler so we aren't blocking on the HTTP request
         final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+
             public String handleResponse(HttpResponse response) {
                 // when the response happens close the notification and update UI
                 StatusLine status = response.getStatusLine();
                 Log.d(Constants.LOGTAG, " " + ApacheHTTPSimple.CLASSTAG + " statusCode - " + status.getStatusCode());
                 Log.d(Constants.LOGTAG, " " + ApacheHTTPSimple.CLASSTAG + " statusReasonPhrase - "
-                        + status.getReasonPhrase());
+                    + status.getReasonPhrase());
                 HttpEntity entity = response.getEntity();
                 String result = null;
                 try {
@@ -119,13 +122,14 @@ public class ApacheHTTPSimple extends Activity {
 
         this.progressDialog = ProgressDialog.show(this, "working . . .", "performing HTTP request");
 
-        // do the HTTP dance in a separate thread (the responseHandler will fire when complete)    
+        // do the HTTP dance in a separate thread (the responseHandler will fire when complete)
         new Thread() {
+
             @Override
             public void run() {
                 try {
                     DefaultHttpClient client = new DefaultHttpClient();
-                    HttpGet httpMethod = new HttpGet(ApacheHTTPSimple.this.urlChooser.getSelectedItem().toString());
+                    HttpGet httpMethod = new HttpGet(urlChooser.getSelectedItem().toString());
                     client.execute(httpMethod, responseHandler);
                 } catch (ClientProtocolException e) {
                     Log.e(Constants.LOGTAG, " " + ApacheHTTPSimple.CLASSTAG, e);

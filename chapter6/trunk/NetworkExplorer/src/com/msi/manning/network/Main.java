@@ -28,65 +28,72 @@ public class Main extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.main);
 
-        this.socketButton = (Button) this.findViewById(R.id.main_socket_button);
+        this.socketButton = (Button) findViewById(R.id.main_socket_button);
         this.socketButton.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, SimpleSocket.class));
+                startActivity(new Intent(Main.this, SimpleSocket.class));
             }
         });
 
-        this.getButton = (Button) this.findViewById(R.id.main_get_button);
+        this.getButton = (Button) findViewById(R.id.main_get_button);
         this.getButton.setOnClickListener(new OnClickListener() {
-            public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, SimpleGet.class));
-            }
-        });       
 
-        this.apacheButton = (Button) this.findViewById(R.id.main_apache_button);
-        this.apacheButton.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, ApacheHTTPSimple.class));
+                startActivity(new Intent(Main.this, SimpleGet.class));
             }
         });
 
-        this.apacheViaHelperButton = (Button) this.findViewById(R.id.main_apacheviahelper_button);
-        this.apacheViaHelperButton.setOnClickListener(new OnClickListener() {
-            public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, ApacheHTTPViaHelper.class));
-            }
-        }); 
-        
-        this.helperFormButton = (Button) this.findViewById(R.id.main_helper_button);
-        this.helperFormButton.setOnClickListener(new OnClickListener() {
-            public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, HTTPHelperForm.class));
-            }
-        }); 
-        
-        this.deliciousButton = (Button) this.findViewById(R.id.main_delicious_button);
-        this.deliciousButton.setOnClickListener(new OnClickListener() {
-            public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, DeliciousRecentPosts.class));
-            }
-        });  
-        
-        this.gClientLoginButton = (Button) this.findViewById(R.id.main_gclientlogin_button);
-        this.gClientLoginButton.setOnClickListener(new OnClickListener() {
-            public void onClick(final View v) {
-                Main.this.startActivity(new Intent(Main.this, GoogleClientLogin.class));
-            }
-        });  
+        this.apacheButton = (Button) findViewById(R.id.main_apache_button);
+        this.apacheButton.setOnClickListener(new OnClickListener() {
 
-        this.status = (TextView) this.findViewById(R.id.main_status);
+            public void onClick(final View v) {
+                startActivity(new Intent(Main.this, ApacheHTTPSimple.class));
+            }
+        });
+
+        this.apacheViaHelperButton = (Button) findViewById(R.id.main_apacheviahelper_button);
+        this.apacheViaHelperButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(final View v) {
+                startActivity(new Intent(Main.this, ApacheHTTPViaHelper.class));
+            }
+        });
+
+        this.helperFormButton = (Button) findViewById(R.id.main_helper_button);
+        this.helperFormButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(final View v) {
+                startActivity(new Intent(Main.this, HTTPHelperForm.class));
+            }
+        });
+
+        this.deliciousButton = (Button) findViewById(R.id.main_delicious_button);
+        this.deliciousButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(final View v) {
+                startActivity(new Intent(Main.this, DeliciousRecentPosts.class));
+            }
+        });
+
+        this.gClientLoginButton = (Button) findViewById(R.id.main_gclientlogin_button);
+        this.gClientLoginButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(final View v) {
+                startActivity(new Intent(Main.this, GoogleClientLogin.class));
+            }
+        });
+
+        this.status = (TextView) findViewById(R.id.main_status);
     }
-    
+
     @Override
     public void onStart() {
         super.onStart();
-        
-        ConnectivityManager cMgr =  (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        ConnectivityManager cMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cMgr.getActiveNetworkInfo();
-        this.status.setText(netInfo.toString());        
+        this.status.setText(netInfo.toString());
     }
 
     @Override

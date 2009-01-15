@@ -1,12 +1,5 @@
 package com.msi.manning.network;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +9,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+
 /**
  * Android direct to Socket example.
  * 
- * For this to work you need a server listening on the IP address and port
- * specified. See the NetworkSocketServer project for an example.
+ * For this to work you need a server listening on the IP address and port specified. See the
+ * NetworkSocketServer project for an example.
  * 
  * 
  * @author charliecollins
@@ -87,17 +87,17 @@ public class SimpleSocket extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.simple_socket);
 
-        this.ipAddress = (EditText) this.findViewById(R.id.socket_ip);
-        this.port = (EditText) this.findViewById(R.id.socket_port);
-        this.socketInput = (EditText) this.findViewById(R.id.socket_input);
-        this.socketOutput = (TextView) this.findViewById(R.id.socket_output);
-        this.socketButton = (Button) this.findViewById(R.id.socket_button);
+        this.ipAddress = (EditText) findViewById(R.id.socket_ip);
+        this.port = (EditText) findViewById(R.id.socket_port);
+        this.socketInput = (EditText) findViewById(R.id.socket_input);
+        this.socketOutput = (TextView) findViewById(R.id.socket_output);
+        this.socketButton = (Button) findViewById(R.id.socket_button);
 
         this.socketButton.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
-                SimpleSocket.this.socketOutput.setText("");
-                SimpleSocket.this.callSocket(SimpleSocket.this.ipAddress.getText().toString(), SimpleSocket.this.port
-                        .getText().toString(), SimpleSocket.this.socketInput.getText().toString());
+                socketOutput.setText("");
+                callSocket(ipAddress.getText().toString(), port.getText().toString(), socketInput.getText().toString());
             }
         });
     }
