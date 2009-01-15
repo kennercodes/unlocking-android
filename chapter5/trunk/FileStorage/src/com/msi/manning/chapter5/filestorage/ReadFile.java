@@ -30,8 +30,7 @@ public class ReadFile extends Activity {
         try {
             fis = openFileInput("filename.txt");
             byte[] reader = new byte[fis.available()];
-            while (fis.read(reader) != -1) {
-            }
+            while (fis.read(reader) != -1) {}
             this.readOutput.setText(new String(reader));
         } catch (IOException e) {
             Log.e(ReadFile.LOGTAG, e.getMessage(), e);
@@ -47,6 +46,7 @@ public class ReadFile extends Activity {
 
         this.gotoReadResource = (Button) findViewById(R.id.read_button);
         this.gotoReadResource.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
                 startActivity(new Intent(ReadFile.this, ReadRawResourceFile.class));
             }
