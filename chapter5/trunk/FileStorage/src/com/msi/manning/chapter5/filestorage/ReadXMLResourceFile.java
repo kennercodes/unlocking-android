@@ -50,10 +50,10 @@ public class ReadXMLResourceFile extends Activity {
                     }
                 }
             }
+            this.readOutput.setText(sb.toString());
         } catch (Exception e) {
             Log.e(ReadXMLResourceFile.LOGTAG, e.getMessage(), e);
-        }
-        this.readOutput.setText(sb.toString());
+        }        
 
         this.gotoReadWriteSDCard = (Button) findViewById(R.id.readwritesdcard_button);
         this.gotoReadWriteSDCard.setOnClickListener(new OnClickListener() {
