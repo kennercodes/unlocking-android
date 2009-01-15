@@ -43,14 +43,16 @@ public class ProviderExplorer extends Activity {
         this.addPhoneNumber = (EditText) findViewById(R.id.add_phone_number);
         this.editName = (EditText) findViewById(R.id.edit_name);
         this.editPhoneNumber = (EditText) findViewById(R.id.edit_phone_number);
-        this.addContact = (Button) findViewById(R.id.add_contact_button);        
+        this.addContact = (Button) findViewById(R.id.add_contact_button);
         this.addContact.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
                 addContact();
             }
         });
         this.editContact = (Button) findViewById(R.id.edit_contact_button);
         this.editContact.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
                 editContact();
             }
@@ -77,6 +79,7 @@ public class ProviderExplorer extends Activity {
                 contactEditButton.setText(c.toString());
                 editLayout.addView(contactEditButton, params);
                 contactEditButton.setOnClickListener(new OnClickListener() {
+
                     public void onClick(final View v) {
                         ContactButton view = (ContactButton) v;
                         editName.setText(view.contact.name);
@@ -89,6 +92,7 @@ public class ProviderExplorer extends Activity {
                 contactDeleteButton.setText("Delete " + c.name);
                 deleteLayout.addView(contactDeleteButton, params);
                 contactDeleteButton.setOnClickListener(new OnClickListener() {
+
                     public void onClick(final View v) {
                         ContactButton view = (ContactButton) v;
                         contactId = view.contact.id;
@@ -187,12 +191,13 @@ public class ProviderExplorer extends Activity {
     //
     // end resolver methods
     //
-    
+
     //
     // addtl classes
     //
-    
+
     private class Contact {
+
         public long id;
         public String name;
         public String phoneNumber;
@@ -210,6 +215,7 @@ public class ProviderExplorer extends Activity {
     }
 
     private class ContactButton extends Button {
+
         public Contact contact;
 
         public ContactButton(final Context ctx, final Contact contact) {
