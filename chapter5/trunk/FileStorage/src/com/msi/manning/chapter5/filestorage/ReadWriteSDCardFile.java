@@ -1,15 +1,15 @@
 package com.msi.manning.chapter5.filestorage;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 public class ReadWriteSDCardFile extends Activity {
 
@@ -22,11 +22,11 @@ public class ReadWriteSDCardFile extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.read_write_sdcard_file);
 
-        this.readOutput = (TextView) this.findViewById(R.id.readwritesd_output);
+        this.readOutput = (TextView) findViewById(R.id.readwritesd_output);
 
         String fileName = "testfile-" + System.currentTimeMillis() + ".txt";
 
-        // create structure /sdcard/unlocking_android and then WRITE        
+        // create structure /sdcard/unlocking_android and then WRITE
         File sdDir = new File("/sdcard/");
         if (sdDir.exists() && sdDir.canWrite()) {
             File uadDir = new File(sdDir.getAbsolutePath() + "/unlocking_android");
@@ -68,10 +68,10 @@ public class ReadWriteSDCardFile extends Activity {
             }
         } else {
             Log
-                    .e(
-                            ReadWriteSDCardFile.LOGTAG,
-                            "ERROR, /sdcard path not available "
-                                    + "(did you create an SD image with the mksdcard tool, and start emulator with -sdcard <path_to_file> option?");
+                .e(
+                    ReadWriteSDCardFile.LOGTAG,
+                    "ERROR, /sdcard path not available "
+                        + "(did you create an SD image with the mksdcard tool, and start emulator with -sdcard <path_to_file> option?");
         }
 
         // READ

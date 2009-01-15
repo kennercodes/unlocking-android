@@ -1,7 +1,5 @@
 package com.msi.manning.chapter5.filestorage;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.xmlpull.v1.XmlPullParser;
 
 public class ReadXMLResourceFile extends Activity {
 
@@ -23,9 +23,9 @@ public class ReadXMLResourceFile extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.read_xmlresource_file);
 
-        this.readOutput = (TextView) this.findViewById(R.id.readxmlres_output);
-        
-        XmlPullParser parser = this.getResources().getXml(R.xml.people);
+        this.readOutput = (TextView) findViewById(R.id.readxmlres_output);
+
+        XmlPullParser parser = getResources().getXml(R.xml.people);
         StringBuffer sb = new StringBuffer();
 
         try {
@@ -54,11 +54,11 @@ public class ReadXMLResourceFile extends Activity {
             Log.e(ReadXMLResourceFile.LOGTAG, e.getMessage(), e);
         }
         this.readOutput.setText(sb.toString());
-        
-        this.gotoReadWriteSDCard = (Button) this.findViewById(R.id.readwritesdcard_button);
+
+        this.gotoReadWriteSDCard = (Button) findViewById(R.id.readwritesdcard_button);
         this.gotoReadWriteSDCard.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
-                ReadXMLResourceFile.this.startActivity(new Intent(ReadXMLResourceFile.this, ReadWriteSDCardFile.class));
+                startActivity(new Intent(ReadXMLResourceFile.this, ReadWriteSDCardFile.class));
             }
         });
 

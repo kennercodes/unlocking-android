@@ -1,8 +1,5 @@
 package com.msi.manning.chapter5.filestorage;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -12,6 +9,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ReadRawResourceFile extends Activity {
 
@@ -25,9 +25,9 @@ public class ReadRawResourceFile extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.read_rawresource_file);
 
-        this.readOutput = (TextView) this.findViewById(R.id.readrawres_output);
+        this.readOutput = (TextView) findViewById(R.id.readrawres_output);
 
-        Resources resources = this.getResources();
+        Resources resources = getResources();
         InputStream is = null;
         try {
             is = resources.openRawResource(R.raw.people);
@@ -47,10 +47,10 @@ public class ReadRawResourceFile extends Activity {
             }
         }
 
-        this.gotoReadXMLResource = (Button) this.findViewById(R.id.readrawres_button);
+        this.gotoReadXMLResource = (Button) findViewById(R.id.readrawres_button);
         this.gotoReadXMLResource.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
-                ReadRawResourceFile.this.startActivity(new Intent(ReadRawResourceFile.this, ReadXMLResourceFile.class));
+                startActivity(new Intent(ReadRawResourceFile.this, ReadXMLResourceFile.class));
             }
         });
 

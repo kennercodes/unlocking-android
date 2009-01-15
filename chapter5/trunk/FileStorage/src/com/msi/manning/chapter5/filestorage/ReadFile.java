@@ -1,8 +1,5 @@
 package com.msi.manning.chapter5.filestorage;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +8,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class ReadFile extends Activity {
 
@@ -24,11 +24,11 @@ public class ReadFile extends Activity {
         super.onCreate(icicle);
         this.setContentView(R.layout.read_file);
 
-        this.readOutput = (TextView) this.findViewById(R.id.read_output);
+        this.readOutput = (TextView) findViewById(R.id.read_output);
 
         FileInputStream fis = null;
         try {
-            fis = this.openFileInput("filename.txt");
+            fis = openFileInput("filename.txt");
             byte[] reader = new byte[fis.available()];
             while (fis.read(reader) != -1) {
             }
@@ -45,10 +45,10 @@ public class ReadFile extends Activity {
             }
         }
 
-        this.gotoReadResource = (Button) this.findViewById(R.id.read_button);
+        this.gotoReadResource = (Button) findViewById(R.id.read_button);
         this.gotoReadResource.setOnClickListener(new OnClickListener() {
             public void onClick(final View v) {
-                ReadFile.this.startActivity(new Intent(ReadFile.this, ReadRawResourceFile.class));
+                startActivity(new Intent(ReadFile.this, ReadRawResourceFile.class));
             }
         });
 
