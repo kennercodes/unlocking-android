@@ -22,11 +22,11 @@ public class WidgetProvider extends ContentProvider {
     private static final String CLASSNAME = WidgetProvider.class.getSimpleName();
     private static final int WIDGETS = 1;
     private static final int WIDGET = 2;
-    
+
     public static final String DB_NAME = "widgets_db";
     public static final String DB_TABLE = "widget";
     public static final int DB_VERSION = 1;
-    
+
     private static UriMatcher URI_MATCHER = null;
     private static HashMap<String, String> PROJECTION_MAP;
 

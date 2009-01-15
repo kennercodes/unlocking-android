@@ -32,7 +32,7 @@ public class WidgetExplorer extends Activity {
     private long itemId;
 
     @Override
-    public void onCreate(final Bundle icicle) {
+    public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         this.setContentView(R.layout.provider_explorer);
 
@@ -44,12 +44,14 @@ public class WidgetExplorer extends Activity {
         this.editCategory = (EditText) findViewById(R.id.edit_category);
         this.addButton = (Button) findViewById(R.id.add_button);
         this.addButton.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
                 add();
             }
         });
         this.editButton = (Button) findViewById(R.id.edit_button);
         this.editButton.setOnClickListener(new OnClickListener() {
+
             public void onClick(final View v) {
                 edit();
             }
@@ -68,11 +70,12 @@ public class WidgetExplorer extends Activity {
             LinearLayout deleteLayout = (LinearLayout) findViewById(R.id.delete_buttons_layout);
             params.setMargins(10, 0, 0, 0);
             for (WidgetBean w : widgets) {
-                
+
                 WidgetButton widgetEditButton = new WidgetButton(this, w);
                 widgetEditButton.setText(w.toString());
                 editLayout.addView(widgetEditButton, params);
                 widgetEditButton.setOnClickListener(new OnClickListener() {
+
                     public void onClick(final View v) {
                         WidgetButton view = (WidgetButton) v;
                         editName.setText(view.widget.name);
@@ -86,6 +89,7 @@ public class WidgetExplorer extends Activity {
                 widgetDeleteButton.setText("Delete " + w.name);
                 deleteLayout.addView(widgetDeleteButton, params);
                 widgetDeleteButton.setOnClickListener(new OnClickListener() {
+
                     public void onClick(final View v) {
                         WidgetButton view = (WidgetButton) v;
                         itemId = view.widget.id;
@@ -174,6 +178,7 @@ public class WidgetExplorer extends Activity {
     //
 
     private class WidgetBean {
+
         public long id;
         public String name;
         public String type;
@@ -198,6 +203,7 @@ public class WidgetExplorer extends Activity {
     }
 
     private class WidgetButton extends Button {
+
         public WidgetBean widget;
 
         public WidgetButton(final Context ctx, final WidgetBean w) {
