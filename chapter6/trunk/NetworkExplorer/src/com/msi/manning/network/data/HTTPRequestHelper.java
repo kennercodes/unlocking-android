@@ -18,10 +18,12 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
@@ -106,10 +108,7 @@ public class HTTPRequestHelper {
         Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " making HTTP request to url - " + url);
 
         // establish HttpClient
-        DefaultHttpClient client = new DefaultHttpClient();
-
-        // create a response specifically for errors
-        BasicHttpResponse errorResponse = new BasicHttpResponse(new ProtocolVersion("HTTP_ERROR", 1, 1), 500, "ERROR");
+        DefaultHttpClient client = new DefaultHttpClient();       
 
         // add user and pass to client credentials if present
         if ((user != null) && (pass != null)) {
@@ -164,37 +163,41 @@ public class HTTPRequestHelper {
                     Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
                 }
             }
-
-            try {
-                client.execute(method, this.responseHandler);
-                Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " request completed");
-            } catch (Exception e) {
-                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
-                errorResponse.setReasonPhrase(e.getMessage());
-                try {
-                    this.responseHandler.handleResponse(errorResponse);
-                } catch (Exception ex) {
-                    Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, ex);
-                }
-            }
+            execute(client, method);            
         } else if (requestType == HTTPRequestHelper.GET_TYPE) {
             Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " performRequest GET");
             HttpGet method = new HttpGet(url);
-
+            execute(client, method);
+        }
+    }
+    
+    /**
+     * Once the client and method are established, execute the request. 
+     * 
+     * @param client
+     * @param method
+     */
+    private void execute(HttpClient client, HttpRequestBase method) {
+        Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " execute invoked");
+        
+        // create a response specifically for errors (in case)
+        BasicHttpResponse errorResponse = 
+            new BasicHttpResponse(new ProtocolVersion("HTTP_ERROR", 1, 1), 500, "ERROR");
+        
+        try {
+            client.execute(method, this.responseHandler);
+            Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " request completed");
+        } catch (Exception e) {
+            Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
+            errorResponse.setReasonPhrase(e.getMessage());
             try {
-                client.execute(method, this.responseHandler);
-                Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " request completed");
-            } catch (Exception e) {
-                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, e);
-                errorResponse.setReasonPhrase(e.getMessage());
-                try {
-                    this.responseHandler.handleResponse(errorResponse);
-                } catch (Exception ex) {
-                    Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, ex);
-                }
+                this.responseHandler.handleResponse(errorResponse);
+            } catch (Exception ex) {
+                Log.e(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG, ex);
             }
         }
     }
+    
 
     /**
      * Static utility method to create a default ResponseHandler that sends a Message to the passed

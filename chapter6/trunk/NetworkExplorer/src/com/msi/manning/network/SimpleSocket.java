@@ -36,11 +36,33 @@ public class SimpleSocket extends Activity {
     private TextView socketOutput;
     private Button socketButton;
 
-    private void callSocket(final String ip, final String port, final String socketData) {
+    @Override
+    public void onCreate(final Bundle icicle) {
+        super.onCreate(icicle);
+        this.setContentView(R.layout.simple_socket);
+
+        this.ipAddress = (EditText) findViewById(R.id.socket_ip);
+        this.port = (EditText) findViewById(R.id.socket_port);
+        this.socketInput = (EditText) findViewById(R.id.socket_input);
+        this.socketOutput = (TextView) findViewById(R.id.socket_output);
+        this.socketButton = (Button) findViewById(R.id.socket_button);
+
+        this.socketButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(final View v) {
+                socketOutput.setText("");
+                String output = callSocket(ipAddress.getText().toString(), port.getText().toString(), socketInput.getText().toString());
+                socketOutput.setText(output);
+            }
+        });
+    }
+
+    private String callSocket(final String ip, final String port, final String socketData) {
 
         Socket socket = null;
         BufferedWriter writer = null;
         BufferedReader reader = null;
+        String output = null;
 
         try {
             socket = new Socket(ip, Integer.parseInt(port));
@@ -53,9 +75,8 @@ public class SimpleSocket extends Activity {
             writer.flush();
 
             // read back output
-            String output = reader.readLine();
+            output = reader.readLine();
             Log.d(Constants.LOGTAG, " " + SimpleSocket.CLASSTAG + " output - " + output);
-            this.socketOutput.setText(output);
 
             // send EXIT and close
             writer.write("EXIT\n", 0, 5);
@@ -80,25 +101,7 @@ public class SimpleSocket extends Activity {
                 // swallow
             }
         }
+        
+        return output;
     };
-
-    @Override
-    public void onCreate(final Bundle icicle) {
-        super.onCreate(icicle);
-        this.setContentView(R.layout.simple_socket);
-
-        this.ipAddress = (EditText) findViewById(R.id.socket_ip);
-        this.port = (EditText) findViewById(R.id.socket_port);
-        this.socketInput = (EditText) findViewById(R.id.socket_input);
-        this.socketOutput = (TextView) findViewById(R.id.socket_output);
-        this.socketButton = (Button) findViewById(R.id.socket_button);
-
-        this.socketButton.setOnClickListener(new OnClickListener() {
-
-            public void onClick(final View v) {
-                socketOutput.setText("");
-                callSocket(ipAddress.getText().toString(), port.getText().toString(), socketInput.getText().toString());
-            }
-        });
-    }
 }
