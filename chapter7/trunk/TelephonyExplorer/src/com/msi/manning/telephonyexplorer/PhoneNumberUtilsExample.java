@@ -12,65 +12,65 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class PhoneNumberUtilsExample extends Activity {
-   private TextView pnOutput;
-   private EditText pnInput;
-   private EditText pnInPlaceInput;
-   private Button pnFormat;
 
-   @Override
-   public void onCreate(final Bundle icicle) {
-      Log.d(Constants.LOGTAG, "PhoneNumberUtilsExample onCreate");
+    private TextView pnOutput;
+    private EditText pnInput;
+    private EditText pnInPlaceInput;
+    private Button pnFormat;
 
-      super.onCreate(icicle);
-      this.setContentView(R.layout.phonenumberutilsexample);
+    @Override
+    public void onCreate(final Bundle icicle) {
+        Log.d(Constants.LOGTAG, "PhoneNumberUtilsExample onCreate");
 
-      this.pnOutput = (TextView) this.findViewById(R.id.pnoutput);
-      this.pnInput = (EditText) this.findViewById(R.id.pninput);
-      this.pnInPlaceInput = (EditText) this.findViewById(R.id.pninplaceinput);
-      this.pnFormat = (Button) this.findViewById(R.id.pnformat);
+        super.onCreate(icicle);
+        this.setContentView(R.layout.phonenumberutilsexample);
 
-      this.pnFormat.setOnClickListener(new OnClickListener() {
-         public void onClick(final View v) {
-            Log.d(Constants.LOGTAG, "PhoneNumberUtilsExample format TextView input - "
-                     + PhoneNumberUtilsExample.this.pnInput.getText().toString());
+        this.pnOutput = (TextView) findViewById(R.id.pnoutput);
+        this.pnInput = (EditText) findViewById(R.id.pninput);
+        this.pnInPlaceInput = (EditText) findViewById(R.id.pninplaceinput);
+        this.pnFormat = (Button) findViewById(R.id.pnformat);
 
-            // format as a phone number FIRST
-            String phoneNumber = PhoneNumberUtils.formatNumber(PhoneNumberUtilsExample.this.pnInput.getText()
-                     .toString());
-            // then convert phone number keypad alpha to numeric
-            phoneNumber = PhoneNumberUtils.convertKeypadLettersToDigits(PhoneNumberUtilsExample.this.pnInput.getText()
-                     .toString());
+        this.pnFormat.setOnClickListener(new OnClickListener() {
 
-            StringBuilder result = new StringBuilder();
-            result.append(phoneNumber);
-            result.append("\nisGlobal - " + PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber));
-            result.append("\nisEmergency - " + PhoneNumberUtils.isEmergencyNumber(phoneNumber));
+            public void onClick(final View v) {
+                Log.d(Constants.LOGTAG, "PhoneNumberUtilsExample format TextView input - "
+                    + pnInput.getText().toString());
 
-            PhoneNumberUtilsExample.this.pnOutput.setText(result.toString());
+                // format as a phone number FIRST
+                String phoneNumber = PhoneNumberUtils.formatNumber(pnInput.getText().toString());
+                // then convert phone number keypad alpha to numeric
+                phoneNumber = PhoneNumberUtils.convertKeypadLettersToDigits(pnInput.getText().toString());
 
-            PhoneNumberUtilsExample.this.pnInput.setText("");
-         }
-      });
+                StringBuilder result = new StringBuilder();
+                result.append(phoneNumber);
+                result.append("\nisGlobal - " + PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber));
+                result.append("\nisEmergency - " + PhoneNumberUtils.isEmergencyNumber(phoneNumber));
 
-      this.pnInPlaceInput.setOnFocusChangeListener(new OnFocusChangeListener() {
-         public void onFocusChange(final View v, final boolean b) {
-            if (v.equals(PhoneNumberUtilsExample.this.pnInPlaceInput) && (b == false)) {
-               Log.d(Constants.LOGTAG, "PhoneNumberUtilsExample formatInPlace TextView input - "
-                        + PhoneNumberUtilsExample.this.pnInPlaceInput.getText().toString());
-               PhoneNumberUtils.formatNumber(PhoneNumberUtilsExample.this.pnInPlaceInput.getText(),
-                        PhoneNumberUtils.FORMAT_NANP);
+                pnOutput.setText(result.toString());
+
+                pnInput.setText("");
             }
-         }
-      });
-   }
+        });
 
-   @Override
-   public void onStart() {
-      super.onStart();
-   }
+        this.pnInPlaceInput.setOnFocusChangeListener(new OnFocusChangeListener() {
 
-   @Override
-   public void onPause() {
-      super.onPause();
-   }
+            public void onFocusChange(final View v, final boolean b) {
+                if (v.equals(pnInPlaceInput) && (b == false)) {
+                    Log.d(Constants.LOGTAG, "PhoneNumberUtilsExample formatInPlace TextView input - "
+                        + pnInPlaceInput.getText().toString());
+                    PhoneNumberUtils.formatNumber(pnInPlaceInput.getText(), PhoneNumberUtils.FORMAT_NANP);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 }
