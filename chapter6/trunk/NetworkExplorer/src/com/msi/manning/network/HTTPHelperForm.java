@@ -165,7 +165,7 @@ public class HTTPHelperForm extends Activity {
                 } else if (method.equals("POST")) {
                     helper.performPost(HTTPRequestHelper.MIME_FORM_ENCODED, url, user, pass, null, params);
                 } else {
-                    Message msg = new Message();
+                    Message msg = handler.obtainMessage();
                     Bundle bundle = new Bundle();
                     bundle.putString("RESPONSE", "ERROR - see logcat");
                     msg.setData(bundle);

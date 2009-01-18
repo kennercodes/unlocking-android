@@ -210,7 +210,7 @@ public class HTTPRequestHelper {
         final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
 
             public String handleResponse(final HttpResponse response) {
-                Message message = new Message();
+                Message message = handler.obtainMessage();
                 Bundle bundle = new Bundle();
                 StatusLine status = response.getStatusLine();
                 Log.d(Constants.LOGTAG, " " + HTTPRequestHelper.CLASSTAG + " statusCode - " + status.getStatusCode());

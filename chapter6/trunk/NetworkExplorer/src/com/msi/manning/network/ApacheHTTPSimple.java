@@ -108,7 +108,7 @@ public class ApacheHTTPSimple extends Activity {
                 String result = null;
                 try {
                     result = StringUtils.inputStreamToString(entity.getContent());
-                    Message message = new Message();
+                    Message message = handler.obtainMessage();
                     Bundle bundle = new Bundle();
                     bundle.putString("RESPONSE", result);
                     message.setData(bundle);
