@@ -21,7 +21,7 @@ public class StartActivity extends Activity {
 
         @Override
         public void handleMessage(final Message msg) {
-            StartActivity.this.startActivity(new Intent(StartActivity.this, MapViewActivity.class));
+            startActivity(new Intent(StartActivity.this, MapViewActivity.class));
         }
     };
 
@@ -41,7 +41,7 @@ public class StartActivity extends Activity {
 
             @Override
             public void run() {
-                StartActivity.this.handler.sendMessageDelayed(StartActivity.this.handler.obtainMessage(), 3000);
+                handler.sendMessageDelayed(handler.obtainMessage(), 3000);
             };
         }.start();
     }

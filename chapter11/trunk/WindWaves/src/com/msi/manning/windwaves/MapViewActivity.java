@@ -58,19 +58,18 @@ public class MapViewActivity extends MapActivity {
             Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG
                 + " handleMessage invoked - update overlays with new data");
             Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + "   buoys (List<BuoyOverlayItem>) size - "
-                + MapViewActivity.this.buoys.size());
+                + buoys.size());
 
-            MapViewActivity.this.progressDialog.dismiss();
+            progressDialog.dismiss();
 
             // clear the buoys itemized overlay - if it's already there
-            if (MapViewActivity.this.mapView.getOverlays().contains(MapViewActivity.this.buoyOverlay)) {
-                MapViewActivity.this.mapView.getOverlays().remove(MapViewActivity.this.buoyOverlay);
+            if (mapView.getOverlays().contains(buoyOverlay)) {
+                mapView.getOverlays().remove(buoyOverlay);
             }
 
             // add buoys itemized overlay
-            MapViewActivity.this.buoyOverlay = new BuoyItemizedOverlay(MapViewActivity.this.buoys,
-                MapViewActivity.this.defaultMarker, MapViewActivity.this);
-            MapViewActivity.this.mapView.getOverlays().add(MapViewActivity.this.buoyOverlay);
+            buoyOverlay = new BuoyItemizedOverlay(buoys, defaultMarker, MapViewActivity.this);
+            mapView.getOverlays().add(buoyOverlay);
 
             // did invalidate here, but don't think we need it
         }
@@ -107,7 +106,7 @@ public class MapViewActivity extends MapActivity {
             int lon = (int) (loc.getLongitude() * LocationHelper.MILLION);
             // animate to new location
             GeoPoint geoPoint = new GeoPoint(lat, lon);
-            MapViewActivity.this.mapController.animateTo(geoPoint);
+            mapController.animateTo(geoPoint);
         }
 
         public void onProviderDisabled(final String s) {
@@ -288,10 +287,10 @@ public class MapViewActivity extends MapActivity {
                 Log.d(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG + " buoyDataList size = " + buoyDataList.size());
 
                 // parse the List<BuoyData> from network call into a List<BuoyOverlayItem>
-                MapViewActivity.this.buoys = getBuoyOverlayItems(buoyDataList);
+                buoys = getBuoyOverlayItems(buoyDataList);
 
                 // send message to Handler to update UI
-                MapViewActivity.this.handler.sendEmptyMessage(1);
+                handler.sendEmptyMessage(1);
             };
         }.start();
     }
