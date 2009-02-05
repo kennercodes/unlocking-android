@@ -125,6 +125,6 @@ public class BuoyItemizedOverlay extends ItemizedOverlay<BuoyOverlayItem> {
         // example of manual drawing it, here we are letting ItemizedOverlay handle it
         // Bitmap buoy = BitmapFactory.decodeResource(mapView.getResources(), R.drawable.buoy_30);
         // bitmap, x, y, Paint
-        // canvas.drawBitmap(buoy, 50, 50, null);
+        // canvas.drawBitmap(buoy, 50, 50, null);        
     }
 }

@@ -71,7 +71,8 @@ public class MapViewActivity extends MapActivity {
             buoyOverlay = new BuoyItemizedOverlay(buoys, defaultMarker, MapViewActivity.this);
             mapView.getOverlays().add(buoyOverlay);
 
-            // did invalidate here, but don't think we need it
+            // invalidate so redrawn with icons (without this, not drawn until touch)
+            mapView.invalidate();
         }
     };
 
@@ -139,7 +140,7 @@ public class MapViewActivity extends MapActivity {
         this.zoom = (ViewGroup) findViewById(R.id.zoom);
         this.zoom.addView(this.mapView.getZoomControls());
 
-        this.defaultMarker = getResources().getDrawable(R.drawable.redpin);
+        this.defaultMarker = getResources().getDrawable(R.drawable.buoy);
         this.defaultMarker.setBounds(0, 0, this.defaultMarker.getIntrinsicWidth(), this.defaultMarker
             .getIntrinsicHeight());
 
@@ -255,11 +256,15 @@ public class MapViewActivity extends MapActivity {
 
         // get lastKnown GeoPoint (either from lastKnownLocation, or prime the pump manually)
         if (lastKnownLocation != null) {
-            lastKnownPoint = LocationHelper.getGeoPoint(lastKnownLocation);
+            lastKnownPoint = LocationHelper.getGeoPoint(lastKnownLocation);            
         } else {
             Log.w(Constants.LOGTAG, " " + MapViewActivity.CLASSTAG
                 + "  lastKnownLocation NULL - override to Golden Gate (gotta start somewhere)");
             lastKnownPoint = LocationHelper.GOLDEN_GATE;
+
+            Toast.makeText(this,
+                "Wind and Waves cannot determine your location at startup, last known location is not present - defaulting to Golden Gate (enable GPS and then use menu->My Location).",
+                Toast.LENGTH_LONG).show();
         }
         return lastKnownPoint;
     }

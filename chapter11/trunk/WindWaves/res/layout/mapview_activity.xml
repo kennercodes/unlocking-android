@@ -11,6 +11,7 @@
 	<!--  Dev Mac OS X Laptop - android:apiKey="05lSygx-ttd-IXjqUbNYN_cu4gBqyzhTAIuYe6g" -->
     <!--  Dev Linux Box Office (rasputin) - android:apiKey="05lSygx-ttd-Nc9s_QZ-9S3v0XCDNssqldHhJuQ" -->
     <!--  Dev Linux Box Home (crotalus) - android:apiKey="05lSygx-ttd-J5GXfsIB-dlpNtggca4I4DMyVqQ" -->
+    <!--  prod UAD 05lSygx-ttd8qQQQurk_PmVVI1vRycbgP1QbNlQ -->
 
 	<com.google.android.maps.MapView
 		android:id="@+id/map_view" android:layout_width="fill_parent"
