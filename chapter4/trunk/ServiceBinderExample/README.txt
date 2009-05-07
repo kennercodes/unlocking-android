@@ -4,6 +4,8 @@ Unlocking Android - ServiceBinderExample
 Android project example that uses IPC 
 through AIDL and Binder. 
 
+Tested with Android 1.1 and 1.5.
+
 --------------------------------------
 
 Checkout:
