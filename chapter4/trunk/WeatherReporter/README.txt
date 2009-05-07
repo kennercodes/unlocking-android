@@ -46,6 +46,8 @@ Uses a custom scheme and authority as a registered Intent to allow other
 applications to invoke it easily with a "weather://com.msi.manning?loc=ZIP" style URI. 
 
 
+Tested with Android 1.1 and 1.5.
+
 --------------------------------------
 
 Checkout:
