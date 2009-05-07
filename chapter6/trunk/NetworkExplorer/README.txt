@@ -9,6 +9,8 @@ and includes SSL and basic authentication.
 Also provides an example of a Google ClientLogin token retrieval and usage with
 Google Contacts, and a REST (like) example with helper class that uses the del.icio.us API.
 
+Tested with Android 1.1 and 1.5.
+
 --------------------------------------
 
 Checkout:
