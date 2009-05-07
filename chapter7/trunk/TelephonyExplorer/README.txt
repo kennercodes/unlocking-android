@@ -5,6 +5,8 @@ Android application that exercises
 many aspects of the telephony APIs
 for the platform. 
 
+Tested with 1.1 and 1.5.
+
 --------------------------------------
 
 Checkout:
