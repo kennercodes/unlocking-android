@@ -14,6 +14,8 @@ http://code.google.com/android/toolbox/apis/mapkey.html#getfingerprint.
 
 Once you have the key you must set it in res/layout/mapview_activity.xml.
 
+Tested with 1.1 and 1.5. 
+
 --------------------------------------
 
 Checkout:
