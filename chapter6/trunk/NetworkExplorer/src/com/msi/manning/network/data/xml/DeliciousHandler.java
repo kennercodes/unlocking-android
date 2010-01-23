@@ -7,6 +7,16 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SAX DefaultHandler impl for Del.icio.us.
+ * 
+ * Note you can also use Android XmlPullParser:
+ * http://developer.android.com/reference/org/xmlpull/v1/XmlPullParser.html,
+ * but a direct SAX parser seems to be faster (in micro benchmarks with bigger data sets than this).
+ * 
+ * @author ccollins
+ *
+ */
 public class DeliciousHandler extends DefaultHandler {
 
     private static final String POST = "post";
