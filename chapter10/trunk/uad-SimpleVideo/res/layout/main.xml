@@ -8,11 +8,4 @@ android:layout_height="fill_parent"
 	android:layout_width="320px"
 	android:layout_height="240px"
 	/>
-	<Button android:id="@+id/playvideo"
-	android:text="Play Video"
-	android:layout_height="wrap_content"
-	android:layout_width="wrap_content"
-	android:paddingRight="4px"
-	android:enabled="false"
-	/>
 </LinearLayout>
